@@ -9,11 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
-<<<<<<< HEAD
-  "author": "a+j",
-=======
   "author": "",
->>>>>>> 591619c1512ba2931d149aebd2630c0c6f4a1e07
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
