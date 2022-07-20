@@ -26,7 +26,7 @@ const addMiddleware = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   const corsOptions = {
-    origin: "*",
+    origin: "http://localhost:3000",
     credentials: true,
   };
   app.use(cors(corsOptions));
@@ -41,9 +41,9 @@ const connectToMongoDB = async () => {
   }
 };
 
-async () => {
+(async () => {
   connectToMongoDB();
   addMiddleware();
   loadRoutes();
   runServer();
-};
+})();
