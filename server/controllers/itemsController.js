@@ -3,7 +3,7 @@ import Item from "../models/itemModel.js";
 
 // * GET all items
 
-const getAllItems = async () => {
+const getAllItems = async (request, response) => {
   try {
     const items = await Item.find({});
     response.status(200).json({
@@ -13,7 +13,7 @@ const getAllItems = async () => {
       items,
     });
   } catch (error) {
-    response.status(404).json({
+    response.send({
       msg: "Error: Unable to find all items.",
       msgAlert: "error",
       error,
