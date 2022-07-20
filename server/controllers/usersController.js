@@ -5,6 +5,7 @@ const getAllUsers = async (request, response) => {
   try {
     const users = await User.find({});
     response.status(200).json({
+      total: users.length,
       msg: "Success: All users retrieved.",
       msgAlert: "success",
       users,

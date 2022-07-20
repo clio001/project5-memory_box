@@ -18,6 +18,9 @@ const runServer = () => {
 };
 
 const loadRoutes = () => {
+  app.use("/test", (req, res) => {
+    res.status(200).json({ msg: "Endpoint reached at '/'" });
+  });
   app.use("/users", usersRoute);
   app.use("/items", itemsRoute);
 };
