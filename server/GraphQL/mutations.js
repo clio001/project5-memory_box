@@ -31,6 +31,28 @@ const Mutation = new GraphQLObjectType({
         return await newUser.save();
       },
     },
+    addItem: {
+      type: ItemType,
+      args: {
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        createdBy: { type: GraphQLString },
+        type: { type: GraphQLString },
+        file_url: { type: GraphQLString },
+        share: { type: GraphQLBoolean },
+      },
+      async resolve(parent, args) {
+        let newItem = new Item({
+          title: args.title,
+          description: args.description,
+          createdBy: args.createdBy,
+          type: args.type,
+          file_url: args.file_url,
+          share: args.share,
+        });
+        return await newItem.save();
+      },
+    },
   },
 });
 
