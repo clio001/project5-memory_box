@@ -4,6 +4,8 @@ import usersRoute from "./routes/usersRoute.js";
 import itemsRoute from "./routes/itemsRoute.js";
 import cors from "cors";
 import mongoose from "mongoose";
+import { ApolloServer } from "apollo-server";
+import { schema } from "./GraphQL/schema.js";
 
 dotenv.config();
 
@@ -44,9 +46,22 @@ const connectToMongoDB = async () => {
   }
 };
 
+const runApolloServer = () => {
+  const server = new ApolloServer({
+    schema,
+    csrfPrevention: true,
+    cache: "bounded",
+  });
+
+  server.listen().then(({ url }) => {
+    console.log(`Apollo server running at ${url}`);
+  });
+};
+
 (async () => {
   connectToMongoDB();
   addMiddleware();
   loadRoutes();
   runServer();
+  runApolloServer();
 })();
