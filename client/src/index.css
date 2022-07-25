@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -10,4 +10,25 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+.home-bg {
+	background: transparent url(http://localhost:3000/home-bg-2.png) no-repeat scroll 50% 0%;
+	width: 100%;
+	height: 510px;
+}
+
+/* .home-bg img {
+	width: 250px;
+	text-align: center;
+} */
+
+button {
+	background: #666500 !important;
+		border-radius: 100px !important;
+		padding: 6px 100px !important;
+		font-weight: 300 !important;
+		text-transform: capitalize !important;
+		font-size: 20px !important;
 }
