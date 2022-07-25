@@ -3,12 +3,14 @@ import graphql, {
   GraphQLID,
   GraphQLString,
   GraphQLBoolean,
+  GraphQLList,
 } from "graphql";
 import _ from "lodash";
+import Comment from "../models/commentModel.js";
 
 const UserType = new GraphQLObjectType({
   name: "User",
-  fields: {
+  fields: () => ({
     id: { type: GraphQLID },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
@@ -21,12 +23,12 @@ const UserType = new GraphQLObjectType({
     groups: { type: GraphQLString },
     following: { type: GraphQLString },
     location: { type: GraphQLString },
-  },
+  }),
 });
 
 const ItemType = new GraphQLObjectType({
   name: "Item",
-  fields: {
+  fields: () => ({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
@@ -34,11 +36,36 @@ const ItemType = new GraphQLObjectType({
     location: { type: GraphQLString },
     type: { type: GraphQLString },
     file_url: { type: GraphQLString },
-    comments: { type: GraphQLString },
+    comments: {
+      type: new GraphQLList(CommentType),
+      async resolve(parent, args) {
+        return await Comment.where("item_id").equals(parent.id).exec();
+      },
+    },
     bookmarks: { type: GraphQLString },
     like: { type: GraphQLString },
     share: { type: GraphQLBoolean },
-  },
+  }),
 });
 
-export { UserType, ItemType };
+const GroupType = new GraphQLObjectType({
+  name: "Group",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    location: { type: GraphQLString },
+    members: { type: GraphQLList },
+  }),
+});
+
+const CommentType = new GraphQLObjectType({
+  name: "Comment",
+  fields: () => ({
+    id: { type: GraphQLID },
+    author: { type: GraphQLString },
+    body: { type: GraphQLString },
+    item_id: { type: GraphQLString },
+    user_id: { type: GraphQLString },
+  }),
+});
+export { UserType, ItemType, CommentType };

@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import usersRoute from "./routes/usersRoute.js";
 import itemsRoute from "./routes/itemsRoute.js";
+import commentsRoute from "./routes/commentsRoute.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server";
@@ -25,6 +26,7 @@ const loadRoutes = () => {
   });
   app.use("/users", usersRoute);
   app.use("/items", itemsRoute);
+  app.use("/comments", commentsRoute);
 };
 
 const addMiddleware = () => {
