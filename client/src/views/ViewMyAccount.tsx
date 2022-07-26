@@ -1,12 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Register from "../components/Register";
+import Appbar from "../components/Appbar";
+import MyAccount from "../components/MyAccount";
 import { Box } from "@mui/material";
 
 function ViewMyAccount() {
   return (
     <Box className="ViewMyAccount">
-      <Register />
+      <Appbar />
+      <MyAccount />
     </Box>
   );
 }

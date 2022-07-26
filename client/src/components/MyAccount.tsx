@@ -1,6 +1,6 @@
 import React from "react";
-import { Link as LinkRouter } from "react-router-dom";
-import { Grid, Box, Typography, Button, TextField } from "@mui/material";
+// import { Link as LinkRouter } from "react-router-dom";
+import { Grid, Box } from "@mui/material";
 
 const MyAccount: React.FC = () => {
   return (
@@ -15,7 +15,9 @@ const MyAccount: React.FC = () => {
         alignItems: "center",
         flexWrap: "nowrap",
       }}
-    ></Grid>
+    >
+      <Box sx={{ mt: "100px" }}>Hola</Box>
+    </Grid>
   );
 };
 export default MyAccount;
