@@ -200,7 +200,7 @@ function Appbar() {
                   src="/logo-appbar.svg"
                   alt="MEMORYBOX by Alejandro and John"
                   style={{
-                    width: "160px",
+                    width: "125px",
                     height: "28px",
                     marginTop: "5px",
                     marginLeft: "5px",
@@ -220,7 +220,7 @@ function Appbar() {
                     src="/logo-appbar.svg"
                     alt="MEMORYBOX by Alejandro and John"
                     style={{
-                      width: "160px",
+                      width: "125px",
                       height: "28px",
                       marginTop: "10px",
                       marginLeft: "5px",
