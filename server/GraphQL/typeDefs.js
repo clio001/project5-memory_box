@@ -6,9 +6,13 @@ import graphql, {
   GraphQLList,
 } from "graphql";
 import _ from "lodash";
+import Bookmark from "../models/bookmarkModel.js";
 import Comment from "../models/commentModel.js";
+import Group from "../models/groupModel.js";
 import Like from "../models/likeModel.js";
 import User from "../models/userModel.js";
+
+// * USER
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -25,13 +29,31 @@ const UserType = new GraphQLObjectType({
         return await Comment.find({ user_id: parent.id });
       },
     },
-    bookmarks: { type: GraphQLString },
+    bookmarks: {
+      type: new GraphQLList(BookmarkType),
+      async resolve(parent, args) {
+        return await Bookmark.find({ user_id: parent.id });
+      },
+    },
+    likes: {
+      type: new GraphQLList(LikeType),
+      async resolve(parent, args) {
+        return await Like.find({ user_id: parent.id });
+      },
+    },
     items: { type: GraphQLString },
-    groups: { type: GraphQLString },
+    groups: {
+      type: new GraphQLList(GroupType),
+      async resolve(parent, args) {
+        return await Group.find({ members: parent.id });
+      },
+    },
     following: { type: GraphQLString },
     location: { type: GraphQLString },
   }),
 });
+
+// * ITEM
 
 const ItemType = new GraphQLObjectType({
   name: "Item",
@@ -49,10 +71,17 @@ const ItemType = new GraphQLObjectType({
         return await Comment.find({ item_id: parent.id });
       },
     },
-    bookmarks: { type: GraphQLString },
+    bookmarks: {
+      type: new GraphQLList(BookmarkType),
+      async resolve(parent, args) {
+        return await Bookmark.find({ item_id: parent.id });
+      },
+    },
     share: { type: GraphQLBoolean },
   }),
 });
+
+// * GROUP
 
 const GroupType = new GraphQLObjectType({
   name: "Group",
@@ -60,9 +89,19 @@ const GroupType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     location: { type: GraphQLString },
-    members: { type: GraphQLList },
+    members: {
+      type: new GraphQLList(UserType),
+      async resolve(parent, args) {
+        return await User.find({ groups: parent.id });
+      },
+    },
+
+    items: { type: GraphQLString },
+    public: { type: GraphQLBoolean },
   }),
 });
+
+// * COMMENT
 
 const CommentType = new GraphQLObjectType({
   name: "Comment",
@@ -85,6 +124,8 @@ const CommentType = new GraphQLObjectType({
   }),
 });
 
+// * LIKE
+
 const LikeType = new GraphQLObjectType({
   name: "Like",
   fields: () => ({
@@ -100,4 +141,21 @@ const LikeType = new GraphQLObjectType({
   }),
 });
 
-export { UserType, ItemType, CommentType, LikeType };
+// * BOOKMARK
+
+const BookmarkType = new GraphQLObjectType({
+  name: "Bookmark",
+  fields: () => ({
+    id: { type: GraphQLID },
+    item_id: { type: GraphQLString },
+    user_id: { type: GraphQLString },
+    author: {
+      type: UserType,
+      async resolve(parent, args) {
+        return await User.findById(parent.user_id);
+      },
+    },
+  }),
+});
+
+export { UserType, ItemType, CommentType, LikeType, BookmarkType, GroupType };

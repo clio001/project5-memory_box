@@ -6,11 +6,20 @@ import graphql, {
   GraphQLBoolean,
 } from "graphql";
 import _ from "lodash";
-import { ItemType, UserType, CommentType, LikeType } from "./typeDefs.js";
+import {
+  ItemType,
+  UserType,
+  CommentType,
+  LikeType,
+  BookmarkType,
+  GroupType,
+} from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
 import Comment from "../models/commentModel.js";
 import Like from "../models/likeModel.js";
+import Bookmark from "../models/bookmarkModel.js";
+import Group from "../models/groupModel.js";
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -53,6 +62,18 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(LikeType),
       async resolve(parent, args) {
         return await Like.find({});
+      },
+    },
+    bookmarks: {
+      type: new GraphQLList(BookmarkType),
+      async resolve(parent, args) {
+        return await Bookmark.find({});
+      },
+    },
+    groups: {
+      type: new GraphQLList(GroupType),
+      async resolve(parent, args) {
+        return await Group.find({});
       },
     },
   },

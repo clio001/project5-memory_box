@@ -20,34 +20,29 @@ const userSchema = new Schema(
     avatar_url: {
       type: String,
     },
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Commment",
-      },
-    ],
-    bookmarks: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Bookmark",
-      },
-    ],
+    comments: {
+      type: String,
+    },
+
+    bookmarks: {
+      type: String,
+    },
+    likes: {
+      type: String,
+    },
+
     items: [
       {
         type: Schema.Types.ObjectId,
         ref: "Item",
       },
     ],
-    groups: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Group",
-      },
-    ],
+    groups: {
+      type: String,
+    },
     following: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
       },
     ],
     location: [

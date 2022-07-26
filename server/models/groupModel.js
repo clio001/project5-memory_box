@@ -6,12 +6,10 @@ const groupSchema = new Schema(
     name: {
       type: String,
     },
-    members: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    members: {
+      type: String,
+    },
+
     items: [
       {
         type: Schema.Types.ObjectId,
@@ -19,8 +17,7 @@ const groupSchema = new Schema(
       },
     ],
     location: {
-      latitude: String,
-      longitude: String,
+      type: String,
     },
     public: {
       type: Boolean,

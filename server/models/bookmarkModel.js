@@ -4,12 +4,13 @@ const { Schema } = mongoose;
 const bookmarkSchema = new Schema(
   {
     item_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Item",
+      type: String,
     },
     user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+    },
+    author: {
+      type: String,
     },
   },
   { timestamps: true }
