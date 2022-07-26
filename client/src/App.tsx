@@ -4,6 +4,7 @@ import ViewHome from "./views/ViewHome";
 import ViewLogin from "./views/ViewLogin";
 import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
+import NoMatch from "./components/NoMatch";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<ViewLogin />} />
         <Route path="/register" element={<ViewRegister />} />
         <Route path="/my-account" element={<ViewMyAccount />} />
+        <Route path="*" element={<NoMatch />} />
       </Routes>
     </div>
   );
