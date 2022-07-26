@@ -1,5 +1,6 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
+import { Link as LinkRouter } from "react-router-dom";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -19,6 +20,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import Slide from "@mui/material/Slide";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 
+import { createTheme } from "@mui/material/styles";
+
 interface Props {
   children: React.ReactElement;
 }
@@ -32,45 +35,45 @@ function HideOnScroll({ children }: Props) {
   );
 }
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
+// const Search = styled("div")(({ theme }) => ({
+//   position: "relative",
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   "&:hover": {
+//     backgroundColor: alpha(theme.palette.common.white, 0.25),
+//   },
+//   marginRight: theme.spacing(2),
+//   marginLeft: 0,
+//   width: "100%",
+//   [theme.breakpoints.up("sm")]: {
+//     marginLeft: theme.spacing(3),
+//     width: "auto",
+//   },
+// }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
+// const SearchIconWrapper = styled("div")(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: "100%",
+//   position: "absolute",
+//   pointerEvents: "none",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "center",
+// }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
+// const StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     // vertical padding + font size from searchIcon
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create("width"),
+//     width: "100%",
+//     [theme.breakpoints.up("md")]: {
+//       width: "20ch",
+//     },
+//   },
+// }));
 
 function Appbar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -174,26 +177,52 @@ function Appbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <HideOnScroll>
-        <AppBar>
+        <AppBar style={{ backgroundColor: "#fff", color: "#666500" }}>
           <Toolbar>
             <IconButton
               size="large"
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              sx={{ mr: 2 }}
             >
               <MenuIcon />
             </IconButton>
+            <Box sx={{ display: { xs: "block", sm: "none" } }}>
+              <LinkRouter to="/register" style={{ textDecoration: "none" }}>
+                <img
+                  src="/logo-appbar.svg"
+                  alt="MEMORYBOX by Alejandro and John"
+                  style={{
+                    width: "160px",
+                    height: "28px",
+                    marginTop: "5px",
+                    marginLeft: "5px",
+                  }}
+                />
+              </LinkRouter>
+            </Box>
             <Typography
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-              MUI
+              <Box>
+                <LinkRouter to="/register" style={{ textDecoration: "none" }}>
+                  <img
+                    src="/logo-appbar.svg"
+                    alt="MEMORYBOX by Alejandro and John"
+                    style={{
+                      width: "160px",
+                      height: "28px",
+                      marginTop: "10px",
+                      marginLeft: "5px",
+                    }}
+                  />
+                </LinkRouter>
+              </Box>
             </Typography>
-            <Search>
+            {/* <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
@@ -201,9 +230,9 @@ function Appbar() {
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />
-            </Search>
+            </Search> */}
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ display: { xs: "none", sm: "flex" } }}>
               <IconButton
                 size="large"
                 aria-label="show 4 new mails"
@@ -234,7 +263,7 @@ function Appbar() {
                 <AccountCircle />
               </IconButton>
             </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
               <IconButton
                 size="large"
                 aria-label="show more"
