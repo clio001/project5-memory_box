@@ -4,12 +4,13 @@ const { Schema } = mongoose;
 const likeSchema = new Schema(
   {
     user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
     },
-    item_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Item",
+    comment_id: {
+      type: String,
+    },
+    author: {
+      type: String,
     },
   },
   { timestamps: true }

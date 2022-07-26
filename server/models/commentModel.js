@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const commentSchema = new Schema(
   {
+    // ! Author will be populated by GraphQL using "user_id"
     author: {
       type: String,
     },
@@ -13,8 +14,10 @@ const commentSchema = new Schema(
       type: String,
     },
     user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+    },
+    likes: {
+      type: String,
     },
   },
   { timestamps: true }

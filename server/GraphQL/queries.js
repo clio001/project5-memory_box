@@ -6,10 +6,11 @@ import graphql, {
   GraphQLBoolean,
 } from "graphql";
 import _ from "lodash";
-import { ItemType, UserType, CommentType } from "./typeDefs.js";
+import { ItemType, UserType, CommentType, LikeType } from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
 import Comment from "../models/commentModel.js";
+import Like from "../models/likeModel.js";
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -46,6 +47,12 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(CommentType),
       async resolve(parent, args) {
         return await Comment.find({});
+      },
+    },
+    likes: {
+      type: new GraphQLList(LikeType),
+      async resolve(parent, args) {
+        return await Like.find({});
       },
     },
   },

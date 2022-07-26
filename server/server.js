@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server";
 import { schema } from "./GraphQL/schema.js";
 
+// TODO: https://www.apollographql.com/docs/react/get-started
+
 dotenv.config();
 
 const app = express();
