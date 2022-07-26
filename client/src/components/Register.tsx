@@ -2,7 +2,7 @@ import React from "react";
 import { Link as LinkRouter } from "react-router-dom";
 import { Grid, Box, Typography, Button, TextField } from "@mui/material";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   return (
     <Grid
       container
@@ -25,7 +25,7 @@ const Login: React.FC = () => {
           mt: "60px",
         }}
       >
-        <img src="/login.svg" alt="Login" style={{ width: "80px" }} />
+        <img src="/register.svg" alt="Login" style={{ width: "80px" }} />
         <Typography
           variant="h1"
           color="initial"
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
             textAlign: "center",
           }}
         >
-          Log in in to your Account
+          Create an Account
         </Typography>
       </Box>
       <Box
@@ -77,13 +77,13 @@ const Login: React.FC = () => {
           disableElevation
           className="buttons"
         >
-          Login
+          Register
         </Button>
 
         <Typography component="p" sx={{ mt: "25px" }}>
-          Don't have an account?{" "}
-          <LinkRouter to="/register" style={{ textDecoration: "none" }}>
-            Signup
+          Already have an account?{" "}
+          <LinkRouter to="/login" style={{ textDecoration: "none" }}>
+            Login
           </LinkRouter>
         </Typography>
       </Box>
@@ -155,4 +155,4 @@ const Login: React.FC = () => {
     </Grid>
   );
 };
-export default Login;
+export default Register;
