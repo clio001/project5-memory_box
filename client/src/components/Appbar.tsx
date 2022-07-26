@@ -195,7 +195,7 @@ function Appbar() {
               <MenuIcon />
             </IconButton>
             <Box sx={{ display: { xs: "block", sm: "none" } }}>
-              <LinkRouter to="/register" style={{ textDecoration: "none" }}>
+              <LinkRouter to="/" style={{ textDecoration: "none" }}>
                 <img
                   src="/logo-appbar.svg"
                   alt="MEMORYBOX by Alejandro and John"
@@ -215,7 +215,7 @@ function Appbar() {
               sx={{ display: { xs: "none", sm: "block" } }}
             >
               <Box>
-                <LinkRouter to="/register" style={{ textDecoration: "none" }}>
+                <LinkRouter to="/" style={{ textDecoration: "none" }}>
                   <img
                     src="/logo-appbar.svg"
                     alt="MEMORYBOX by Alejandro and John"
