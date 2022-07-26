@@ -177,7 +177,14 @@ function Appbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <HideOnScroll>
-        <AppBar style={{ backgroundColor: "#fff", color: "#666500" }}>
+        <AppBar
+          sx={{
+            backgroundColor: "#fff",
+            color: "#818181",
+            height: "64px",
+            justifyContent: "center",
+          }}
+        >
           <Toolbar>
             <IconButton
               size="large"
