@@ -12,6 +12,9 @@ const itemSchema = new Schema(
     year: {
       type: String,
     },
+    user_id: {
+      type: String,
+    },
     createdBy: {
       type: String,
     },

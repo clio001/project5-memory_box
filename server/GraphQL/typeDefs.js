@@ -9,6 +9,7 @@ import _ from "lodash";
 import Bookmark from "../models/bookmarkModel.js";
 import Comment from "../models/commentModel.js";
 import Group from "../models/groupModel.js";
+import Item from "../models/itemModel.js";
 import Like from "../models/likeModel.js";
 import User from "../models/userModel.js";
 
@@ -22,6 +23,8 @@ const UserType = new GraphQLObjectType({
     lastName: { type: GraphQLString },
     email: { type: GraphQLString },
     avatar_url: { type: GraphQLString },
+    banner_url: { type: GraphQLString },
+    role: { type: GraphQLString },
     password: { type: GraphQLString },
     comments: {
       type: new GraphQLList(CommentType),
@@ -41,7 +44,12 @@ const UserType = new GraphQLObjectType({
         return await Like.find({ user_id: parent.id });
       },
     },
-    items: { type: GraphQLString },
+    items: {
+      type: new GraphQLList(ItemType),
+      async resolve(parent, args) {
+        return await Item.find({ createdBy: parent.id });
+      },
+    },
     groups: {
       type: new GraphQLList(GroupType),
       async resolve(parent, args) {
@@ -61,7 +69,13 @@ const ItemType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
-    createdBy: { type: GraphQLString },
+    user_id: { type: GraphQLString },
+    createdBy: {
+      type: UserType,
+      async resolve(parent, args) {
+        return await User.findById(parent.user_id);
+      },
+    },
     location: { type: GraphQLString },
     type: { type: GraphQLString },
     file_url: { type: GraphQLString },
@@ -88,6 +102,8 @@ const GroupType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    avatar_url: { type: GraphQLString },
+    banner_url: { type: GraphQLString },
     location: { type: GraphQLString },
     members: {
       type: new GraphQLList(UserType),

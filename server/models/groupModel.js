@@ -6,6 +6,12 @@ const groupSchema = new Schema(
     name: {
       type: String,
     },
+    avatar_url: {
+      type: String,
+    },
+    banner_url: {
+      type: String,
+    },
     members: {
       type: String,
     },

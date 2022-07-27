@@ -20,6 +20,12 @@ const userSchema = new Schema(
     avatar_url: {
       type: String,
     },
+    banner_url: {
+      type: String,
+    },
+    role: {
+      type: String,
+    },
     comments: {
       type: String,
     },
@@ -30,13 +36,9 @@ const userSchema = new Schema(
     likes: {
       type: String,
     },
-
-    items: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Item",
-      },
-    ],
+    items: {
+      type: String,
+    },
     groups: {
       type: String,
     },
