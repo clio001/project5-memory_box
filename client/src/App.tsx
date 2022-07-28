@@ -6,16 +6,30 @@ import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
 import NoMatch from "./components/NoMatch";
 
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  gql,
+} from "@apollo/client";
+
 function App() {
+  const client = new ApolloClient({
+    uri: "http://localhost:4000/graphql",
+    cache: new InMemoryCache(),
+  });
+
   return (
     <div className="Home">
-      <Routes>
-        <Route path="/" element={<ViewHome />} />
-        <Route path="/login" element={<ViewLogin />} />
-        <Route path="/register" element={<ViewRegister />} />
-        <Route path="/my-account" element={<ViewMyAccount />} />
-        <Route path="*" element={<NoMatch />} />
-      </Routes>
+      <ApolloProvider client={client}>
+        <Routes>
+          <Route path="/" element={<ViewHome />} />
+          <Route path="/login" element={<ViewLogin />} />
+          <Route path="/register" element={<ViewRegister />} />
+          <Route path="/my-account" element={<ViewMyAccount />} />
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      </ApolloProvider>
     </div>
   );
 }

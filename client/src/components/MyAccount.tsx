@@ -1,8 +1,33 @@
 import React from "react";
 // import { Link as LinkRouter } from "react-router-dom";
+import { useQuery, gql } from "@apollo/client";
 import { Grid, Box, Typography } from "@mui/material";
 
+interface GetUsers {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar_url: string;
+}
+
+const GET_USERS = gql`
+  query GetUsers {
+    users {
+      id
+      firstName
+      lastName
+      email
+      avatar_url
+    }
+  }
+`;
+
 const MyAccount: React.FC = () => {
+  const { loading, data } = useQuery<GetUsers>(GET_USERS);
+
+  console.log(data);
+
   return (
     <Grid
       container
