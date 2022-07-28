@@ -1,7 +1,6 @@
 import React from "react";
 // import { Link as LinkRouter } from "react-router-dom";
 import { Grid, Box, Typography } from "@mui/material";
-import { width } from "@mui/system";
 
 const MyAccount: React.FC = () => {
   return (
