@@ -41,14 +41,14 @@ const addMiddleware = () => {
   app.use(cors(corsOptions));
 };
 
-const connectToMongoDB = async () => {
+/* const connectToMongoDB = async () => {
   try {
     await mongoose.connect(process.env.DB);
     console.log("Connection to Memory Box database established.");
   } catch (error) {
     console.log("Error trying to connect with Memory Box database", error);
   }
-};
+}; */
 
 const runApolloServer = () => {
   const server = new ApolloServer({
@@ -63,7 +63,7 @@ const runApolloServer = () => {
 };
 
 (async () => {
-  connectToMongoDB();
+  /* connectToMongoDB(); */
   addMiddleware();
   loadRoutes();
   runServer();
