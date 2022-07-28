@@ -4,7 +4,11 @@
     "watch": true,
     "lib": ["dom", "es2020"],
     "outDir": "./built",
-    "module": "CommonJS"
+    "rootDir": "./src",
+    "module": "ES6",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   },
   "include": ["./src/**/*"]
 }

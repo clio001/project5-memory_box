@@ -1,12 +1,12 @@
 import express from "express";
 import * as dotenv from "dotenv";
-import usersRoute from "./src/routes/usersRoute.js";
-import itemsRoute from "./src/routes/itemsRoute.js";
-import commentsRoute from "./src/routes/commentsRoute.js";
+import usersRoute from "./routes/usersRoute.js";
+import itemsRoute from "./routes/itemsRoute.js";
+import commentsRoute from "./routes/commentsRoute.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server";
-import { schema } from "./src/GraphQL/schema.js";
+import { schema } from "./GraphQL/schema.js";
 
 // TODO: https://www.apollographql.com/docs/react/get-started
 
@@ -41,14 +41,14 @@ const addMiddleware = () => {
   app.use(cors(corsOptions));
 };
 
-/* const connectToMongoDB = async () => {
+const connectToMongoDB = async () => {
   try {
     await mongoose.connect(process.env.DB);
     console.log("Connection to Memory Box database established.");
   } catch (error) {
     console.log("Error trying to connect with Memory Box database", error);
   }
-}; */
+};
 
 const runApolloServer = () => {
   const server = new ApolloServer({
@@ -63,7 +63,7 @@ const runApolloServer = () => {
 };
 
 (async () => {
-  /* connectToMongoDB(); */
+  connectToMongoDB();
   addMiddleware();
   loadRoutes();
   runServer();

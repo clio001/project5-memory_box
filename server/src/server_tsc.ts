@@ -1,16 +1,16 @@
 import express from "express";
 import * as dotenv from "dotenv";
-import usersRoute from "./src/routes/usersRoute.js";
-import itemsRoute from "./src/routes/itemsRoute.js";
-import commentsRoute from "./src/routes/commentsRoute.js";
+import usersRoute from "./routes/usersRoute.js";
+import itemsRoute from "./routes/itemsRoute.js";
+import commentsRoute from "./routes/commentsRoute.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server";
-import { schema } from "./src/GraphQL/schema.js";
+import { schema } from "./GraphQL/schema.js";
 
 // TODO: https://www.apollographql.com/docs/react/get-started
 
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const app = express();
 
