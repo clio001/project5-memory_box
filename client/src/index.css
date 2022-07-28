@@ -1,13 +1,77 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #2D333A
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+p {
+	font-size: 17px;
+}
+
+
+a {
+	color: #666500;
+}
+
+a:hover {
+	text-decoration: underline!important;
+}
+
+
+.home-bg {
+	background: transparent url(http://localhost:3000/home-bg-2.png) no-repeat scroll 50% 0%;
+	width: 100%;
+	height: 460px;
+}
+
+/* .home-bg img {
+	width: 250px;
+	text-align: center;
+} */
+
+.buttons {
+	background: #666500 !important;
+		border-radius: 100px !important;
+		font-weight: 300 !important;
+		text-transform: capitalize !important;
+		font-size: 17px !important;
+		width: 280px;
+		height: 50px;
+}
+
+.TextField fieldset {
+	border-radius: 100px;
+	border-color: #79747E;
+}
+.TextField fieldset:focus {
+	border-radius: 100px;
+	border-color: #79747E;
+}
+
+.google {
+	margin-right: 10px;
+}
+
+.social-btn {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #C2C8D0!important;
+	border-radius: 100px!important;
+	width: 280px;
+	height: 50px;
+	text-align: center;
+	text-transform: none!important;
+	color: #2D333A!important;
+	font-weight: 500;
 }
