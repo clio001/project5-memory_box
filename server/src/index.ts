@@ -10,7 +10,7 @@ import { schema } from "./GraphQL/schema.js";
 
 // TODO: https://www.apollographql.com/docs/react/get-started
 
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "./.env" });
 
 const app = express();
 

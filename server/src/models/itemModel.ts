@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const itemSchema = new Schema(
+const itemSchema = new Schema<dbModel.Item>(
   {
     title: {
       type: String,

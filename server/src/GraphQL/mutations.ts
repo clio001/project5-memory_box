@@ -9,6 +9,7 @@ import _ from "lodash";
 import { ItemType, UserType } from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
+import bcrypt from "bcrypt";
 
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -23,15 +24,49 @@ const Mutation = new GraphQLObjectType({
         password: { type: GraphQLString },
       },
       async resolve(parent, args) {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(args.password, salt);
+
         let newUser = new User({
           firstName: args.firstName,
           lastName: args.lastName,
           email: args.email,
-          password: args.password,
+          password: hash,
         });
         return await newUser.save();
       },
     },
+
+    // * LOGIN USER
+    loginUser: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        // 1. verify password using bcrypt compare
+        const existingUser = await User.findOne({
+          email: args.email,
+        });
+        if (!existingUser) {
+          throw Error(`${args.email} does not exist.`);
+        } else {
+          const isVerified = await bcrypt.compare(
+            args.password,
+            existingUser.password
+          );
+          if (!isVerified) {
+            throw Error(`Incorrect password.`);
+          } else {
+            console.log("Password correct.");
+            // 2. issueToken
+            // Question is where to pass the token when making a mutation from the frontend? As headers aren't available in GraphQL.
+          }
+        }
+      },
+    },
+
     // * UPDATE USER INFO
     updateUser: {
       type: UserType,
