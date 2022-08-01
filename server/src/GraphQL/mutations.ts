@@ -6,10 +6,11 @@ import graphql, {
   GraphQLBoolean,
 } from "graphql";
 import _ from "lodash";
-import { ItemType, UserType } from "./typeDefs.js";
+import { ItemType, UserType, TokenType } from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
 import bcrypt from "bcrypt";
+import { createToken } from "../utils/jwt.js";
 
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -18,8 +19,6 @@ const Mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        firstName: { type: GraphQLString },
-        lastName: { type: GraphQLString },
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
@@ -28,8 +27,6 @@ const Mutation = new GraphQLObjectType({
         const hash = await bcrypt.hash(args.password, salt);
 
         let newUser = new User({
-          firstName: args.firstName,
-          lastName: args.lastName,
           email: args.email,
           password: hash,
         });
@@ -60,8 +57,15 @@ const Mutation = new GraphQLObjectType({
             throw Error(`Incorrect password.`);
           } else {
             console.log("Password correct.");
-            // 2. issueToken
-            // Question is where to pass the token when making a mutation from the frontend? As headers aren't available in GraphQL.
+            // 2. Issue token
+            const token = createToken(existingUser.id);
+            console.log("Token: ", token);
+
+            const loginObject = {
+              user: existingUser,
+              token: token,
+            };
+            return loginObject;
           }
         }
       },

@@ -30,6 +30,18 @@ declare namespace dbModel {
     likes?: string;
     share: boolean;
   }
-}
 
-declare namespace GQL {}
+  interface Comment {
+    author: string;
+    body: string;
+    item_id: string;
+    user_id: string;
+    likes?: string;
+  }
+
+  interface Like {}
+
+  interface Bookmark {}
+
+  interface Group {}
+}

@@ -13,12 +13,22 @@ import Item from "../models/itemModel.js";
 import Like from "../models/likeModel.js";
 import User from "../models/userModel.js";
 
+// * TOKEN
+
+const TokenType = new GraphQLObjectType({
+  name: "Token",
+  fields: () => ({
+    token: { type: GraphQLString },
+  }),
+});
+
 // * USER
 
 const UserType = new GraphQLObjectType({
   name: "User",
   fields: () => ({
     id: { type: GraphQLID },
+    token: { type: TokenType },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -174,4 +184,12 @@ const BookmarkType = new GraphQLObjectType({
   }),
 });
 
-export { UserType, ItemType, CommentType, LikeType, BookmarkType, GroupType };
+export {
+  UserType,
+  ItemType,
+  CommentType,
+  LikeType,
+  BookmarkType,
+  GroupType,
+  TokenType,
+};
