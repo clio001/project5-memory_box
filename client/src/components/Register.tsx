@@ -1,8 +1,31 @@
 import React, { useState } from "react";
 import { Link as LinkRouter } from "react-router-dom";
 import { Grid, Box, Typography, Button, TextField } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { gql, useMutation } from "@apollo/client"
 
-import { useQuery, gql, useMutation } from "@apollo/client"
+const CssTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#473800',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#473800',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      color: '#79747E',
+      borderColor: '#79747E',
+    },
+    '&:hover fieldset': {
+      color: '#666500',
+      borderColor: '#666500',
+    },
+    '&.Mui-focused fieldset': {
+      color: '#473800',
+      borderColor: '#473800',
+    },
+  },
+});
 
 //Apollo operation to AddUser 
 const ADD_USER = gql`
@@ -95,7 +118,7 @@ const Register: React.FC = () => {
         }}
       >
 		<form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
-        <TextField
+        <CssTextField
           id="outlined-email"
           label="E-Mail"
           type="text"
@@ -108,7 +131,7 @@ const Register: React.FC = () => {
 			 onChange={handleInputChange}
         />
 
-        <TextField
+        <CssTextField
           id="outlined-password"
           label="Password"
           type="password"
