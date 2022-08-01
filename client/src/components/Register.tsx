@@ -1,8 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as LinkRouter } from "react-router-dom";
 import { Grid, Box, Typography, Button, TextField } from "@mui/material";
 
+import { useQuery, gql, useMutation } from "@apollo/client"
+
+//Apollo operation to AddUser 
+const ADD_USER = gql`
+mutation AddUser(
+	$email: String, 
+	$password: String
+	) {
+  addUser(email: $email, password: $password) {
+    email
+    password
+  }
+}
+`;
+
 const Register: React.FC = () => {
+
+	//Default value for inputs
+	const defaultValues = {email: "", password: ""};
+
+	const [formValues, setFormValues] = useState(defaultValues);
+
+    const [addUser] = useMutation(ADD_USER);
+	 
+	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		 e.preventDefault();
+		 handleClear();
+		 addUser({ variables: {
+			 email: formValues.email,
+			 password: formValues.password,
+			} });
+		};
+		
+		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			setFormValues({
+				...formValues,
+				[e.target.name]: e.target.value
+			});
+		};
+
+  const handleClear = () => {
+	setFormValues(defaultValues)
+ };
+
   return (
     <Grid
       container
@@ -51,6 +94,7 @@ const Register: React.FC = () => {
           mt: "50px",
         }}
       >
+		<form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
         <TextField
           id="outlined-email"
           label="E-Mail"
@@ -59,6 +103,9 @@ const Register: React.FC = () => {
             shrink: true,
           }}
           sx={{ width: "280px", mb: "20px" }}
+			 name="email"
+			 value={formValues.email}
+			 onChange={handleInputChange}
         />
 
         <TextField
@@ -69,17 +116,19 @@ const Register: React.FC = () => {
             shrink: true,
           }}
           sx={{ width: "280px", mb: "30px", borderRadius: "100px" }}
+			 name="password"
+			 value={formValues.password}
+			 onChange={handleInputChange}
         />
 
-        <Button
-          variant="contained"
+		  <Button variant="contained"
           size="large"
           disableElevation
-          className="buttons"
-        >
-          Register
+          className="buttons" 
+			 type="submit">
+          Create Account
         </Button>
-
+		</form>
         <Typography component="p" sx={{ mt: "25px" }}>
           Already have an account?{" "}
           <LinkRouter to="/login" style={{ textDecoration: "none" }}>

@@ -4,6 +4,7 @@ import ViewHome from "./views/ViewHome";
 import ViewLogin from "./views/ViewLogin";
 import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
+import ViewMyAccountEdit from "./views/ViewMyAccountEdit";
 import NoMatch from "./components/NoMatch";
 
 import {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<ViewLogin />} />
           <Route path="/register" element={<ViewRegister />} />
           <Route path="/my-account" element={<ViewMyAccount />} />
+          <Route path="/edit-account" element={<ViewMyAccountEdit />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
       </ApolloProvider>
