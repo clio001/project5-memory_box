@@ -41,8 +41,9 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      async resolve(parent, args) {
-        // 1. verify password using bcrypt compare
+      async resolve(parent, args, context) {
+        console.log("context: ", context.permission);
+        // * 1. verify password using bcrypt compare
         const existingUser = await User.findOne({
           email: args.email,
         });
@@ -57,15 +58,11 @@ const Mutation = new GraphQLObjectType({
             throw Error(`Incorrect password.`);
           } else {
             console.log("Password correct.");
-            // 2. Issue token
+            // * 2. Issue token
             const token = createToken(existingUser.id);
             console.log("Token: ", token);
 
-            const loginObject = {
-              user: existingUser,
-              token: token,
-            };
-            return loginObject;
+            return { ...existingUser, token: { token } };
           }
         }
       },
@@ -104,6 +101,9 @@ const Mutation = new GraphQLObjectType({
         file_url: { type: GraphQLString },
         share: { type: GraphQLBoolean },
       },
+      // const item : Item= {
+      //   title,
+      // }
       async resolve(parent, args) {
         let newItem = new Item({
           title: args.title,

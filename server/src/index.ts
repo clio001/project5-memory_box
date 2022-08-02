@@ -7,6 +7,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { ApolloServer } from "apollo-server";
 import { schema } from "./GraphQL/schema.js";
+import { getUser } from "./getUser.js";
+import passport from "passport";
 
 // TODO: https://www.apollographql.com/docs/react/get-started
 
@@ -55,6 +57,11 @@ const runApolloServer = () => {
     schema,
     csrfPrevention: true,
     cache: "bounded",
+    context: async ({ req }) => {
+      const { token } = req.headers;
+      const user = await getUser(token);
+      return { user };
+    },
   });
 
   server.listen().then(({ url }) => {
