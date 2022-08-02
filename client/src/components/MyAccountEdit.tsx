@@ -37,7 +37,7 @@ const CssTextField = styled(TextField)({
 
 interface GetUsers {
   [key: string]: any;
-  id: string;
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -49,7 +49,7 @@ interface GetUsers {
 const GET_USERS = gql`
   query GetUsers {
     users {
-      id
+      _id
       firstName
       lastName
       email
@@ -63,27 +63,18 @@ const GET_USERS = gql`
 const UPDATE_USER = gql`
 mutation UpdateUser(
 	$firstName: String, 
-	$lastName: String, 
-	$email: String, 
-	$password: String, 
-	$avatarUrl: String, 
-	$bannerUrl: String
+	$lastName: String,  
+	$avatarUrl: String,
 	) {
 	updateUser(
 	id: "62dd51f4c0c6c0d1781a1dac", 
 	firstName: $firstName, 
 	lastName: $lastName, 
-	email: $email, 
-	password: $password, 
 	avatar_url: $avatarUrl, 
-	banner_url: $bannerUrl
 	) {
     firstName
     lastName
-    email
     avatar_url
-    banner_url
-    password
   }
 }
 `;
@@ -96,8 +87,6 @@ interface FormError {
 interface FormFieldError {
 	firstName: FormError;
 	lastName: FormError;
-	email: FormError;
-	password: FormError;
 	avatar_url: FormError;
 	banner_url: FormError;
 }
@@ -121,17 +110,7 @@ const MyAccountEdit: React.FC = () => {
 			value:'',
 			error:false,
 			errorMessage:'You must enter a Last Name'
-    	}, 
-		email:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a E-Mail'
-    	}, 
-		password:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a Password'
-    	}, 
+    	},  
 		avatar_url:{
 			value:'',
 			error:false,
@@ -147,6 +126,7 @@ const MyAccountEdit: React.FC = () => {
 
 	const [formValues, setFormValues] = useState(defaultValues);
 
+
    const [updateUser] = useMutation(UPDATE_USER);
 	 
 	const handleChange  = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -161,24 +141,14 @@ const MyAccountEdit: React.FC = () => {
 	}
 	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		 e.preventDefault();
-		 handleClear();
-		 updateUser({ variables: {
-			 firstName: formValues.firstName.value,
-			 lastName: formValues.lastName.value,
-			 email: formValues.email.value,
-			 password: formValues.password.value,
-			 avatarUrl: formValues.avatar_url.value,
-			 bannerUrl: formValues.banner_url.value,
-			} });
+		 
 
 	 const formFields = Object.keys(formValues);
     let newFormValues = {...formValues}
 
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
-		console.log("currentField: ", currentField)
       const currentValue = formValues[currentField].value;
-		console.log("Current Value: ",currentValue)
       if(currentValue === ""){
         newFormValues = {
           ...newFormValues,
@@ -187,15 +157,37 @@ const MyAccountEdit: React.FC = () => {
             error:true
           }
         }
-      }
+      } else {
+			newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:false
+          }
+        }
+		}
     }
+	console.log(newFormValues)
+	 for (let i = 0; i < formFields.length; i++) { 
+		const currentField = formFields[i];
+      const currentValue = formValues[currentField].error;
+		console.log("ALEJANDRO")
+		if(currentValue === "false") {
+			console.log("ALEJANDRO")
+		 	updateUser({ variables: {
+				firstName: formValues.firstName.value,
+				lastName: formValues.lastName.value,
+				avatarUrl: formValues.avatar_url.value,
+				bannerUrl: formValues.banner_url.value,
+			} });
+		}
+	 }
     setFormValues(newFormValues)
-	 console.log("YOYOOOOOOOOOOOO ",newFormValues)
 	};
 		
 
   const handleClear = () => {
-	setFormValues(defaultValues)
+	setFormValues({defaultValues})
  };
 
 
@@ -298,111 +290,53 @@ const MyAccountEdit: React.FC = () => {
           id="outlined-firstName"
           label="Name"
           type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
+          InputLabelProps={{shrink: true,}}
           sx={{ width: "280px", mb: "20px" }}
 			 name="firstName"
 			 value={formValues.firstName.value}
 			 onChange={handleChange }
-
 			error={formValues.firstName.error}
-         // helperText={formValues.firstName.error && formValues.firstName.errorMessage}
+         helperText={formValues.firstName.error && formValues.firstName.errorMessage}
         />
 
         <CssTextField
           id="outlined-lastName"
           label="Last Name"
           type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
+          InputLabelProps={{shrink: true,}}
           sx={{ width: "280px", mb: "20px"}}
 			 name="lastName"
 			 value={formValues.lastName.value}
 			 onChange={handleChange }
-
 			error={formValues.lastName.error}
-         // helperText={formValues.lastName.error && formValues.lastName.errorMessage}
+         helperText={formValues.lastName.error && formValues.lastName.errorMessage}
         />
 
-		  	{/* <CssTextField
-          id="outlined-location"
-          label="Location"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "20px", }}
-			 name="location"
-			 value={data?.users[3].location}
-			 onChange={handleChange }
-        /> */}
-
-		  <CssTextField
-          id="outlined-email"
-          label="E-Mail"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "20px" }}
-			 name="email"
-			 value={formValues.email.value}
-			 onChange={handleChange }
-
-
-			error={formValues.email.error}
-         // helperText={formValues.email.error && formValues.email.errorMessage}
-        />
-
-        <CssTextField
-          id="outlined-password"
-          label="Password"
-          type="password"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "30px", }}
-			 name="password"
-			 value={formValues.password.value}
-			 onChange={handleChange }
-
-			 error={formValues.password.error}
-         // helperText={formValues.password.error && formValues.password.errorMessage}
-        />
 
         <CssTextField
           id="outlined-password"
           label="Avatar URL"
           type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
+          InputLabelProps={{shrink: true,}}
           sx={{ width: "280px", mb: "30px", }}
 			 name="avatar_url"
 			 value={formValues.avatar_url.value}
 			 onChange={handleChange }
-
 			 error={formValues.avatar_url.error}
-         // helperText={formValues.avatar_url.error && formValues.avatar_url.errorMessage}
+         helperText={formValues.avatar_url.error && formValues.avatar_url.errorMessage}
         />
 
         <CssTextField
           id="outlined-banner"
           label="Banner URL"
           type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
+          InputLabelProps={{shrink: true,}}
           sx={{ width: "280px", mb: "30px", }}
 			 name="banner_url"
-			//  value={data?.users[3].banner_url || ''}
 			 value={formValues.banner_url.value}
 			 onChange={handleChange }
-
 			 error={formValues.banner_url.error}
-         // helperText={formValues.banner_url.error && formValues.banner_url.errorMessage}
+         helperText={formValues.banner_url.error && formValues.banner_url.errorMessage}
         />
 
 
@@ -421,13 +355,3 @@ const MyAccountEdit: React.FC = () => {
 };
 export default MyAccountEdit;
 
-// <Box>
-//   <div>
-//     {data &&
-//       data?.users.map((param: any) => (
-//         <div key={param.id}>
-//           <h2>{param.firstName}</h2>
-//         </div>
-//       ))}
-//   </div>
-// </Box>;
