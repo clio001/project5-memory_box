@@ -141,8 +141,6 @@ const MyAccountEdit: React.FC = () => {
 	}
 	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		 e.preventDefault();
-		 
-
 	 const formFields = Object.keys(formValues);
     let newFormValues = {...formValues}
 
@@ -167,13 +165,11 @@ const MyAccountEdit: React.FC = () => {
         }
 		}
     }
-	console.log(newFormValues)
 	 for (let i = 0; i < formFields.length; i++) { 
 		const currentField = formFields[i];
       const currentValue = formValues[currentField].error;
-		console.log("ALEJANDRO")
-		if(currentValue === "false") {
-			console.log("ALEJANDRO")
+		console.log(currentValue)
+		if(currentValue === false) {
 		 	updateUser({ variables: {
 				firstName: formValues.firstName.value,
 				lastName: formValues.lastName.value,
