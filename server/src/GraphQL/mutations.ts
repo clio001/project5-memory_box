@@ -88,7 +88,18 @@ const Mutation = new GraphQLObjectType({
       },
     },
 
-    // TODO: DELETE USER ACCOUNT
+    // * DELETE USER
+
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await User.findByIdAndDelete(args.id);
+      },
+    },
 
     // * ADD NEW ITEM
     addItem: {
@@ -104,7 +115,8 @@ const Mutation = new GraphQLObjectType({
       // const item : Item= {
       //   title,
       // }
-      async resolve(parent, args) {
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
         let newItem = new Item({
           title: args.title,
           description: args.description,
@@ -114,6 +126,42 @@ const Mutation = new GraphQLObjectType({
           share: args.share,
         });
         return await newItem.save();
+      },
+    },
+
+    // * UPDATE ITEM
+    updateItem: {
+      type: ItemType,
+      args: {
+        id: { type: GraphQLID },
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        type: { type: GraphQLString },
+        file_url: { type: GraphQLString },
+        share: { type: GraphQLBoolean },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await Item.findByIdAndUpdate(args.id, {
+          title: args.title,
+          description: args.description,
+          type: args.type,
+          file_url: args.file_url,
+          share: args.share,
+        });
+      },
+    },
+
+    // * DELETE ITEM
+
+    deleteItem: {
+      type: ItemType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await Item.findByIdAndDelete(args.id);
       },
     },
   },
