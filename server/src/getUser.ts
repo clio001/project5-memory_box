@@ -14,9 +14,9 @@ const getUser = async (token) => {
       }
     });
   });
-  // console.log("VERIFIED: ", verified.sub);
+
   const user = await User.findById(verified.sub);
-  //console.log("Verfiied user: ", user);
+
   return user;
 };
 

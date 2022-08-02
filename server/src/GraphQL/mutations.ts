@@ -41,10 +41,9 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      async resolve(parent, args, context) {
-        console.log("context: ", context.permission);
+      async resolve(parent, args) {
         // * 1. verify password using bcrypt compare
-        const existingUser: dbModel.User = await User.findOne({
+        const existingUser = await User.findOne({
           email: args.email,
         });
         if (!existingUser) {
@@ -61,8 +60,7 @@ const Mutation = new GraphQLObjectType({
             // * 2. Issue token
             const token = createToken(existingUser.id);
             console.log("Token: ", token);
-
-            return { ...existingUser, token: { token } };
+            return { ...existingUser.toObject(), token };
           }
         }
       },

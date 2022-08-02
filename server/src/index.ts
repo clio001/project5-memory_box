@@ -56,11 +56,17 @@ const runApolloServer = () => {
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
+    introspection: true,
     cache: "bounded",
     context: async ({ req }) => {
-      const { token } = req.headers;
-      const user = await getUser(token);
-      return { user };
+      if (!req.headers.token) {
+        return null;
+      } else {
+        const { token } = req.headers;
+        const user = await getUser(token);
+
+        return { user };
+      }
     },
   });
 
