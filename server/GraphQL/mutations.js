@@ -39,15 +39,21 @@ const Mutation = new GraphQLObjectType({
 				id: { type: GraphQLID },
 				firstName: { type: GraphQLString },
 				lastName: { type: GraphQLString },
+				email: { type: GraphQLString },
+				password: { type: GraphQLString },
 				avatar_url: { type: GraphQLString },
-				location: { type: GraphQLString },
+				banner_url: { type: GraphQLString },
+				// location: { type: GraphQLString },
 			},
 			async resolve(parent, args) {
 				return await User.findByIdAndUpdate(args.id, {
 					firstName: args.firstName,
 					lastName: args.lastName,
+					email: args.email,
+					password: args.password,
 					avatar_url: args.avatar_url,
-					location: args.location,
+					banner_url: args.banner_url,
+					// location: args.location,
 				});
 			},
 		},

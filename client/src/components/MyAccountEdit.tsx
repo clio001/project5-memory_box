@@ -34,6 +34,7 @@ const CssTextField = styled(TextField)({
 //   email: string;
 //   avatar_url: string;
 // }>
+
 interface GetUsers {
   [key: string]: any;
   id: string;
@@ -65,16 +66,17 @@ mutation UpdateUser(
 	$lastName: String, 
 	$email: String, 
 	$password: String, 
-	$avatarUrl: String,
-	$bannerURL: String
+	$avatarUrl: String, 
+	$bannerUrl: String
 	) {
-  updateUser(
+	updateUser(
+	id: "62dd51f4c0c6c0d1781a1dac", 
 	firstName: $firstName, 
 	lastName: $lastName, 
-	email: $email,
-	password: $password,
-	avatar_url: $avatarUrl,
-	banner_url: $bannerURL,
+	email: $email, 
+	password: $password, 
+	avatar_url: $avatarUrl, 
+	banner_url: $bannerUrl
 	) {
     firstName
     lastName
@@ -85,41 +87,110 @@ mutation UpdateUser(
   }
 }
 `;
+interface FormError {
+	value: string;
+	error: boolean;
+	errorMessage: string
+}
+
+interface FormFieldError {
+	firstName: FormError;
+	lastName: FormError;
+	email: FormError;
+	password: FormError;
+	avatar_url: FormError;
+	banner_url: FormError;
+}
+
 
 const MyAccountEdit: React.FC = () => {
 
   const { loading, error, data } = useQuery<GetUsers>(GET_USERS);
-  console.log(data?.users);
+//   console.log(data?.users);
 //   console.log(data?.users[3].firstName);
 
 
-	//Default value for inputs
-	const defaultValues = {firstName: "", lastName: "", avatar_url: "", banner_url: "", email: "", password: ""};
+	const defaultValues: any = {
+		firstName:{
+			value:'',
+			error:false,
+			errorMessage:'You must enter a Name'
+    	}, 
+
+		lastName:{
+			value:'',
+			error:false,
+			errorMessage:'You must enter a Last Name'
+    	}, 
+		email:{
+			value:'',
+			error:false,
+			errorMessage:'You must enter a E-Mail'
+    	}, 
+		password:{
+			value:'',
+			error:false,
+			errorMessage:'You must enter a Password'
+    	}, 
+		avatar_url:{
+			value:'',
+			error:false,
+			errorMessage:'You must enter a Avatar_URL'
+    	}, 
+		banner_url:{
+			value:'',
+			error:false,
+			errorMessage:'You must enter a Banner_URL'
+    	}, 
+	};
+
 
 	const [formValues, setFormValues] = useState(defaultValues);
-	console.log(formValues)
 
-    const [updateUser] = useMutation(UPDATE_USER);
+   const [updateUser] = useMutation(UPDATE_USER);
 	 
+	const handleChange  = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		const {name, value}:{name: any; value: string}  = e.target;
+		setFormValues({
+			...formValues,
+			[name]:{
+				...formValues[name],
+				value
+			}
+		})
+	}
 	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		 e.preventDefault();
-		 handleClear();
+		//  handleClear();
 		 updateUser({ variables: {
 			 firstName: formValues.firstName,
 			 lastName: formValues.lastName,
 			 email: formValues.email,
-			 avatar_url: formValues.avatar_url,
-			 banner_url: formValues.banner_url,
-			 password: formValues.password
+			 password: formValues.password,
+			 avatarUrl: formValues.avatar_url,
+			 bannerUrl: formValues.banner_url,
 			} });
-		};
+
+	 const formFields = Object.keys(formValues);
+    let newFormValues = {...formValues}
+
+    for (let index = 0; index < formFields.length; index++) {
+      const currentField = formFields[index];
+      const currentValue = formValues[currentField].value;
+
+      if(currentValue === ''){
+        newFormValues = {
+          ...newFormValues,
+          [currentField]:{
+            ...newFormValues[currentField],
+            error:true
+          }
+        }
+      }
+    }
+    setFormValues(newFormValues)
+	};
 		
-		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-			setFormValues({
-				...formValues,
-				[e.target.name]: e.target.value
-			});
-		};
 
   const handleClear = () => {
 	setFormValues(defaultValues)
@@ -231,7 +302,10 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "20px" }}
 			 name="firstName"
 			 value={formValues.firstName}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
+
+			 error={formValues.firstName.error}
+         helperText={formValues.firstName.error && formValues.firstName.errorMessage}
         />
 
         <CssTextField
@@ -244,7 +318,7 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "20px"}}
 			 name="lastName"
 			 value={formValues.lastName}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
         />
 
 		  	{/* <CssTextField
@@ -257,7 +331,7 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "20px", }}
 			 name="location"
 			 value={data?.users[3].location}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
         /> */}
 
 		  <CssTextField
@@ -270,7 +344,7 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "20px" }}
 			 name="email"
 			 value={formValues.email}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
         />
 
         <CssTextField
@@ -283,7 +357,7 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "30px", }}
 			 name="password"
 			 value={formValues.password}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
         />
 
         <CssTextField
@@ -296,7 +370,7 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "30px", }}
 			 name="avatar_url"
 			 value={formValues.avatar_url}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
         />
 
         <CssTextField
@@ -310,7 +384,7 @@ const MyAccountEdit: React.FC = () => {
 			 name="banner_url"
 			//  value={data?.users[3].banner_url || ''}
 			 value={formValues.banner_url}
-			 onChange={handleInputChange}
+			 onChange={handleChange }
         />
 
 
