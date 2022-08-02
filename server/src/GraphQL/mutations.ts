@@ -44,7 +44,7 @@ const Mutation = new GraphQLObjectType({
       async resolve(parent, args, context) {
         console.log("context: ", context.permission);
         // * 1. verify password using bcrypt compare
-        const existingUser = await User.findOne({
+        const existingUser: dbModel.User = await User.findOne({
           email: args.email,
         });
         if (!existingUser) {
@@ -108,6 +108,7 @@ const Mutation = new GraphQLObjectType({
         title: { type: GraphQLString },
         description: { type: GraphQLString },
         createdBy: { type: GraphQLString },
+        user_id: { type: GraphQLString },
         type: { type: GraphQLString },
         file_url: { type: GraphQLString },
         share: { type: GraphQLBoolean },
@@ -117,10 +118,11 @@ const Mutation = new GraphQLObjectType({
       // }
       async resolve(parent, args, context) {
         if (!context.user) return null;
-        let newItem = new Item({
+        let newItem = new Item<dbModel.Item>({
           title: args.title,
           description: args.description,
           createdBy: args.createdBy,
+          user_id: args.user_id,
           type: args.type,
           file_url: args.file_url,
           share: args.share,

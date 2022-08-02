@@ -1,5 +1,6 @@
 declare namespace dbModel {
   interface User {
+    id?: string;
     firstName?: string;
     lastName?: string;
     email: string;
@@ -17,6 +18,7 @@ declare namespace dbModel {
   }
 
   interface Item {
+    id?: string;
     title: string;
     description?: string;
     year?: string;
