@@ -161,24 +161,25 @@ const MyAccountEdit: React.FC = () => {
 	}
 	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		 e.preventDefault();
-		//  handleClear();
+		 handleClear();
 		 updateUser({ variables: {
-			 firstName: formValues.firstName,
-			 lastName: formValues.lastName,
-			 email: formValues.email,
-			 password: formValues.password,
-			 avatarUrl: formValues.avatar_url,
-			 bannerUrl: formValues.banner_url,
+			 firstName: formValues.firstName.value,
+			 lastName: formValues.lastName.value,
+			 email: formValues.email.value,
+			 password: formValues.password.value,
+			 avatarUrl: formValues.avatar_url.value,
+			 bannerUrl: formValues.banner_url.value,
 			} });
 
 	 const formFields = Object.keys(formValues);
     let newFormValues = {...formValues}
 
-    for (let index = 0; index < formFields.length; index++) {
-      const currentField = formFields[index];
+    for (let i = 0; i < formFields.length; i++) {
+      const currentField = formFields[i];
+		console.log("currentField: ", currentField)
       const currentValue = formValues[currentField].value;
-
-      if(currentValue === ''){
+		console.log("Current Value: ",currentValue)
+      if(currentValue === ""){
         newFormValues = {
           ...newFormValues,
           [currentField]:{
@@ -189,6 +190,7 @@ const MyAccountEdit: React.FC = () => {
       }
     }
     setFormValues(newFormValues)
+	 console.log("YOYOOOOOOOOOOOO ",newFormValues)
 	};
 		
 
@@ -301,11 +303,11 @@ const MyAccountEdit: React.FC = () => {
           }}
           sx={{ width: "280px", mb: "20px" }}
 			 name="firstName"
-			 value={formValues.firstName}
+			 value={formValues.firstName.value}
 			 onChange={handleChange }
 
-			 error={formValues.firstName.error}
-         helperText={formValues.firstName.error && formValues.firstName.errorMessage}
+			error={formValues.firstName.error}
+         // helperText={formValues.firstName.error && formValues.firstName.errorMessage}
         />
 
         <CssTextField
@@ -317,8 +319,11 @@ const MyAccountEdit: React.FC = () => {
           }}
           sx={{ width: "280px", mb: "20px"}}
 			 name="lastName"
-			 value={formValues.lastName}
+			 value={formValues.lastName.value}
 			 onChange={handleChange }
+
+			error={formValues.lastName.error}
+         // helperText={formValues.lastName.error && formValues.lastName.errorMessage}
         />
 
 		  	{/* <CssTextField
@@ -343,8 +348,12 @@ const MyAccountEdit: React.FC = () => {
           }}
           sx={{ width: "280px", mb: "20px" }}
 			 name="email"
-			 value={formValues.email}
+			 value={formValues.email.value}
 			 onChange={handleChange }
+
+
+			error={formValues.email.error}
+         // helperText={formValues.email.error && formValues.email.errorMessage}
         />
 
         <CssTextField
@@ -356,8 +365,11 @@ const MyAccountEdit: React.FC = () => {
           }}
           sx={{ width: "280px", mb: "30px", }}
 			 name="password"
-			 value={formValues.password}
+			 value={formValues.password.value}
 			 onChange={handleChange }
+
+			 error={formValues.password.error}
+         // helperText={formValues.password.error && formValues.password.errorMessage}
         />
 
         <CssTextField
@@ -369,8 +381,11 @@ const MyAccountEdit: React.FC = () => {
           }}
           sx={{ width: "280px", mb: "30px", }}
 			 name="avatar_url"
-			 value={formValues.avatar_url}
+			 value={formValues.avatar_url.value}
 			 onChange={handleChange }
+
+			 error={formValues.avatar_url.error}
+         // helperText={formValues.avatar_url.error && formValues.avatar_url.errorMessage}
         />
 
         <CssTextField
@@ -383,8 +398,11 @@ const MyAccountEdit: React.FC = () => {
           sx={{ width: "280px", mb: "30px", }}
 			 name="banner_url"
 			//  value={data?.users[3].banner_url || ''}
-			 value={formValues.banner_url}
+			 value={formValues.banner_url.value}
 			 onChange={handleChange }
+
+			 error={formValues.banner_url.error}
+         // helperText={formValues.banner_url.error && formValues.banner_url.errorMessage}
         />
 
 
