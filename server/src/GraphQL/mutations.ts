@@ -74,6 +74,7 @@ const Mutation = new GraphQLObjectType({
         firstName: { type: GraphQLString },
         lastName: { type: GraphQLString },
         avatar_url: { type: GraphQLString },
+        banner_url: { type: GraphQLString },
         location: { type: GraphQLString },
       },
       async resolve(parent, args) {
@@ -81,6 +82,7 @@ const Mutation = new GraphQLObjectType({
           firstName: args.firstName,
           lastName: args.lastName,
           avatar_url: args.avatar_url,
+          banner_url: args.banner_url,
           location: args.location,
         });
       },
