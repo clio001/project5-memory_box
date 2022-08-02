@@ -1,9 +1,36 @@
 import React from "react";
 // import { Link as LinkRouter } from "react-router-dom";
+import { useQuery, gql } from "@apollo/client";
 import { Grid, Box, Typography } from "@mui/material";
-import { width } from "@mui/system";
+
+interface GetUsers {
+  [key: string]: any;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar_url: string;
+}
+
+const GET_USERS = gql`
+  query GetUsers {
+    users {
+      id
+      firstName
+      lastName
+      email
+      avatar_url
+    }
+  }
+`;
 
 const MyAccount: React.FC = () => {
+  const { loading, error, data } = useQuery<GetUsers>(GET_USERS);
+
+  console.log(data?.users);
+
+  console.log(data?.users[3].firstName);
+
   return (
     <Grid
       container
@@ -29,11 +56,23 @@ const MyAccount: React.FC = () => {
             "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat;",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center", pt: "170px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            pt: "90px",
+            width: "150px",
+            margin: "0 auto",
+          }}
+        >
           <img
-            src="./profile-img.png"
+            src={data?.users[3].avatar_url}
             alt="profile img"
-            style={{ border: "5px solid #fff", borderRadius: "100px" }}
+            style={{
+              borderRadius: "100px",
+              width: "150px",
+              boxShadow: "0 0 0px 5px #b5b5b5",
+            }}
           />
         </Box>
       </Box>
@@ -42,17 +81,16 @@ const MyAccount: React.FC = () => {
           variant="h1"
           color="initial"
           sx={{
-            display: "inline-block",
             fontSize: "24px",
-            lineHeight: "35px",
+            lineHeight: "0px",
             letterSpacing: "0px",
-            pt: "80px",
+            pt: "90px",
+            pb: "15px",
             textAlign: "center",
           }}
         >
-          Alejandro F. Marrero
+          {data?.users[3].firstName}
         </Typography>
-        <br />
         <Typography
           component="p"
           color="initial"
@@ -65,7 +103,7 @@ const MyAccount: React.FC = () => {
             fontWeight: "300",
           }}
         >
-          info@alejandrofm.com
+          {data?.users[3].email}
         </Typography>
       </Box>
       <Box
@@ -106,3 +144,14 @@ const MyAccount: React.FC = () => {
   );
 };
 export default MyAccount;
+
+// <Box>
+//   <div>
+//     {data &&
+//       data?.users.map((param: any) => (
+//         <div key={param.id}>
+//           <h2>{param.firstName}</h2>
+//         </div>
+//       ))}
+//   </div>
+// </Box>;

@@ -1,8 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as LinkRouter } from "react-router-dom";
 import { Grid, Box, Typography, Button, TextField } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { gql, useMutation } from "@apollo/client"
+
+const CssTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#473800',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#473800',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      color: '#79747E',
+      borderColor: '#79747E',
+    },
+    '&:hover fieldset': {
+      color: '#666500',
+      borderColor: '#666500',
+    },
+    '&.Mui-focused fieldset': {
+      color: '#473800',
+      borderColor: '#473800',
+    },
+  },
+});
+
+//Apollo operation to AddUser 
+const ADD_USER = gql`
+mutation AddUser(
+	$email: String, 
+	$password: String
+	) {
+  addUser(email: $email, password: $password) {
+    email
+    password
+  }
+}
+`;
 
 const Register: React.FC = () => {
+
+	//Default value for inputs
+	const defaultValues = {email: "", password: ""};
+
+	const [formValues, setFormValues] = useState(defaultValues);
+
+    const [addUser] = useMutation(ADD_USER);
+	 
+	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		 e.preventDefault();
+		 handleClear();
+		 addUser({ variables: {
+			 email: formValues.email,
+			 password: formValues.password,
+			} });
+		};
+		
+		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			setFormValues({
+				...formValues,
+				[e.target.name]: e.target.value
+			});
+		};
+
+  const handleClear = () => {
+	setFormValues(defaultValues)
+ };
+
   return (
     <Grid
       container
@@ -51,7 +117,8 @@ const Register: React.FC = () => {
           mt: "50px",
         }}
       >
-        <TextField
+		<form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+        <CssTextField
           id="outlined-email"
           label="E-Mail"
           type="text"
@@ -59,9 +126,12 @@ const Register: React.FC = () => {
             shrink: true,
           }}
           sx={{ width: "280px", mb: "20px" }}
+			 name="email"
+			 value={formValues.email}
+			 onChange={handleInputChange}
         />
 
-        <TextField
+        <CssTextField
           id="outlined-password"
           label="Password"
           type="password"
@@ -69,17 +139,19 @@ const Register: React.FC = () => {
             shrink: true,
           }}
           sx={{ width: "280px", mb: "30px", borderRadius: "100px" }}
+			 name="password"
+			 value={formValues.password}
+			 onChange={handleInputChange}
         />
 
-        <Button
-          variant="contained"
+		  <Button variant="contained"
           size="large"
           disableElevation
-          className="buttons"
-        >
-          Register
+          className="buttons" 
+			 type="submit">
+          Create Account
         </Button>
-
+		</form>
         <Typography component="p" sx={{ mt: "25px" }}>
           Already have an account?{" "}
           <LinkRouter to="/login" style={{ textDecoration: "none" }}>
