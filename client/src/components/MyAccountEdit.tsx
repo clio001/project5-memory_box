@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 // import { Link as LinkRouter } from "react-router-dom";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { Grid, Box, Typography, TextField, Button } from "@mui/material";
+import { Grid, Box, Typography, TextField, Button, Collapse, Alert } from "@mui/material";
 import { styled } from '@mui/material/styles';
+
+import {Severity} from "../types"
+
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -34,6 +37,8 @@ const CssTextField = styled(TextField)({
 //   email: string;
 //   avatar_url: string;
 // }>
+
+
 
 interface GetUsers {
   [key: string]: any;
@@ -126,6 +131,14 @@ const MyAccountEdit: React.FC = () => {
 
 	const [formValues, setFormValues] = useState(defaultValues);
 
+	const [alert, setAlert] = useState<boolean>(false)
+	const [alertSeverity, setAlertSeverity] = useState<Severity>()
+	const [alertMessage, setAlertMessage] = useState<string>()
+
+	function closeAlerts() {
+		setAlert(false);
+	}
+
 
    const [updateUser] = useMutation(UPDATE_USER);
 	 
@@ -176,6 +189,10 @@ const MyAccountEdit: React.FC = () => {
 				avatarUrl: formValues.avatar_url.value,
 				bannerUrl: formValues.banner_url.value,
 			} });
+			setAlert(true)
+			setAlertSeverity("warning")
+			setAlertMessage("Todo bien")
+			setTimeout(closeAlerts, 3000);
 		}
 	 }
     setFormValues(newFormValues)
@@ -343,6 +360,11 @@ const MyAccountEdit: React.FC = () => {
 			 type="submit">
           Save Changes
         </Button>
+		  <Collapse in={alert}>
+				<Alert severity={alertSeverity}>
+					Hola
+				</Alert>
+			</Collapse>
 		</form>
 </Box>
 
