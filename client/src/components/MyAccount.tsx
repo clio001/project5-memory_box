@@ -1,8 +1,9 @@
 import React from "react";
-// import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
-import { Grid, Box, Typography } from "@mui/material";
-
+import { Grid, Box, Typography, Tooltip, Button } from "@mui/material";
+import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
+import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 
 import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types"
 
@@ -47,6 +48,7 @@ const MyAccount: React.FC = () => {
           position: "relative",
           width: "100%",
           height: "200px",
+			 mb: '70px',
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
           background:
@@ -73,6 +75,18 @@ const MyAccount: React.FC = () => {
           />
         </Box>
       </Box>
+		<Box sx={{mb: '30px'}}>
+			<Tooltip title="Admin" arrow placement="top">
+
+					<LocalPoliceOutlinedIcon sx={{color: "#BD5252"}}/>
+
+				</Tooltip>
+			<Tooltip title="Top Contributor" arrow placement="top">
+
+					<WorkspacePremiumOutlinedIcon sx={{color: "#BD5252"}}/>
+
+				</Tooltip>
+		</Box>
       <Box>
         <Typography
           variant="h1"
@@ -81,13 +95,25 @@ const MyAccount: React.FC = () => {
             fontSize: "24px",
             lineHeight: "0px",
             letterSpacing: "0px",
-            pt: "90px",
-            pb: "15px",
+            pb: "40px",
             textAlign: "center",
           }}
         >
-          {data?.users[3].firstName}
+          {data?.users[3].firstName}{" "} {data?.users[3].lastName}
         </Typography>
+
+<Box sx={{display: 'flex', justifyContent: 'center'}}>
+	<LinkRouter to="/edit-account">
+		 <Button variant="contained"
+          size="large"
+          disableElevation
+          className="buttons" 
+			 type="submit"
+			 sx={{width:'130px', height: '26px', fontSize: '12px!important'}}>
+          Edit Profile
+        </Button>
+		  </LinkRouter>
+		  </Box>
         <Typography
           component="p"
           color="initial"
