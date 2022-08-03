@@ -238,7 +238,7 @@ const MyAccountEdit: React.FC = () => {
             style={{
               borderRadius: "100px",
               width: "150px",
-              border: '4px solid #666500',
+              boxShadow: 'rgb(181 181 181) 0px 0px 0px 5px',
             }}
           />
 			 <Box sx={{ position: 'absolute', top: '100px', right: '-7px', background: '#fff', borderRadius: '100px', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.13)'  }}>

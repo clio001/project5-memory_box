@@ -3,23 +3,20 @@ import React from "react";
 import { useQuery, gql } from "@apollo/client";
 import { Grid, Box, Typography } from "@mui/material";
 
-interface GetUsers {
-  [key: string]: any;
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatar_url: string;
-}
+
+import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types"
+
 
 const GET_USERS = gql`
   query GetUsers {
     users {
-      id
+      _id
       firstName
       lastName
       email
+		password
       avatar_url
+		banner_url
     }
   }
 `;
