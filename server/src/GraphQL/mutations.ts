@@ -186,7 +186,7 @@ const Mutation = new GraphQLObjectType({
         item_id: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
-        /* if (!context.user) return null; */
+        if (!context.user) return null;
         let newComment = new Comment<dbModel.Comment>({
           body: args.body,
           user_id: args.user_id,

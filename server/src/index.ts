@@ -5,10 +5,16 @@ import itemsRoute from "./routes/itemsRoute.js";
 import commentsRoute from "./routes/commentsRoute.js";
 import cors from "cors";
 import mongoose from "mongoose";
-import { ApolloServer } from "apollo-server";
 import { schema } from "./GraphQL/schema.js";
 import { getUser } from "./getUser.js";
-import passport from "passport";
+import { ApolloServer, gql } from "apollo-server-express";
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageLocalDefault,
+} from "apollo-server-core";
+import http from "http";
+
+import { GraphQLUpload } from "graphql-upload";
 
 // TODO: https://www.apollographql.com/docs/react/get-started
 
@@ -52,7 +58,9 @@ const connectToMongoDB = async () => {
   }
 };
 
-const runApolloServer = () => {
+const runApolloServer = async () => {
+  const httpServer = http.createServer(app);
+
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
@@ -68,11 +76,25 @@ const runApolloServer = () => {
         return { user };
       }
     },
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+    ],
+  });
+  await server.start();
+
+  server.applyMiddleware({
+    app,
+    path: "/graphql",
   });
 
-  server.listen().then(({ url }) => {
-    console.log(`Apollo server is running at ${url}`);
-  });
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: 4000 }, resolve)
+  );
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+
+  /*  server.listen().then(({ url }) => {
+    console.log(`Apollo server is running at ${url}`); */
 };
 
 (async () => {
