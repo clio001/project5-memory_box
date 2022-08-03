@@ -4,7 +4,7 @@ import { useQuery, gql, useMutation } from "@apollo/client";
 import { Grid, Box, Typography, TextField, Button, Collapse, Alert } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
-import {Severity} from "../types"
+import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types"
 
 
 const CssTextField = styled(TextField)({
@@ -30,26 +30,8 @@ const CssTextField = styled(TextField)({
   },
 });
 
-// type  GetUsers Array<{
-//   id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   avatar_url: string;
-// }>
 
 
-
-interface GetUsers {
-  [key: string]: any;
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  avatar_url: string;
-  banner_url: string;
-}
 
 const GET_USERS = gql`
   query GetUsers {
@@ -83,34 +65,22 @@ mutation UpdateUser(
   }
 }
 `;
-interface FormError {
-	value: string;
-	error: boolean;
-	errorMessage: string
-}
-
-interface FormFieldError {
-	firstName: FormError;
-	lastName: FormError;
-	avatar_url: FormError;
-	banner_url: FormError;
-}
 
 
 const MyAccountEdit: React.FC = () => {
 
   const { loading, error, data } = useQuery<GetUsers>(GET_USERS);
-//   console.log(data?.users);
+  console.log(data?.users);
 //   console.log(data?.users[3].firstName);
 
 
-	const defaultValues: any = {
+
+	const [formValues, setFormValues] = useState<FormErrors>({
 		firstName:{
 			value:'',
 			error:false,
 			errorMessage:'You must enter a Name'
     	}, 
-
 		lastName:{
 			value:'',
 			error:false,
@@ -125,25 +95,22 @@ const MyAccountEdit: React.FC = () => {
 			value:'',
 			error:false,
 			errorMessage:'You must enter a Banner_URL'
-    	}, 
-	};
-
-
-	const [formValues, setFormValues] = useState(defaultValues);
+    	}, }
+	);
 
 	const [alert, setAlert] = useState<boolean>(false)
-	const [alertSeverity, setAlertSeverity] = useState<Severity>()
-	const [alertMessage, setAlertMessage] = useState<string>()
+	const [alertSeverity, setAlertSeverity] = useState<ErrorSeverity>()
+	const [alertMessage, setAlertMessage] = useState<ErrorMessage>()
 
 	function closeAlerts() {
 		setAlert(false);
 	}
 
-
    const [updateUser] = useMutation(UPDATE_USER);
 	 
 	const handleChange  = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const {name, value}:{name: any; value: string}  = e.target;
+		// const {name, value}:{name: string; value: string}  = e.target;
+		const {name, value} = e.target;
 		setFormValues({
 			...formValues,
 			[name]:{
@@ -152,10 +119,14 @@ const MyAccountEdit: React.FC = () => {
 			}
 		})
 	}
+
 	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		 e.preventDefault();
+
+	 e.preventDefault();
 	 const formFields = Object.keys(formValues);
     let newFormValues = {...formValues}
+	 
+		console.log("Before For", newFormValues)
 
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
@@ -168,7 +139,8 @@ const MyAccountEdit: React.FC = () => {
             error:true
           }
         }
-      } else {
+		  console.log("First IF ",newFormValues)
+      }  else {
 			newFormValues = {
           ...newFormValues,
           [currentField]:{
@@ -178,31 +150,20 @@ const MyAccountEdit: React.FC = () => {
         }
 		}
     }
-	 for (let i = 0; i < formFields.length; i++) { 
-		const currentField = formFields[i];
-      const currentValue = formValues[currentField].error;
-		console.log(currentValue)
-		if(currentValue === false) {
-		 	updateUser({ variables: {
+      if(!newFormValues.firstName.error && !newFormValues.lastName.error  && !newFormValues.avatar_url.error && !newFormValues.banner_url.error) {
+			updateUser({ variables: {
 				firstName: formValues.firstName.value,
 				lastName: formValues.lastName.value,
 				avatarUrl: formValues.avatar_url.value,
 				bannerUrl: formValues.banner_url.value,
-			} });
+			}});
 			setAlert(true)
-			setAlertSeverity("warning")
-			setAlertMessage("Todo bien")
+			setAlertSeverity("success")
+			setAlertMessage("Changes have been saved successfully.")
 			setTimeout(closeAlerts, 3000);
-		}
-	 }
-    setFormValues(newFormValues)
+		  }
+	setFormValues(newFormValues)
 	};
-		
-
-  const handleClear = () => {
-	setFormValues({defaultValues})
- };
-
 
   return (
     <Grid
@@ -217,26 +178,37 @@ const MyAccountEdit: React.FC = () => {
         flexWrap: "nowrap",
         mt: "55px",
       }}
-    >
+    > <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: "200px",
+          backgroundColor: "#f6f6f6",
+          borderRadius: "0 0 70px 70px",
+          background:
+            "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat;",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            pt: "60px",
+            pt: "90px",
             width: "150px",
             margin: "0 auto",
           }}
         >
           <img
-            src={data?.users[3].avatar_url}
+            src={data?.users[5].avatar_url === null || "" ? "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" : data?.users[5].avatar_url}
             alt="profile img"
             style={{
               borderRadius: "100px",
-              width: "100px",
+              width: "150px",
+              boxShadow: "0 0 0px 5px #b5b5b5",
             }}
           />
         </Box>
-
+      </Box>
       <Box>
         <Typography
           variant="h1"
@@ -245,7 +217,7 @@ const MyAccountEdit: React.FC = () => {
             fontSize: "24px",
             lineHeight: "0px",
             letterSpacing: "0px",
-            pt: "50px",
+            pt: "90px",
             pb: "15px",
             textAlign: "center",
           }}
@@ -298,7 +270,7 @@ const MyAccountEdit: React.FC = () => {
           mt: "30px",
         }}
       >
-	<form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+	<form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <CssTextField
           id="outlined-firstName"
           label="Name"
@@ -360,9 +332,9 @@ const MyAccountEdit: React.FC = () => {
 			 type="submit">
           Save Changes
         </Button>
-		  <Collapse in={alert}>
+		  <Collapse in={alert} sx={{mt: '20px', borderRadius: '100px'}}>
 				<Alert severity={alertSeverity}>
-					Hola
+					{alertMessage}
 				</Alert>
 			</Collapse>
 		</form>
