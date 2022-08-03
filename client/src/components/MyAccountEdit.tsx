@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-// import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter } from "react-router-dom";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { Grid, Box, Typography, TextField, Button, Collapse, Alert } from "@mui/material";
+import { Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton } from "@mui/material";
+import {PhotoCamera } from '@mui/icons-material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { styled } from '@mui/material/styles';
 
+
 import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types"
+
+
+const Input = styled('input')({
+	display: 'none',
+});
 
 
 const CssTextField = styled(TextField)({
@@ -189,6 +197,31 @@ const MyAccountEdit: React.FC = () => {
             "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat;",
         }}
       >
+			<LinkRouter to="/my-account">
+				<Box sx={{ position: 'absolute', display: 'flex', alignItems: 'center', top: '20px', left: '15px', color: '#fff'}}>
+					
+					<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', background: '#fff', borderRadius: '100px',mr: '8px', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.13)' }}>
+						<ArrowBackIosNewIcon sx={{color: '#AEAEAE'}}/>
+					</Box>
+					<Box sx={{fontSize: '12px', textShadow: '0px 0px 8px #484848'}}>Go back</Box>
+						
+					
+				</Box>
+				</LinkRouter>
+			
+
+				<Box sx={{ position: 'absolute', top: '20px', right: '15px', background: '#fff', borderRadius: '100px',boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.13)'  }}>
+				<FormControl>
+				<label htmlFor="icon-button-file">
+					<Input accept="image/*" id="icon-button-file" type="file" />
+					<IconButton color="primary" aria-label="PROFILE" component="span">
+						<PhotoCamera sx={{color: '#000'}}/>
+					</IconButton>
+				</label>
+				{/* <Button variant="contained" size="small" color="error" sx={{ my: '10px', padding: '0px' }} disableElevation >UPLOAD</Button> */}
+				</FormControl>
+			</Box>
+
         <Box
           sx={{
             display: "flex",
@@ -196,17 +229,29 @@ const MyAccountEdit: React.FC = () => {
             pt: "90px",
             width: "150px",
             margin: "0 auto",
+				position: 'relative'
           }}
         >
           <img
-            src={data?.users[5].avatar_url === null || "" ? "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" : data?.users[5].avatar_url}
+            src={data?.users[3].avatar_url === null || "" ? "profile.svg" : data?.users[3].avatar_url}
             alt="profile img"
             style={{
               borderRadius: "100px",
               width: "150px",
-              boxShadow: "0 0 0px 5px #b5b5b5",
+              border: '4px solid #666500',
             }}
           />
+			 <Box sx={{ position: 'absolute', top: '100px', right: '-7px', background: '#fff', borderRadius: '100px', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.13)'  }}>
+				<FormControl>
+				<label htmlFor="icon-button-file">
+					<Input accept="image/*" id="icon-button-file" type="file" />
+					<IconButton color="primary" aria-label="upload picture" component="span">
+						<PhotoCamera sx={{color: '#000'}}/>
+					</IconButton>
+				</label>
+				{/* <Button variant="contained" size="small" color="error" sx={{ my: '10px', padding: '0px' }} disableElevation >UPLOAD</Button> */}
+				</FormControl>
+			</Box>
         </Box>
       </Box>
       <Box>

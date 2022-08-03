@@ -7,7 +7,7 @@ export interface GetUsers {
   [key: string]: UserAttributes;
 }
 export interface UserAttributes {
-	5: any;
+	3: any;
   _id: string;
   firstName: string;
   lastName: string;
