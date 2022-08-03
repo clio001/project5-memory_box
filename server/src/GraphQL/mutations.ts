@@ -6,9 +6,18 @@ import graphql, {
   GraphQLBoolean,
 } from "graphql";
 import _ from "lodash";
-import { ItemType, UserType, TokenType } from "./typeDefs.js";
+import {
+  ItemType,
+  UserType,
+  CommentType,
+  BookmarkType,
+  LikeType,
+} from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
+import Comment from "../models/commentModel.js";
+import Bookmark from "../models/bookmarkModel.js";
+import Like from "../models/likeModel.js";
 import bcrypt from "bcrypt";
 import { createToken } from "../utils/jwt.js";
 
@@ -164,6 +173,117 @@ const Mutation = new GraphQLObjectType({
       async resolve(parent, args, context) {
         if (!context.user) return null;
         return await Item.findByIdAndDelete(args.id);
+      },
+    },
+
+    // * ADD COMMENT
+
+    addComment: {
+      type: CommentType,
+      args: {
+        body: { type: GraphQLString },
+        user_id: { type: GraphQLString },
+        item_id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        /* if (!context.user) return null; */
+        let newComment = new Comment<dbModel.Comment>({
+          body: args.body,
+          user_id: args.user_id,
+          item_id: args.item_id,
+        });
+        return await newComment.save();
+      },
+    },
+
+    // * UPDATE COMMENT
+
+    updateComment: {
+      type: CommentType,
+      args: {
+        id: { type: GraphQLID },
+        body: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await Comment.findByIdAndUpdate(args.id, {
+          body: args.body,
+        });
+      },
+    },
+
+    // * DELETE COMMENT
+
+    deleteComment: {
+      type: CommentType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await Comment.findByIdAndDelete(args.id);
+      },
+    },
+
+    // * ADD BOOKMARK
+
+    addBookmark: {
+      type: BookmarkType,
+      args: {
+        user_id: { type: GraphQLString },
+        item_id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        let newBookmark = new Bookmark<dbModel.Bookmark>({
+          user_id: args.user_id,
+          item_id: args.item_id,
+        });
+        return await newBookmark.save();
+      },
+    },
+
+    // * DELETE BOOKMARK
+
+    deleteBookmark: {
+      type: BookmarkType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await Bookmark.findByIdAndDelete(args.id);
+      },
+    },
+
+    // * ADD LIKE
+
+    addLike: {
+      type: LikeType,
+      args: {
+        user_id: { type: GraphQLString },
+        comment_id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        let newLike = new Like<dbModel.Like>({
+          user_id: args.user_id,
+          comment_id: args.comment_id,
+        });
+        return await newLike.save();
+      },
+    },
+
+    // * DELETE LIKE
+
+    deleteLike: {
+      type: LikeType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        if (!context.user) return null;
+        return await Like.findByIdAndDelete(args.id);
       },
     },
   },

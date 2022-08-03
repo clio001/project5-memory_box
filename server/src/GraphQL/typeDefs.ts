@@ -134,6 +134,7 @@ const CommentType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     body: { type: GraphQLString },
+    item_id: { type: GraphQLString },
     user_id: { type: GraphQLString },
     author: {
       type: UserType,
@@ -184,12 +185,4 @@ const BookmarkType = new GraphQLObjectType({
   }),
 });
 
-export {
-  UserType,
-  ItemType,
-  CommentType,
-  LikeType,
-  BookmarkType,
-  GroupType,
-  TokenType,
-};
+export { UserType, ItemType, CommentType, LikeType, BookmarkType, GroupType };

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const commentSchema = new Schema(
+const commentSchema = new Schema<dbModel.Comment>(
   {
     // ! Author will be populated by GraphQL using "user_id"
     author: {

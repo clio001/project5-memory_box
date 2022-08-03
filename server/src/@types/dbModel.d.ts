@@ -34,16 +34,25 @@ declare namespace dbModel {
   }
 
   interface Comment {
-    author: string;
+    id?: string;
+    author?: string;
     body: string;
     item_id: string;
     user_id: string;
     likes?: string;
   }
 
-  interface Like {}
+  interface Like {
+    comment_id: string;
+    user_id: string;
+    author?: string;
+  }
 
-  interface Bookmark {}
+  interface Bookmark {
+    item_id: string;
+    user_id: string;
+    author?: string;
+  }
 
   interface Group {}
 }

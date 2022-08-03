@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+
 const { Schema } = mongoose;
 
-const bookmarkSchema = new Schema(
+const bookmarkSchema = new Schema<dbModel.Bookmark>(
   {
     item_id: {
       type: String,
