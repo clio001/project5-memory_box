@@ -1,16 +1,16 @@
 body {
-  margin: 0;
-  font-family: 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2D333A
+	margin: 0;
+	font-family: 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #2D333A
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
 }
 
 p {
@@ -20,10 +20,29 @@ p {
 
 a {
 	color: #666500;
+	text-decoration: none !important
 }
 
 a:hover {
-	text-decoration: underline!important;
+	text-decoration: underline !important;
+}
+
+.no-underline:hover {
+	text-decoration: none !important
+}
+
+.btn-viewCollection:hover {
+	background-color: rgb(189 82 82 / 7%) !important;
+}
+
+.collection-images img {
+	border-radius: 10px;
+	margin-right: 5px;
+	width: 23%;
+}
+
+.collection-images img:last-child {
+	margin-right: 0;
 }
 
 
@@ -40,18 +59,19 @@ a:hover {
 
 .buttons {
 	background: #666500 !important;
-		border-radius: 100px !important;
-		font-weight: 300 !important;
-		text-transform: capitalize !important;
-		font-size: 17px !important;
-		width: 280px;
-		height: 50px;
+	border-radius: 100px !important;
+	font-weight: 300 !important;
+	text-transform: capitalize !important;
+	font-size: 17px !important;
+	width: 280px;
+	height: 50px;
 }
 
 .TextField fieldset {
 	border-radius: 100px;
 	border-color: #79747E;
 }
+
 .TextField fieldset:focus {
 	border-radius: 100px;
 	border-color: #79747E;
@@ -66,12 +86,12 @@ a:hover {
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	border: 1px solid #C2C8D0!important;
-	border-radius: 100px!important;
+	border: 1px solid #C2C8D0 !important;
+	border-radius: 100px !important;
 	width: 280px;
 	height: 50px;
 	text-align: center;
-	text-transform: none!important;
-	color: #2D333A!important;
+	text-transform: none !important;
+	color: #2D333A !important;
 	font-weight: 500;
 }
