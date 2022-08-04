@@ -1,7 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
 import * as dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({path: "server/.env"});
 
 const createToken = (user_id) => {
   const payload = {
@@ -12,13 +12,9 @@ const createToken = (user_id) => {
     expiresIn: "1d",
   };
 
-  const jwt = jsonwebtoken.sign(
-    payload,
-    process.env.SECRET_OR_KEY,
-    signOptions
-  );
+  const jwt = jsonwebtoken.sign(payload, process.env.SECRET_OR_KEY, signOptions);
 
   return jwt;
 };
 
-export { createToken };
+export {createToken};

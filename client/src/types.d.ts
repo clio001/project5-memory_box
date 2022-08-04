@@ -1,13 +1,13 @@
 export interface RegisterUser {
-email: string
-password: string
+  email: string;
+  password: string;
 }
 
 export interface GetUsers {
   [key: string]: UserAttributes;
 }
 export interface UserAttributes {
-	3: any;
+  3: any;
   _id: string;
   firstName: string;
   lastName: string;
@@ -17,33 +17,22 @@ export interface UserAttributes {
   banner_url: string;
 }
 
-export type ErrorSeverity = "error" | "success" | "info" | "warning" | undefined;
-export type ErrorMessage = "Changes have been saved successfully."
+export interface GetUserToken {
+  token: string;
+}
 
+export type ErrorSeverity = "error" | "success" | "info" | "warning" | undefined;
+export type ErrorMessage = "Changes have been saved successfully.";
 
 export interface FormErrors {
-	 [key : string] : FormErrorsAttributes
+  [key: string]: FormErrorsAttributes;
 }
 
 export interface FormErrorsAttributes {
-    value : string;
-    error : boolean;
-    errorMessage : string;
+  value: string;
+  error: boolean;
+  errorMessage: string;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // export interface IForm{
 // 	firstName : firstName,
