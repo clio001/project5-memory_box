@@ -1,6 +1,6 @@
 import graphql, {GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString, GraphQLBoolean} from "graphql";
 import _ from "lodash";
-import {ItemType, UserType, CommentType, BookmarkType, LikeType, FileType, SingleUploadType} from "./typeDefs.js";
+import {ItemType, UserType, CommentType, BookmarkType, LikeType} from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
 import Comment from "../models/commentModel.js";
@@ -9,7 +9,6 @@ import Like from "../models/likeModel.js";
 import bcrypt from "bcrypt";
 import {createToken} from "../utils/jwt.js";
 import {gql} from "apollo-server-express";
-import {GraphQLUpload, Upload} from "graphql-upload";
 import {finished} from "stream/promises";
 
 const Mutation = new GraphQLObjectType({
@@ -275,31 +274,31 @@ const Mutation = new GraphQLObjectType({
       },
     },
 
-    // * FILE  UPLOAD
-    // uploadFile(file: Upload!): string!,
+    //  // * FILE  UPLOAD
+    //  // uploadFile(file: Upload!): string!,
 
-    singleUpload: {
-      type: FileType,
-      args: {
-        file: {type: SingleUploadType},
-      },
-      async resolve(parent, {file}) {
-        try {
-          const {createReadStream, filename, mimetype, encoding} = await file;
+    //  singleUpload: {
+    //    type: FileType,
+    //    args: {
+    //      file: {type: SingleUploadType},
+    //    },
+    //    async resolve(parent, {file}) {
+    //      try {
+    //        const {createReadStream, filename, mimetype, encoding} = await file;
 
-          const stream = createReadStream();
+    //        const stream = createReadStream();
 
-          const out = require("fs").createWriteStream(`./ assets/${filename}.jpg`);
+    //        const out = require("fs").createWriteStream(`./ assets/${filename}.jpg`);
 
-          stream.pipe(out);
-          await finished(out);
+    //        stream.pipe(out);
+    //        await finished(out);
 
-          return {filename, mimetype, encoding};
-        } catch (error) {
-          console.log("Error uploading single file", error);
-        }
-      },
-    },
+    //        return {filename, mimetype, encoding};
+    //      } catch (error) {
+    //        console.log("Error uploading single file", error);
+    //      }
+    //    },
+    //  },
   },
 });
 

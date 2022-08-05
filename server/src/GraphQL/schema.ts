@@ -1,7 +1,6 @@
-import graphql, { buildSchema, GraphQLSchema } from "graphql";
-import { Upload } from "graphql-upload";
-import { Mutation } from "./mutations.js";
-import { RootQuery } from "./queries.js";
+import graphql, {buildSchema, GraphQLSchema} from "graphql";
+import {Mutation} from "./mutations.js";
+import {RootQuery} from "./queries.js";
 
 const schema = new GraphQLSchema({
   query: RootQuery,
@@ -14,4 +13,4 @@ const schema = new GraphQLSchema({
     mutation: Mutation,
     `); */
 
-export { schema };
+export {schema};
