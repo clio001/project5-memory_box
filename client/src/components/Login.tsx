@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import {Link as LinkRouter} from "react-router-dom";
-import {Grid, Box, Typography, Button, TextField} from "@mui/material";
+import {Link as LinkRouter, useNavigate} from "react-router-dom";
+import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import {useQuery, useMutation, gql} from "@apollo/client";
 
@@ -40,6 +40,8 @@ const LOGIN_USER = gql`
 `;
 
 const Login: React.FC = () => {
+  const redirectTo = useNavigate();
+
   const [formValues, setFormValues] = useState<FormErrors>({
     email: {
       value: "",
@@ -65,6 +67,7 @@ const Login: React.FC = () => {
     onCompleted(data) {
       const myToken = data?.loginUser.token;
       window.localStorage.setItem("TOKEN", myToken);
+      redirectTo("/my-account");
     },
   });
   // const [loginUserToken] = useMutation(LOGIN_USER_TOKEN);
@@ -116,7 +119,6 @@ const Login: React.FC = () => {
     }
 
     if (!newFormValues.email.error && !newFormValues.password.error && validateEmail(formValues.email.value)) {
-      console.log("ALL OKAY IN THE LOGIN");
       loginUser({
         variables: {
           email: formValues.email.value,
@@ -124,7 +126,7 @@ const Login: React.FC = () => {
         },
       });
       setAlert(true);
-      setAlertSeverity("success");
+      setAlertSeverity("error");
       setAlertMessage("Changes have been saved successfully.");
       setTimeout(closeAlerts, 3000);
     }
@@ -224,6 +226,14 @@ const Login: React.FC = () => {
           <Button variant="contained" size="large" disableElevation className="buttons" type="submit">
             Login
           </Button>
+
+          <Collapse in={alert} sx={{mt: "20px"}}>
+            <Alert severity={alertSeverity} sx={{borderRadius: "100px", width: "248px"}}>
+              {error?.graphQLErrors.map(({message}, i) => (
+                <span key={i}>{message}</span>
+              ))}
+            </Alert>
+          </Collapse>
         </form>
         <Typography component="p" sx={{mt: "25px"}}>
           Don't have an account?{" "}
