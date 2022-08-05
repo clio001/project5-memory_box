@@ -4,6 +4,7 @@ import graphql, {
   GraphQLString,
   GraphQLBoolean,
   GraphQLList,
+  GraphQLScalarType,
 } from "graphql";
 import _ from "lodash";
 import Bookmark from "../models/bookmarkModel.js";
@@ -12,6 +13,7 @@ import Group from "../models/groupModel.js";
 import Item from "../models/itemModel.js";
 import Like from "../models/likeModel.js";
 import User from "../models/userModel.js";
+import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 
 // * TOKEN
 
@@ -19,6 +21,28 @@ const TokenType = new GraphQLObjectType({
   name: "Token",
   fields: () => ({
     token: { type: GraphQLString },
+  }),
+});
+
+// * UPLOAD MUTATION
+
+// type Mutation {
+//   singleUpload(file: Upload!): File!
+// }
+
+const SingleUploadType = new GraphQLScalarType({
+  name: "SingleUpload",
+  serialize: () => GraphQLUpload,
+});
+
+// * FILE
+
+const FileType = new GraphQLObjectType({
+  name: "File",
+  fields: () => ({
+    filename: { type: GraphQLString },
+    mimetype: { type: GraphQLString },
+    encoding: { type: GraphQLString },
   }),
 });
 
@@ -185,4 +209,13 @@ const BookmarkType = new GraphQLObjectType({
   }),
 });
 
-export { UserType, ItemType, CommentType, LikeType, BookmarkType, GroupType };
+export {
+  UserType,
+  ItemType,
+  CommentType,
+  LikeType,
+  BookmarkType,
+  GroupType,
+  FileType,
+  SingleUploadType,
+};

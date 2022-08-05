@@ -12,6 +12,8 @@ import {
   CommentType,
   BookmarkType,
   LikeType,
+  FileType,
+  SingleUploadType,
 } from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
@@ -20,6 +22,9 @@ import Bookmark from "../models/bookmarkModel.js";
 import Like from "../models/likeModel.js";
 import bcrypt from "bcrypt";
 import { createToken } from "../utils/jwt.js";
+import { gql } from "apollo-server-express";
+import { GraphQLUpload, Upload } from "graphql-upload";
+import { finished } from "stream/promises";
 
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -284,6 +289,34 @@ const Mutation = new GraphQLObjectType({
       async resolve(parent, args, context) {
         if (!context.user) return null;
         return await Like.findByIdAndDelete(args.id);
+      },
+    },
+
+    // * FILE  UPLOAD
+    // uploadFile(file: Upload!): string!,
+
+    singleUpload: {
+      type: FileType,
+      args: {
+        file: { type: SingleUploadType },
+      },
+      async resolve(parent, { file }) {
+        try {
+          const { createReadStream, filename, mimetype, encoding } = await file;
+
+          const stream = createReadStream();
+
+          const out = require("fs").createWriteStream(
+            `./ assets/${filename}.jpg`
+          );
+
+          stream.pipe(out);
+          await finished(out);
+
+          return { filename, mimetype, encoding };
+        } catch (error) {
+          console.log("Error uploading single file", error);
+        }
       },
     },
   },

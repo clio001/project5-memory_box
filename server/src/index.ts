@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import usersRoute from "./routes/usersRoute.js";
 import itemsRoute from "./routes/itemsRoute.js";
 import commentsRoute from "./routes/commentsRoute.js";
+import uploadsRoute from "./routes/uploadsRoute.js";
 import cors from "cors";
 import mongoose from "mongoose";
 import { schema } from "./GraphQL/schema.js";
@@ -14,7 +15,8 @@ import {
 } from "apollo-server-core";
 import http from "http";
 
-import { GraphQLUpload } from "graphql-upload";
+import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
+import { cloudinaryConfig } from "./config/cloudinaryConfig.js";
 
 // TODO: https://www.apollographql.com/docs/react/get-started
 
@@ -37,6 +39,7 @@ const loadRoutes = () => {
   app.use("/users", usersRoute);
   app.use("/items", itemsRoute);
   app.use("/comments", commentsRoute);
+  app.use("/uploads", uploadsRoute);
 };
 
 const addMiddleware = () => {
@@ -47,6 +50,7 @@ const addMiddleware = () => {
     credentials: true,
   };
   app.use(cors(corsOptions));
+  cloudinaryConfig();
 };
 
 const connectToMongoDB = async () => {
@@ -82,6 +86,7 @@ const runApolloServer = async () => {
     ],
   });
   await server.start();
+  app.use(graphqlUploadExpress());
 
   server.applyMiddleware({
     app,
