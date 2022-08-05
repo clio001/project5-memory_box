@@ -2,9 +2,9 @@ import React, {useState} from "react";
 import {Link as LinkRouter, useNavigate} from "react-router-dom";
 import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {useQuery, useMutation, gql} from "@apollo/client";
+import {useMutation, gql} from "@apollo/client";
 
-import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
+import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {

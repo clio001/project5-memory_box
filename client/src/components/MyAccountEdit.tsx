@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link as LinkRouter} from "react-router-dom";
 import {useQuery, gql, useMutation} from "@apollo/client";
-import {Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton} from "@mui/material";
+import {Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton, Fade, Modal, Backdrop} from "@mui/material";
 import {PhotoCamera} from "@mui/icons-material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {styled} from "@mui/material/styles";
@@ -35,6 +35,20 @@ const CssTextField = styled(TextField)({
   },
 });
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #666500",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+  textAlign: "center",
+};
+
 const GET_USERS = gql`
   query GetUsers {
     users {
@@ -60,6 +74,10 @@ const UPDATE_USER = gql`
 `;
 
 const MyAccountEdit: React.FC = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
   console.log(data?.users);
   //   console.log(data?.users[3].firstName);
@@ -293,6 +311,35 @@ const MyAccountEdit: React.FC = () => {
           <Collapse in={alert} sx={{mt: "20px", borderRadius: "100px"}}>
             <Alert severity={alertSeverity}>{alertMessage}</Alert>
           </Collapse>
+
+          <Box sx={{mt: "15px", mb: "30px"}}>
+            <LinkRouter onClick={handleOpen} to={""}>
+              <Typography component="p" sx={{fontSize: "12px", color: "#BD5252", textDecoration: "underline"}}>
+                Delete Account
+              </Typography>
+            </LinkRouter>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              open={open}
+              onClose={handleClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}>
+              <Fade in={open}>
+                <Box sx={style}>
+                  <Typography id="transition-modal-title" variant="h6" component="h2">
+                    Confirm account deletion
+                  </Typography>
+                  <Typography id="transition-modal-description" sx={{mt: 2}}>
+                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                  </Typography>
+                </Box>
+              </Fade>
+            </Modal>
+          </Box>
         </form>
       </Box>
     </Grid>
