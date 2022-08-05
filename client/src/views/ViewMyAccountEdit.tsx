@@ -1,4 +1,5 @@
 import Appbar from "../components/Appbar";
+import BottomNav from "../components/BottomNav";
 import MyAccountEdit from "../components/MyAccountEdit";
 import { Box } from "@mui/material";
 
@@ -7,6 +8,7 @@ function ViewMyAccountEdit() {
     <Box className="ViewMyAccountEdit">
       <Appbar />
       <MyAccountEdit />
+		<BottomNav />
     </Box>
   );
 }

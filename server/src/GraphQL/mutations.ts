@@ -1,30 +1,16 @@
-import graphql, {
-  GraphQLObjectType,
-  GraphQLList,
-  GraphQLID,
-  GraphQLString,
-  GraphQLBoolean,
-} from "graphql";
+import graphql, {GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString, GraphQLBoolean} from "graphql";
 import _ from "lodash";
-import {
-  ItemType,
-  UserType,
-  CommentType,
-  BookmarkType,
-  LikeType,
-  FileType,
-  SingleUploadType,
-} from "./typeDefs.js";
+import {ItemType, UserType, CommentType, BookmarkType, LikeType, FileType, SingleUploadType} from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
 import Comment from "../models/commentModel.js";
 import Bookmark from "../models/bookmarkModel.js";
 import Like from "../models/likeModel.js";
 import bcrypt from "bcrypt";
-import { createToken } from "../utils/jwt.js";
-import { gql } from "apollo-server-express";
-import { GraphQLUpload, Upload } from "graphql-upload";
-import { finished } from "stream/promises";
+import {createToken} from "../utils/jwt.js";
+import {gql} from "apollo-server-express";
+import {GraphQLUpload, Upload} from "graphql-upload";
+import {finished} from "stream/promises";
 
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -33,8 +19,8 @@ const Mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString },
+        email: {type: GraphQLString},
+        password: {type: GraphQLString},
       },
       async resolve(parent, args) {
         const salt = await bcrypt.genSalt(10);
@@ -52,8 +38,8 @@ const Mutation = new GraphQLObjectType({
     loginUser: {
       type: UserType,
       args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString },
+        email: {type: GraphQLString},
+        password: {type: GraphQLString},
       },
       async resolve(parent, args) {
         // * 1. verify password using bcrypt compare
@@ -63,10 +49,7 @@ const Mutation = new GraphQLObjectType({
         if (!existingUser) {
           throw Error(`${args.email} does not exist.`);
         } else {
-          const isVerified = await bcrypt.compare(
-            args.password,
-            existingUser.password
-          );
+          const isVerified = await bcrypt.compare(args.password, existingUser.password);
           if (!isVerified) {
             throw Error(`Incorrect password.`);
           } else {
@@ -74,7 +57,7 @@ const Mutation = new GraphQLObjectType({
             // * 2. Issue token
             const token = createToken(existingUser.id);
             console.log("Token: ", token);
-            return { ...existingUser.toObject(), token };
+            return {...existingUser.toObject(), token};
           }
         }
       },
@@ -84,12 +67,12 @@ const Mutation = new GraphQLObjectType({
     updateUser: {
       type: UserType,
       args: {
-        id: { type: GraphQLID },
-        firstName: { type: GraphQLString },
-        lastName: { type: GraphQLString },
-        avatar_url: { type: GraphQLString },
-        banner_url: { type: GraphQLString },
-        location: { type: GraphQLString },
+        id: {type: GraphQLID},
+        firstName: {type: GraphQLString},
+        lastName: {type: GraphQLString},
+        avatar_url: {type: GraphQLString},
+        banner_url: {type: GraphQLString},
+        location: {type: GraphQLString},
       },
       async resolve(parent, args) {
         return await User.findByIdAndUpdate(args.id, {
@@ -107,10 +90,10 @@ const Mutation = new GraphQLObjectType({
     deleteUser: {
       type: UserType,
       args: {
-        id: { type: GraphQLString },
+        id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
-        if (!context.user) return null;
+        //   if (!context.user) return null;
         return await User.findByIdAndDelete(args.id);
       },
     },
@@ -119,13 +102,13 @@ const Mutation = new GraphQLObjectType({
     addItem: {
       type: ItemType,
       args: {
-        title: { type: GraphQLString },
-        description: { type: GraphQLString },
-        createdBy: { type: GraphQLString },
-        user_id: { type: GraphQLString },
-        type: { type: GraphQLString },
-        file_url: { type: GraphQLString },
-        share: { type: GraphQLBoolean },
+        title: {type: GraphQLString},
+        description: {type: GraphQLString},
+        createdBy: {type: GraphQLString},
+        user_id: {type: GraphQLString},
+        type: {type: GraphQLString},
+        file_url: {type: GraphQLString},
+        share: {type: GraphQLBoolean},
       },
       // const item : Item= {
       //   title,
@@ -149,12 +132,12 @@ const Mutation = new GraphQLObjectType({
     updateItem: {
       type: ItemType,
       args: {
-        id: { type: GraphQLID },
-        title: { type: GraphQLString },
-        description: { type: GraphQLString },
-        type: { type: GraphQLString },
-        file_url: { type: GraphQLString },
-        share: { type: GraphQLBoolean },
+        id: {type: GraphQLID},
+        title: {type: GraphQLString},
+        description: {type: GraphQLString},
+        type: {type: GraphQLString},
+        file_url: {type: GraphQLString},
+        share: {type: GraphQLBoolean},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -173,7 +156,7 @@ const Mutation = new GraphQLObjectType({
     deleteItem: {
       type: ItemType,
       args: {
-        id: { type: GraphQLString },
+        id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -186,9 +169,9 @@ const Mutation = new GraphQLObjectType({
     addComment: {
       type: CommentType,
       args: {
-        body: { type: GraphQLString },
-        user_id: { type: GraphQLString },
-        item_id: { type: GraphQLString },
+        body: {type: GraphQLString},
+        user_id: {type: GraphQLString},
+        item_id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -206,8 +189,8 @@ const Mutation = new GraphQLObjectType({
     updateComment: {
       type: CommentType,
       args: {
-        id: { type: GraphQLID },
-        body: { type: GraphQLString },
+        id: {type: GraphQLID},
+        body: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -222,7 +205,7 @@ const Mutation = new GraphQLObjectType({
     deleteComment: {
       type: CommentType,
       args: {
-        id: { type: GraphQLString },
+        id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -235,8 +218,8 @@ const Mutation = new GraphQLObjectType({
     addBookmark: {
       type: BookmarkType,
       args: {
-        user_id: { type: GraphQLString },
-        item_id: { type: GraphQLString },
+        user_id: {type: GraphQLString},
+        item_id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -253,7 +236,7 @@ const Mutation = new GraphQLObjectType({
     deleteBookmark: {
       type: BookmarkType,
       args: {
-        id: { type: GraphQLString },
+        id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -266,8 +249,8 @@ const Mutation = new GraphQLObjectType({
     addLike: {
       type: LikeType,
       args: {
-        user_id: { type: GraphQLString },
-        comment_id: { type: GraphQLString },
+        user_id: {type: GraphQLString},
+        comment_id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -284,7 +267,7 @@ const Mutation = new GraphQLObjectType({
     deleteLike: {
       type: LikeType,
       args: {
-        id: { type: GraphQLString },
+        id: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
         if (!context.user) return null;
@@ -298,22 +281,20 @@ const Mutation = new GraphQLObjectType({
     singleUpload: {
       type: FileType,
       args: {
-        file: { type: SingleUploadType },
+        file: {type: SingleUploadType},
       },
-      async resolve(parent, { file }) {
+      async resolve(parent, {file}) {
         try {
-          const { createReadStream, filename, mimetype, encoding } = await file;
+          const {createReadStream, filename, mimetype, encoding} = await file;
 
           const stream = createReadStream();
 
-          const out = require("fs").createWriteStream(
-            `./ assets/${filename}.jpg`
-          );
+          const out = require("fs").createWriteStream(`./ assets/${filename}.jpg`);
 
           stream.pipe(out);
           await finished(out);
 
-          return { filename, mimetype, encoding };
+          return {filename, mimetype, encoding};
         } catch (error) {
           console.log("Error uploading single file", error);
         }
@@ -322,4 +303,4 @@ const Mutation = new GraphQLObjectType({
   },
 });
 
-export { Mutation };
+export {Mutation};

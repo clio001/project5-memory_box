@@ -1,203 +1,177 @@
-import React, { useState } from "react";
-// import { Link as LinkRouter } from "react-router-dom";
-import { useQuery, gql, useMutation } from "@apollo/client";
-import { Grid, Box, Typography, TextField, Button } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import React, {useState} from "react";
+import {Link as LinkRouter} from "react-router-dom";
+import {useQuery, gql, useMutation} from "@apollo/client";
+import {Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton, Fade, Modal, Backdrop} from "@mui/material";
+import {PhotoCamera} from "@mui/icons-material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import {styled} from "@mui/material/styles";
+
+import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
+
+const Input = styled("input")({
+  display: "none",
+});
 
 const CssTextField = styled(TextField)({
-  '& label.Mui-focused': {
-    color: '#473800',
+  "& label.Mui-focused": {
+    color: "#473800",
   },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#473800',
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#473800",
   },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      color: '#79747E',
-      borderColor: '#79747E',
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      color: "#79747E",
+      borderColor: "#79747E",
     },
-    '&:hover fieldset': {
-      color: '#666500',
-      borderColor: '#666500',
+    "&:hover fieldset": {
+      color: "#666500",
+      borderColor: "#666500",
     },
-    '&.Mui-focused fieldset': {
-      color: '#473800',
-      borderColor: '#473800',
+    "&.Mui-focused fieldset": {
+      color: "#473800",
+      borderColor: "#473800",
     },
   },
 });
 
-// type  GetUsers Array<{
-//   id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   avatar_url: string;
-// }>
-
-interface GetUsers {
-  [key: string]: any;
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  avatar_url: string;
-  banner_url: string;
-}
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #666500",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+  textAlign: "center",
+};
 
 const GET_USERS = gql`
   query GetUsers {
     users {
-      id
+      _id
       firstName
       lastName
       email
-		password
+      password
       avatar_url
-		banner_url
+      banner_url
     }
   }
 `;
 
 const UPDATE_USER = gql`
-mutation UpdateUser(
-	$firstName: String, 
-	$lastName: String, 
-	$email: String, 
-	$password: String, 
-	$avatarUrl: String, 
-	$bannerUrl: String
-	) {
-	updateUser(
-	id: "62dd51f4c0c6c0d1781a1dac", 
-	firstName: $firstName, 
-	lastName: $lastName, 
-	email: $email, 
-	password: $password, 
-	avatar_url: $avatarUrl, 
-	banner_url: $bannerUrl
-	) {
-    firstName
-    lastName
-    email
-    avatar_url
-    banner_url
-    password
+  mutation UpdateUser($firstName: String, $lastName: String, $avatarUrl: String) {
+    updateUser(id: "62dd51f4c0c6c0d1781a1dac", firstName: $firstName, lastName: $lastName, avatar_url: $avatarUrl) {
+      firstName
+      lastName
+      avatar_url
+    }
   }
-}
 `;
-interface FormError {
-	value: string;
-	error: boolean;
-	errorMessage: string
-}
-
-interface FormFieldError {
-	firstName: FormError;
-	lastName: FormError;
-	email: FormError;
-	password: FormError;
-	avatar_url: FormError;
-	banner_url: FormError;
-}
-
 
 const MyAccountEdit: React.FC = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  const { loading, error, data } = useQuery<GetUsers>(GET_USERS);
-//   console.log(data?.users);
-//   console.log(data?.users[3].firstName);
+  const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
+  console.log(data?.users);
+  //   console.log(data?.users[3].firstName);
 
+  const [formValues, setFormValues] = useState<FormErrors>({
+    firstName: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a Name",
+    },
+    lastName: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a Last Name",
+    },
+    avatar_url: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a Avatar_URL",
+    },
+    banner_url: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a Banner_URL",
+    },
+  });
 
-	const defaultValues: any = {
-		firstName:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a Name'
-    	}, 
+  const [alert, setAlert] = useState<boolean>(false);
+  const [alertSeverity, setAlertSeverity] = useState<ErrorSeverity>();
+  const [alertMessage, setAlertMessage] = useState<ErrorMessage>();
 
-		lastName:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a Last Name'
-    	}, 
-		email:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a E-Mail'
-    	}, 
-		password:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a Password'
-    	}, 
-		avatar_url:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a Avatar_URL'
-    	}, 
-		banner_url:{
-			value:'',
-			error:false,
-			errorMessage:'You must enter a Banner_URL'
-    	}, 
-	};
+  function closeAlerts() {
+    setAlert(false);
+  }
 
+  const [updateUser] = useMutation(UPDATE_USER);
 
-	const [formValues, setFormValues] = useState(defaultValues);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // const {name, value}:{name: string; value: string}  = e.target;
+    const {name, value} = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: {
+        ...formValues[name],
+        value,
+      },
+    });
+  };
 
-   const [updateUser] = useMutation(UPDATE_USER);
-	 
-	const handleChange  = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const {name, value}:{name: any; value: string}  = e.target;
-		setFormValues({
-			...formValues,
-			[name]:{
-				...formValues[name],
-				value
-			}
-		})
-	}
-	 const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		 e.preventDefault();
-		 handleClear();
-		 updateUser({ variables: {
-			 firstName: formValues.firstName.value,
-			 lastName: formValues.lastName.value,
-			 email: formValues.email.value,
-			 password: formValues.password.value,
-			 avatarUrl: formValues.avatar_url.value,
-			 bannerUrl: formValues.banner_url.value,
-			} });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formFields = Object.keys(formValues);
+    let newFormValues = {...formValues};
 
-	 const formFields = Object.keys(formValues);
-    let newFormValues = {...formValues}
+    console.log("Before For", newFormValues);
 
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
-		console.log("currentField: ", currentField)
       const currentValue = formValues[currentField].value;
-		console.log("Current Value: ",currentValue)
-      if(currentValue === ""){
+      if (currentValue === "") {
         newFormValues = {
           ...newFormValues,
-          [currentField]:{
+          [currentField]: {
             ...newFormValues[currentField],
-            error:true
-          }
-        }
+            error: true,
+          },
+        };
+        console.log("First IF ", newFormValues);
+      } else {
+        newFormValues = {
+          ...newFormValues,
+          [currentField]: {
+            ...newFormValues[currentField],
+            error: false,
+          },
+        };
       }
     }
-    setFormValues(newFormValues)
-	 console.log("YOYOOOOOOOOOOOO ",newFormValues)
-	};
-		
-
-  const handleClear = () => {
-	setFormValues(defaultValues)
- };
-
+    if (!newFormValues.firstName.error && !newFormValues.lastName.error && !newFormValues.avatar_url.error && !newFormValues.banner_url.error) {
+      updateUser({
+        variables: {
+          firstName: formValues.firstName.value,
+          lastName: formValues.lastName.value,
+          avatarUrl: formValues.avatar_url.value,
+          bannerUrl: formValues.banner_url.value,
+        },
+      });
+      setAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Changes have been saved successfully.");
+      setTimeout(closeAlerts, 3000);
+    }
+    setFormValues(newFormValues);
+  };
 
   return (
     <Grid
@@ -211,27 +185,69 @@ const MyAccountEdit: React.FC = () => {
         alignItems: "center",
         flexWrap: "nowrap",
         mt: "55px",
-      }}
-    >
+      }}>
+      {" "}
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: "200px",
+          backgroundColor: "#f6f6f6",
+          borderRadius: "0 0 70px 70px",
+          background: "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat;",
+        }}>
+        <LinkRouter to="/my-account">
+          <Box sx={{position: "absolute", display: "flex", alignItems: "center", top: "20px", left: "15px", color: "#fff"}}>
+            <Box sx={{display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", background: "#fff", borderRadius: "100px", mr: "8px", boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)"}}>
+              <ArrowBackIosNewIcon sx={{color: "#AEAEAE"}} />
+            </Box>
+            <Box sx={{fontSize: "12px", textShadow: "0px 0px 8px #484848"}}>Go back</Box>
+          </Box>
+        </LinkRouter>
+
+        <Box sx={{position: "absolute", top: "20px", right: "15px", background: "#fff", borderRadius: "100px", boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)"}}>
+          <FormControl>
+            <label htmlFor="icon-button-file">
+              <Input accept="image/*" id="icon-button-file" type="file" />
+              <IconButton color="primary" aria-label="PROFILE" component="span">
+                <PhotoCamera sx={{color: "#000"}} />
+              </IconButton>
+            </label>
+            {/* <Button variant="contained" size="small" color="error" sx={{ my: '10px', padding: '0px' }} disableElevation >UPLOAD</Button> */}
+          </FormControl>
+        </Box>
+
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            pt: "60px",
+            pt: "90px",
             width: "150px",
             margin: "0 auto",
-          }}
-        >
+            position: "relative",
+          }}>
           <img
-            src={data?.users[3].avatar_url}
+            src={data?.users[3].avatar_url === null || "" ? "profile.svg" : data?.users[3].avatar_url}
             alt="profile img"
             style={{
               borderRadius: "100px",
-              width: "100px",
+              width: "150px",
+              boxShadow: "rgb(181 181 181) 0px 0px 0px 5px",
             }}
           />
+          <Box sx={{position: "absolute", top: "100px", right: "-7px", background: "#fff", borderRadius: "100px", boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)"}}>
+            <FormControl>
+              <label htmlFor="icon-button-file">
+                <Input accept="image/*" id="icon-button-file" type="file" />
+                <IconButton color="primary" aria-label="upload picture" component="span">
+                  <PhotoCamera sx={{color: "#000"}} />
+                </IconButton>
+              </label>
+              {/* <Button variant="contained" size="small" color="error" sx={{ my: '10px', padding: '0px' }} disableElevation >UPLOAD</Button> */}
+            </FormControl>
+          </Box>
         </Box>
-
+      </Box>
       <Box>
         <Typography
           variant="h1"
@@ -240,11 +256,10 @@ const MyAccountEdit: React.FC = () => {
             fontSize: "24px",
             lineHeight: "0px",
             letterSpacing: "0px",
-            pt: "50px",
+            pt: "90px",
             pb: "15px",
             textAlign: "center",
-          }}
-        >
+          }}>
           Edit your account
         </Typography>
       </Box>
@@ -255,13 +270,8 @@ const MyAccountEdit: React.FC = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
-        <Box
-          component="span"
-          m={1}
-          sx={{ width: "100%", border: "1px solid #C2C8D0" }}
-        ></Box>
+        }}>
+        <Box component="span" m={1} sx={{width: "100%", border: "1px solid #C2C8D0"}}></Box>
         <Box
           sx={{
             display: "flex",
@@ -271,18 +281,12 @@ const MyAccountEdit: React.FC = () => {
             p: "10px",
             color: "#2D333A",
             fontSize: "17px",
-          }}
-        >
+          }}>
           +
         </Box>
 
-        <Box
-          component="span"
-          m={1}
-          sx={{ width: "100%", border: "1px solid #C2C8D0" }}
-        ></Box>
+        <Box component="span" m={1} sx={{width: "100%", border: "1px solid #C2C8D0"}}></Box>
       </Box>
-
       <Box
         className="TextField"
         sx={{
@@ -291,143 +295,54 @@ const MyAccountEdit: React.FC = () => {
           alignItems: "center",
           flexWrap: "nowrap",
           mt: "30px",
-        }}
-      >
-	<form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
-        <CssTextField
-          id="outlined-firstName"
-          label="Name"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "20px" }}
-			 name="firstName"
-			 value={formValues.firstName.value}
-			 onChange={handleChange }
+        }}>
+        <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+          <CssTextField id="outlined-firstName" label="Name" type="text" InputLabelProps={{shrink: true}} sx={{width: "280px", mb: "20px"}} name="firstName" value={formValues.firstName.value} onChange={handleChange} error={formValues.firstName.error} helperText={formValues.firstName.error && formValues.firstName.errorMessage} />
 
-			error={formValues.firstName.error}
-         // helperText={formValues.firstName.error && formValues.firstName.errorMessage}
-        />
+          <CssTextField id="outlined-lastName" label="Last Name" type="text" InputLabelProps={{shrink: true}} sx={{width: "280px", mb: "20px"}} name="lastName" value={formValues.lastName.value} onChange={handleChange} error={formValues.lastName.error} helperText={formValues.lastName.error && formValues.lastName.errorMessage} />
 
-        <CssTextField
-          id="outlined-lastName"
-          label="Last Name"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "20px"}}
-			 name="lastName"
-			 value={formValues.lastName.value}
-			 onChange={handleChange }
+          <CssTextField id="outlined-password" label="Avatar URL" type="text" InputLabelProps={{shrink: true}} sx={{width: "280px", mb: "30px"}} name="avatar_url" value={formValues.avatar_url.value} onChange={handleChange} error={formValues.avatar_url.error} helperText={formValues.avatar_url.error && formValues.avatar_url.errorMessage} />
 
-			error={formValues.lastName.error}
-         // helperText={formValues.lastName.error && formValues.lastName.errorMessage}
-        />
+          <CssTextField id="outlined-banner" label="Banner URL" type="text" InputLabelProps={{shrink: true}} sx={{width: "280px", mb: "30px"}} name="banner_url" value={formValues.banner_url.value} onChange={handleChange} error={formValues.banner_url.error} helperText={formValues.banner_url.error && formValues.banner_url.errorMessage} />
 
-		  	{/* <CssTextField
-          id="outlined-location"
-          label="Location"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "20px", }}
-			 name="location"
-			 value={data?.users[3].location}
-			 onChange={handleChange }
-        /> */}
+          <Button variant="contained" size="large" disableElevation className="buttons" type="submit">
+            Save Changes
+          </Button>
+          <Collapse in={alert} sx={{mt: "20px", borderRadius: "100px"}}>
+            <Alert severity={alertSeverity}>{alertMessage}</Alert>
+          </Collapse>
 
-		  <CssTextField
-          id="outlined-email"
-          label="E-Mail"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "20px" }}
-			 name="email"
-			 value={formValues.email.value}
-			 onChange={handleChange }
-
-
-			error={formValues.email.error}
-         // helperText={formValues.email.error && formValues.email.errorMessage}
-        />
-
-        <CssTextField
-          id="outlined-password"
-          label="Password"
-          type="password"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "30px", }}
-			 name="password"
-			 value={formValues.password.value}
-			 onChange={handleChange }
-
-			 error={formValues.password.error}
-         // helperText={formValues.password.error && formValues.password.errorMessage}
-        />
-
-        <CssTextField
-          id="outlined-password"
-          label="Avatar URL"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "30px", }}
-			 name="avatar_url"
-			 value={formValues.avatar_url.value}
-			 onChange={handleChange }
-
-			 error={formValues.avatar_url.error}
-         // helperText={formValues.avatar_url.error && formValues.avatar_url.errorMessage}
-        />
-
-        <CssTextField
-          id="outlined-banner"
-          label="Banner URL"
-          type="text"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          sx={{ width: "280px", mb: "30px", }}
-			 name="banner_url"
-			//  value={data?.users[3].banner_url || ''}
-			 value={formValues.banner_url.value}
-			 onChange={handleChange }
-
-			 error={formValues.banner_url.error}
-         // helperText={formValues.banner_url.error && formValues.banner_url.errorMessage}
-        />
-
-
-		  <Button variant="contained"
-          size="large"
-          disableElevation
-          className="buttons" 
-			 type="submit">
-          Save Changes
-        </Button>
-		</form>
-</Box>
-
+          <Box sx={{mt: "15px", mb: "30px"}}>
+            <LinkRouter onClick={handleOpen} to={""}>
+              <Typography component="p" sx={{fontSize: "12px", color: "#BD5252", textDecoration: "underline"}}>
+                Delete Account
+              </Typography>
+            </LinkRouter>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              open={open}
+              onClose={handleClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}>
+              <Fade in={open}>
+                <Box sx={style}>
+                  <Typography id="transition-modal-title" variant="h6" component="h2">
+                    Confirm account deletion
+                  </Typography>
+                  <Typography id="transition-modal-description" sx={{mt: 2}}>
+                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                  </Typography>
+                </Box>
+              </Fade>
+            </Modal>
+          </Box>
+        </form>
+      </Box>
     </Grid>
   );
 };
 export default MyAccountEdit;
-
-// <Box>
-//   <div>
-//     {data &&
-//       data?.users.map((param: any) => (
-//         <div key={param.id}>
-//           <h2>{param.firstName}</h2>
-//         </div>
-//       ))}
-//   </div>
-// </Box>;
