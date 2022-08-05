@@ -32,9 +32,11 @@ const CssTextField = styled(TextField)({
 const LOGIN_USER = gql`
   mutation LoginUser($email: String, $password: String) {
     loginUser(email: $email, password: $password) {
-      email
-      password
+      _id
       token
+      firstName
+      lastName
+      email
     }
   }
 `;
@@ -67,6 +69,7 @@ const Login: React.FC = () => {
     onCompleted(data) {
       const myToken = data?.loginUser.token;
       window.localStorage.setItem("TOKEN", myToken);
+      // set userContxt
       redirectTo("/my-account");
     },
   });

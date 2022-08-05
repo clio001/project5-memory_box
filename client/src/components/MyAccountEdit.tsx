@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import {Link as LinkRouter} from "react-router-dom";
-import {useQuery, gql, useMutation} from "@apollo/client";
+import {useQuery, gql, useMutation, ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client";
+import {setContext} from "@apollo/client/link/context";
+
 import {Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton, Fade, Modal, Backdrop} from "@mui/material";
 import {PhotoCamera} from "@mui/icons-material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -73,11 +75,43 @@ const UPDATE_USER = gql`
   }
 `;
 
+const DELETE_USER = gql`
+  mutation DeleteUser($deleteUserId: String) {
+    deleteUser(id: "62e7c974f24b9f14e55f326e", token: token) {
+      firstName
+    }
+  }
+`;
 const MyAccountEdit: React.FC = () => {
+  const httpLink = createHttpLink({
+    uri: "http://localhost:4000/graphql",
+  });
+
+  // GRAPHQL CONTEXT HEADERS
+  const authLink = setContext((_, {headers}) => {
+    const token = localStorage.getItem("TOKEN");
+    console.log("<<<<<<token: ", token);
+    return {
+      headers: {
+        ...headers,
+        token: token ? token : "",
+      },
+    };
+  });
+
+  const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+
+  console.log(client);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [updateUser] = useMutation(UPDATE_USER);
+  const [deleteUser] = useMutation(DELETE_USER);
   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
   console.log(data?.users);
   //   console.log(data?.users[3].firstName);
@@ -112,8 +146,6 @@ const MyAccountEdit: React.FC = () => {
   function closeAlerts() {
     setAlert(false);
   }
-
-  const [updateUser] = useMutation(UPDATE_USER);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // const {name, value}:{name: string; value: string}  = e.target;
@@ -334,8 +366,11 @@ const MyAccountEdit: React.FC = () => {
                     Confirm account deletion
                   </Typography>
                   <Typography id="transition-modal-description" sx={{mt: 2}}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                    The deletion will be definitive and irreversible.
                   </Typography>
+                  <Button variant="contained" size="small" color="error" sx={{mt: "20px", my: "10px", padding: "0px"}} disableElevation>
+                    DELETE
+                  </Button>
                 </Box>
               </Fade>
             </Modal>

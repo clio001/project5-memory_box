@@ -90,9 +90,10 @@ const Mutation = new GraphQLObjectType({
       type: UserType,
       args: {
         id: {type: GraphQLString},
+        token: {type: GraphQLString},
       },
       async resolve(parent, args, context) {
-        //   if (!context.user) return null;
+        if (!args.token) return null;
         return await User.findByIdAndDelete(args.id);
       },
     },
