@@ -34,36 +34,3 @@ export interface FormErrorsAttributes {
   errorMessage: string;
 }
 
-// export interface IForm{
-// 	firstName : firstName,
-// 	lastName : lastName,
-// 	avatar_url : avatar_url,
-// 	banner_url : banner_url,
-// }
-// export interface FormErrors {
-// 	firstName: firstName
-// 	lastName: lastName
-// 	avatar_url: avatar_url
-// 	banner_url: banner_url
-// }
-
-// export interface firstName {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
-// export interface lastName {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
-// export interface avatar_url {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
-// export interface banner_url {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }

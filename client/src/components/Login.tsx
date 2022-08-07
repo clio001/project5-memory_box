@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Link as LinkRouter, useNavigate} from "react-router-dom";
 import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import {useMutation, gql} from "@apollo/client";
+
+import {UserContext} from "../context/UserContext"
 
 import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
@@ -42,6 +44,9 @@ const LOGIN_USER = gql`
 `;
 
 const Login: React.FC = () => {
+
+const { user, setUser } = React.useContext(UserContext);
+	
   const redirectTo = useNavigate();
 
   const [formValues, setFormValues] = useState<FormErrors>({

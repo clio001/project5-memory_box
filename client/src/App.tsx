@@ -7,6 +7,10 @@ import ViewMyAccount from "./views/ViewMyAccount";
 import ViewMyAccountEdit from "./views/ViewMyAccountEdit";
 import NoMatch from "./components/NoMatch";
 
+// import {ProfileContextProvider} from "./context/UserProfile"
+import {UserContextProvider} from "./context/UserContext"
+
+
 import {
   ApolloClient,
   InMemoryCache,
@@ -23,6 +27,7 @@ function App() {
   return (
     <div className="Home">
       <ApolloProvider client={client}>
+		<UserContextProvider>
         <Routes>
           <Route path="/" element={<ViewHome />} />
           <Route path="/login" element={<ViewLogin />} />
@@ -31,6 +36,7 @@ function App() {
           <Route path="/edit-account" element={<ViewMyAccountEdit />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
+		</UserContextProvider>
       </ApolloProvider>
     </div>
   );
