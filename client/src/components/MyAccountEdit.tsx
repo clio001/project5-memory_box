@@ -10,6 +10,8 @@ import {styled} from "@mui/material/styles";
 
 import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
+import {UserContext} from "../context/UserContext"
+
 const Input = styled("input")({
   display: "none",
 });
@@ -83,6 +85,14 @@ const DELETE_USER = gql`
   }
 `;
 const MyAccountEdit: React.FC = () => {
+
+const { user, setUser } = React.useContext(UserContext);
+
+const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
+	console.log("Context user ---> ", user)
+}
+
+
   const httpLink = createHttpLink({
     uri: "http://localhost:4000/graphql",
   });

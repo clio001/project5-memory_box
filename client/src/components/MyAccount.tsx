@@ -5,6 +5,8 @@ import { Grid, Box, Typography, Tooltip, Button } from "@mui/material";
 import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
 
+import {UserContext} from "../context/UserContext"
+
 import { GetUsers, FormErrors, ErrorSeverity, ErrorMessage } from "../types";
 
 const GET_USERS = gql`
@@ -22,6 +24,13 @@ const GET_USERS = gql`
 `;
 
 const MyAccount: React.FC = () => {
+
+const { user, setUser } = React.useContext(UserContext);
+
+const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
+	console.log("Context user ---> ", user)
+}
+
    const { loading, error, data } = useQuery<GetUsers>(GET_USERS);
 
    console.log(data?.users);
@@ -96,6 +105,13 @@ const MyAccount: React.FC = () => {
             >
                {data?.users[3].firstName} {data?.users[3].lastName}
             </Typography>
+
+						  	<Typography component="p" sx={{mt: "25px"}}>
+				Test----{">"} {" "}
+		   <LinkRouter to="" style={{textDecoration: "none"}} onClick={myUser}>
+            user
+          </LinkRouter>
+        </Typography>
 
             <Typography
                component="p"

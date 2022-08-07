@@ -46,6 +46,14 @@ const LOGIN_USER = gql`
 const Login: React.FC = () => {
 
 const { user, setUser } = React.useContext(UserContext);
+
+const mySetUser = (e: React.FormEvent<HTMLAnchorElement>) => {
+	setUser(data?.loginUser)
+	console.log("Context setUser ---> ", user)
+}
+const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
+	console.log("Context user ---> ", user)
+}
 	
   const redirectTo = useNavigate();
 
@@ -75,6 +83,7 @@ const { user, setUser } = React.useContext(UserContext);
       const myToken = data?.loginUser.token;
       window.localStorage.setItem("TOKEN", myToken);
       // set userContxt
+		setUser(data?.loginUser)
       redirectTo("/my-account");
     },
   });
@@ -88,7 +97,6 @@ const { user, setUser } = React.useContext(UserContext);
     const formFields = Object.keys(formValues);
 
     let newFormValues = {...formValues};
-    console.log("newFormValues", newFormValues);
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
       const currentValue = formValues[currentField].value;
@@ -113,9 +121,7 @@ const { user, setUser } = React.useContext(UserContext);
             errorMessage: "You must enter a Password",
           },
         };
-        console.log("CLG ELSE IF: ", formValues);
       } else {
-        console.log("ELSE ERROR FALSE");
         newFormValues = {
           ...newFormValues,
           [currentField]: {
@@ -186,6 +192,18 @@ const { user, setUser } = React.useContext(UserContext);
             textAlign: "center",
           }}>
           Log in in to your Account
+        </Typography>
+		   <Typography component="p" sx={{mt: "25px"}}>
+          Test----{">"} {" "}
+          <LinkRouter to="" style={{textDecoration: "none"}} onClick={mySetUser}>
+            setUser
+          </LinkRouter>
+        </Typography>
+		  	<Typography component="p" sx={{mt: "25px"}}>
+				Test----{">"} {" "}
+		   <LinkRouter to="" style={{textDecoration: "none"}} onClick={myUser}>
+            user
+          </LinkRouter>
         </Typography>
       </Box>
       <Box

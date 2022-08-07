@@ -1,6 +1,8 @@
 import React, { useEffect } from "react"
 
 type UserProfileType = {
+	_id: string | null,
+	__typename: string | null,
 	firstName: string | null, 
 	lastName: string | null, 
 	email: string | null, 
@@ -14,7 +16,6 @@ interface Props {
 interface ContextProps {
 	user: UserProfileType | null;
 	setUser: (user: UserProfileType) => void;
-	children?: React.ReactNode;
 }
 
 export const UserContext = React.createContext<ContextProps>({
