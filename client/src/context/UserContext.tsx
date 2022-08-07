@@ -10,7 +10,7 @@ type UserProfileType = {
 interface Props {
   children?: React.ReactNode;
 }
-
+ 
 interface ContextProps {
 	user: UserProfileType | null;
 	setUser: (user: UserProfileType) => void;
