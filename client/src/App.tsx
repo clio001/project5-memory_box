@@ -6,6 +6,7 @@ import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
 import ViewMyAccountEdit from "./views/ViewMyAccountEdit";
 import NoMatch from "./components/NoMatch";
+import DeletedUser from "./components/DeletedUser";
 
 // import {ProfileContextProvider} from "./context/UserProfile"
 import {UserContextProvider} from "./context/UserContext"
@@ -34,6 +35,7 @@ function App() {
           <Route path="/register" element={<ViewRegister />} />
           <Route path="/my-account" element={<ViewMyAccount />} />
           <Route path="/edit-account" element={<ViewMyAccountEdit />} />
+          <Route path="/delete" element={<DeletedUser />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
 		</UserContextProvider>

@@ -12,6 +12,7 @@ const userSchema = new Schema<dbModel.User>(
     email: {
       type: String,
       required: true,
+		unique: true,
     },
     password: {
       type: String,

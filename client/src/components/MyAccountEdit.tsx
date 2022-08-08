@@ -1,14 +1,13 @@
 import React, {useState} from "react";
-import {Link as LinkRouter} from "react-router-dom";
-import {useQuery, gql, useMutation, ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client";
-import {setContext} from "@apollo/client/link/context";
+import {Link as LinkRouter, useNavigate} from "react-router-dom";
+import { gql, useMutation} from "@apollo/client";
 
 import {Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton, Fade, Modal, Backdrop} from "@mui/material";
 import {PhotoCamera} from "@mui/icons-material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {styled} from "@mui/material/styles";
 
-import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
+import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
 import {UserContext} from "../context/UserContext";
 
@@ -53,19 +52,19 @@ const style = {
   textAlign: "center",
 };
 
-const GET_USERS = gql`
-  query GetUsers {
-    users {
-      _id
-      firstName
-      lastName
-      email
-      password
-      avatar_url
-      banner_url
-    }
-  }
-`;
+// const GET_USERS = gql`
+//   query GetUsers {
+//     users {
+//       _id
+//       firstName
+//       lastName
+//       email
+//       password
+//       avatar_url
+//       banner_url
+//     }
+//   }
+// `;
 
 const UPDATE_USER = gql`
   mutation UpdateUser($id: ID, $firstName: String, $lastName: String, $avatarUrl: String, $bannerUrl: String) {
@@ -79,43 +78,25 @@ const UPDATE_USER = gql`
 `;
 
 const DELETE_USER = gql`
-  mutation DeleteUser($deleteUserId: String) {
-    deleteUser(id: "62e7c974f24b9f14e55f326e", token: token) {
-      firstName
-    }
+mutation DeleteUser($id: String, $token: String) {
+  deleteUser(id: $id, token: $token) {
+    _id
   }
+}
 `;
 const MyAccountEdit: React.FC = () => {
-  const {user, setUser} = React.useContext(UserContext);
+	//   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
+	const [updateUser] = useMutation(UPDATE_USER);
+	const [deleteUser] = useMutation(DELETE_USER);
 
-  const httpLink = createHttpLink({
-    uri: "http://localhost:4000/graphql",
-  });
-
-  // GRAPHQL CONTEXT HEADERS
-  const authLink = setContext((_, {headers}) => {
-    const token = localStorage.getItem("TOKEN");
-    return {
-      headers: {
-        ...headers,
-        token: token ? token : "",
-      },
-    };
-  });
-
-  const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-  });
+	const redirectTo = useNavigate();
+	
+	const {user, setUser} = React.useContext(UserContext);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [updateUser] = useMutation(UPDATE_USER);
-  const [deleteUser] = useMutation(DELETE_USER);
-  const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
-  console.log(data?.users);
 
   const [formValues, setFormValues] = useState<FormErrors>({
     firstName: {
@@ -146,6 +127,18 @@ const MyAccountEdit: React.FC = () => {
 
   function closeAlerts() {
     setAlert(false);
+  }
+
+     const handleDeletion = (e: any) => {
+	console.log("ID: ", user?._id)
+	console.log("Token: ", user?.token)
+		deleteUser({
+        variables: {
+          id: user?._id,
+			 token: user?.token
+        },
+      });
+		redirectTo("/delete");
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -216,6 +209,8 @@ const MyAccountEdit: React.FC = () => {
     setFormValues(newFormValues);
   };
 
+
+
   return (
     <Grid
       container
@@ -237,7 +232,7 @@ const MyAccountEdit: React.FC = () => {
           height: "200px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat;",
+          background: `#f6f6f6 url(${user?.banner_url ? user?.banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <LinkRouter to="/my-account">
           <Box sx={{position: "absolute", display: "flex", alignItems: "center", top: "20px", left: "15px", color: "#fff"}}>
@@ -379,7 +374,7 @@ const MyAccountEdit: React.FC = () => {
                   <Typography id="transition-modal-description" sx={{mt: 2}}>
                     The deletion will be definitive and irreversible.
                   </Typography>
-                  <Button variant="contained" size="small" color="error" sx={{mt: "20px", my: "10px", padding: "0px"}} disableElevation>
+                  <Button variant="contained" size="small" color="error" sx={{mt: "20px", my: "10px", padding: "0px"}} disableElevation onClick={handleDeletion}>
                     DELETE
                   </Button>
                 </Box>
