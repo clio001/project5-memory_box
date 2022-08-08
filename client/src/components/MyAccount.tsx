@@ -7,27 +7,27 @@ import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOu
 
 import {UserContext} from "../context/UserContext";
 
-import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
-import userEvent from "@testing-library/user-event";
+import {GetUsers} from "../types";
 
 const MyAccount: React.FC = () => {
   const {user, setUser} = React.useContext(UserContext);
+  console.log(user);
 
-  const GET_USERS = gql`
-    query GetUsers {
-      users {
-        _id
-        firstName
-        lastName
-        email
-        password
-        avatar_url
-        banner_url
-      }
-    }
-  `;
+  //   const GET_USERS = gql`
+  //     query GetUsers {
+  //       users {
+  //         _id
+  //         firstName
+  //         lastName
+  //         email
+  //         password
+  //         avatar_url
+  //         banner_url
+  //       }
+  //     }
+  //   `;
 
-  const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
+  //   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
 
   return (
     <Grid
@@ -50,7 +50,7 @@ const MyAccount: React.FC = () => {
           mb: "70px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: `#f6f6f6 url(${user?.banner_url}) center center/cover no-repeat`,
+          background: `#f6f6f6 url(${user?.banner_url ? user?.banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <Box
           sx={{
@@ -61,7 +61,7 @@ const MyAccount: React.FC = () => {
             margin: "0 auto",
           }}>
           <img
-            src={user?.avatar_url}
+            src={user?.avatar_url ? user?.avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "100px",
@@ -71,42 +71,54 @@ const MyAccount: React.FC = () => {
           />
         </Box>
       </Box>
-      <Box sx={{mb: "30px"}}>
-        <Tooltip title="Admin" arrow placement="top">
-          <LocalPoliceOutlinedIcon sx={{color: "#BD5252"}} />
-        </Tooltip>
-        <Tooltip title="Top Contributor" arrow placement="top">
-          <WorkspacePremiumOutlinedIcon sx={{color: "#BD5252"}} />
-        </Tooltip>
-      </Box>
-      <Box>
-        <Typography
-          variant="h1"
-          color="initial"
-          sx={{
-            fontSize: "24px",
-            lineHeight: "0px",
-            pb: "20px",
-            letterSpacing: "0px",
-            textAlign: "center",
-          }}>
-          {user?.firstName} {user?.lastName}
-        </Typography>
+      {user?.role ? (
+        <Box sx={{mb: "30px"}}>
+          <Tooltip title="Admin" arrow placement="top">
+            <LocalPoliceOutlinedIcon sx={{color: "#BD5252"}} />
+          </Tooltip>
+          <Tooltip title="Top Contributor" arrow placement="top">
+            <WorkspacePremiumOutlinedIcon sx={{color: "#BD5252"}} />
+          </Tooltip>
+        </Box>
+      ) : (
+        ""
+      )}
 
-        <Typography
-          component="p"
-          color="initial"
-          sx={{
-            fontSize: "16px",
-            pb: "20px",
-            letterSpacing: "0px",
-            textAlign: "center",
-            color: "#C2C8D0",
-            fontWeight: "300",
-          }}>
-          {" "}
-          Berlin
-        </Typography>
+      <Box>
+        {user?.firstName ? (
+          <Typography
+            variant="h1"
+            color="initial"
+            sx={{
+              fontSize: "24px",
+              lineHeight: "0px",
+              pb: "20px",
+              letterSpacing: "0px",
+              textAlign: "center",
+            }}>
+            {user?.firstName} {user?.lastName ? user?.lastName : ""}
+          </Typography>
+        ) : (
+          ""
+        )}
+        {/* {user?.location ? (
+          <Typography
+            component="p"
+            color="initial"
+            sx={{
+              fontSize: "16px",
+              pb: "20px",
+              letterSpacing: "0px",
+              textAlign: "center",
+              color: "#C2C8D0",
+              fontWeight: "300",
+            }}>
+            {" "}
+            {user?.location}
+          </Typography>
+        ) : (
+          ""
+        )} */}
 
         <Box sx={{display: "flex", justifyContent: "center", mb: "30px"}}>
           <LinkRouter to="/edit-account">

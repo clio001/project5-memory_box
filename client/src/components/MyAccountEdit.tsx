@@ -10,7 +10,7 @@ import {styled} from "@mui/material/styles";
 
 import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
-import {UserContext} from "../context/UserContext"
+import {UserContext} from "../context/UserContext";
 
 const Input = styled("input")({
   display: "none",
@@ -68,11 +68,12 @@ const GET_USERS = gql`
 `;
 
 const UPDATE_USER = gql`
-  mutation UpdateUser($firstName: String, $lastName: String, $avatarUrl: String) {
-    updateUser(id: "62dd51f4c0c6c0d1781a1dac", firstName: $firstName, lastName: $lastName, avatar_url: $avatarUrl) {
+  mutation UpdateUser($id: ID, $firstName: String, $lastName: String, $avatarUrl: String, $bannerUrl: String) {
+    updateUser(id: $id, firstName: $firstName, lastName: $lastName, avatar_url: $avatarUrl, banner_url: $bannerUrl) {
       firstName
       lastName
       avatar_url
+      banner_url
     }
   }
 `;
@@ -85,13 +86,7 @@ const DELETE_USER = gql`
   }
 `;
 const MyAccountEdit: React.FC = () => {
-
-const { user, setUser } = React.useContext(UserContext);
-
-const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
-	console.log("Context user ---> ", user)
-}
-
+  const {user, setUser} = React.useContext(UserContext);
 
   const httpLink = createHttpLink({
     uri: "http://localhost:4000/graphql",
@@ -100,7 +95,6 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
   // GRAPHQL CONTEXT HEADERS
   const authLink = setContext((_, {headers}) => {
     const token = localStorage.getItem("TOKEN");
-    console.log("<<<<<<token: ", token);
     return {
       headers: {
         ...headers,
@@ -114,8 +108,6 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
     cache: new InMemoryCache(),
   });
 
-  console.log(client);
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -124,7 +116,6 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
   const [deleteUser] = useMutation(DELETE_USER);
   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
   console.log(data?.users);
-  //   console.log(data?.users[3].firstName);
 
   const [formValues, setFormValues] = useState<FormErrors>({
     firstName: {
@@ -170,11 +161,10 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("User ID: ", user?._id);
     e.preventDefault();
     const formFields = Object.keys(formValues);
     let newFormValues = {...formValues};
-
-    console.log("Before For", newFormValues);
 
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
@@ -187,7 +177,6 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
             error: true,
           },
         };
-        console.log("First IF ", newFormValues);
       } else {
         newFormValues = {
           ...newFormValues,
@@ -201,11 +190,23 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
     if (!newFormValues.firstName.error && !newFormValues.lastName.error && !newFormValues.avatar_url.error && !newFormValues.banner_url.error) {
       updateUser({
         variables: {
+          id: user?._id,
           firstName: formValues.firstName.value,
           lastName: formValues.lastName.value,
           avatarUrl: formValues.avatar_url.value,
           bannerUrl: formValues.banner_url.value,
         },
+      });
+      setUser({
+        __typename: "User",
+        _id: user?._id,
+        token: user?.token,
+        email: user?.email,
+        role: user?.role,
+        firstName: formValues.firstName.value,
+        lastName: formValues.lastName.value,
+        avatar_url: formValues.avatar_url.value,
+        banner_url: formValues.banner_url.value,
       });
       setAlert(true);
       setAlertSeverity("success");
@@ -269,12 +270,12 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
             position: "relative",
           }}>
           <img
-            src={data?.users[3].avatar_url === null || "" ? "profile.svg" : data?.users[3].avatar_url}
+            src={user?.avatar_url ? user?.avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "100px",
               width: "150px",
-              boxShadow: "rgb(181 181 181) 0px 0px 0px 5px",
+              boxShadow: "0 0 0px 5px #b5b5b5",
             }}
           />
           <Box sx={{position: "absolute", top: "100px", right: "-7px", background: "#fff", borderRadius: "100px", boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)"}}>

@@ -8,7 +8,6 @@ export interface GetUsers {
 }
 
 export interface UserAttributes {
-  3: any;
   _id: string;
   firstName: string;
   lastName: string;
@@ -16,6 +15,8 @@ export interface UserAttributes {
   password: string;
   avatar_url: string;
   banner_url: string;
+  location: string;
+  role: string;
 }
 
 export interface GetUserToken {

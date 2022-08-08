@@ -1,14 +1,16 @@
 import React, {useEffect} from "react";
 
 type UserProfileType = {
-  _id: string | null;
-  __typename: string | null;
+  _id: string | null | undefined;
+  token: string | null | undefined;
+  __typename: string | null | undefined;
   firstName: string | null;
   lastName: string | null;
-  email: string | null;
-  token: string | null;
-  avatar_url: string | undefined;
-  banner_url: string | undefined;
+  email: string | null | undefined;
+  avatar_url: string | null;
+  banner_url: string | null;
+  //   location: string | null;
+  role: string | null | undefined;
 };
 
 interface Props {
