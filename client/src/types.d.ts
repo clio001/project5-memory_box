@@ -6,6 +6,7 @@ export interface RegisterUser {
 export interface GetUsers {
   [key: string]: UserAttributes;
 }
+
 export interface UserAttributes {
   3: any;
   _id: string;
@@ -33,4 +34,3 @@ export interface FormErrorsAttributes {
   error: boolean;
   errorMessage: string;
 }
-

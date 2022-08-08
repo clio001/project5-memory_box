@@ -1,10 +1,10 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {Link as LinkRouter, useNavigate} from "react-router-dom";
 import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import {useMutation, gql} from "@apollo/client";
 
-import {UserContext} from "../context/UserContext"
+import {UserContext} from "../context/UserContext";
 
 import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
@@ -39,22 +39,23 @@ const LOGIN_USER = gql`
       firstName
       lastName
       email
+      avatar_url
+      banner_url
     }
   }
 `;
 
 const Login: React.FC = () => {
+  const {user, setUser} = React.useContext(UserContext);
 
-const { user, setUser } = React.useContext(UserContext);
+  const mySetUser = (e: React.FormEvent<HTMLAnchorElement>) => {
+    setUser(data?.loginUser);
+    console.log("Context setUser ---> ", user);
+  };
+  const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
+    console.log("Context user ---> ", user);
+  };
 
-const mySetUser = (e: React.FormEvent<HTMLAnchorElement>) => {
-	setUser(data?.loginUser)
-	console.log("Context setUser ---> ", user)
-}
-const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
-	console.log("Context user ---> ", user)
-}
-	
   const redirectTo = useNavigate();
 
   const [formValues, setFormValues] = useState<FormErrors>({
@@ -83,11 +84,11 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
       const myToken = data?.loginUser.token;
       window.localStorage.setItem("TOKEN", myToken);
       // set userContxt
-		setUser(data?.loginUser)
+      setUser(data?.loginUser);
       redirectTo("/my-account");
     },
   });
-  // const [loginUserToken] = useMutation(LOGIN_USER_TOKEN);
+
   const validateEmail = (e: string) => {
     return e.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   };
@@ -193,15 +194,15 @@ const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
           }}>
           Log in in to your Account
         </Typography>
-		   <Typography component="p" sx={{mt: "25px"}}>
-          Test----{">"} {" "}
+        <Typography component="p" sx={{mt: "25px"}}>
+          Test----{">"}{" "}
           <LinkRouter to="" style={{textDecoration: "none"}} onClick={mySetUser}>
             setUser
           </LinkRouter>
         </Typography>
-		  	<Typography component="p" sx={{mt: "25px"}}>
-				Test----{">"} {" "}
-		   <LinkRouter to="" style={{textDecoration: "none"}} onClick={myUser}>
+        <Typography component="p" sx={{mt: "25px"}}>
+          Test----{">"}{" "}
+          <LinkRouter to="" style={{textDecoration: "none"}} onClick={myUser}>
             user
           </LinkRouter>
         </Typography>
