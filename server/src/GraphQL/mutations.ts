@@ -12,12 +12,14 @@ import {
   CommentType,
   BookmarkType,
   LikeType,
+  GroupType,
 } from "./typeDefs.js";
 import User from "../models/userModel.js";
 import Item from "../models/itemModel.js";
 import Comment from "../models/commentModel.js";
 import Bookmark from "../models/bookmarkModel.js";
 import Like from "../models/likeModel.js";
+import Group from "../models/groupModel.js";
 import bcrypt from "bcrypt";
 import { createToken } from "../utils/jwt.js";
 import { gql } from "apollo-server-express";
@@ -36,7 +38,7 @@ const Mutation = new GraphQLObjectType({
       async resolve(parent, args) {
         const existingUser = await User.find({ email: args.email });
         if (existingUser) {
-          throw Error("E-Mail already exists.");
+          throw Error(`${args.email} already exists.`);
         } else {
           const salt = await bcrypt.genSalt(10);
           const hash = await bcrypt.hash(args.password, salt);
@@ -291,6 +293,75 @@ const Mutation = new GraphQLObjectType({
       async resolve(parent, args, context) {
         if (!context.user) return null;
         return await Like.findByIdAndDelete(args.id);
+      },
+    },
+
+    // * ADD GROUP
+
+    addGroup: {
+      type: GroupType,
+      args: {
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        avatar_url: { type: GraphQLString },
+        banner_url: { type: GraphQLString },
+        location: { type: GraphQLString },
+        createdBy: { type: GraphQLString },
+        public: { type: GraphQLBoolean },
+      },
+      async resolve(parent, args, context) {
+        //if (!context.user) throw Error("Log in to create a group.");
+        let newGroup = new Group({
+          name: args.name,
+          description: args.description,
+          avatar_url: args.avatar_url,
+          banner_url: args.banner_url,
+          location: args.location,
+          createdBy: args.createdBy,
+          public: args.public,
+        });
+        return await newGroup.save();
+      },
+    },
+
+    // * UPDATE GROUP
+
+    updateGroup: {
+      type: GroupType,
+      args: {
+        id: { type: GraphQLString },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        avatar_url: { type: GraphQLString },
+        banner_url: { type: GraphQLString },
+        location: { type: GraphQLString },
+        createdBy: { type: GraphQLString },
+        public: { type: GraphQLBoolean },
+      },
+      async resolve(parent, args, context) {
+        //if (!context.user) throw Error("Log in to update a group.");
+        return await Group.findByIdAndUpdate(args.id, {
+          name: args.name,
+          description: args.description,
+          avatar_url: args.avatar_url,
+          banner_url: args.banner_url,
+          location: args.location,
+          createdBy: args.createdBy,
+          public: args.public,
+        });
+      },
+    },
+
+    // * DELETE GROUP
+
+    deleteGroup: {
+      type: GroupType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        //if (!context.user) return null;
+        return await Group.findByIdAndDelete(args.id);
       },
     },
 

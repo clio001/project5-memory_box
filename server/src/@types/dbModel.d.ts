@@ -54,5 +54,15 @@ declare namespace dbModel {
     author?: string;
   }
 
-  interface Group {}
+  interface Group {
+    name: string;
+    description?: string;
+    createdBy: string;
+    avatar_url?: string;
+    banner_url?: string;
+    members?: string;
+    items?: string;
+    location?: string;
+    public?: boolean;
+  }
 }
