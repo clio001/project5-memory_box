@@ -48,14 +48,6 @@ const LOGIN_USER = gql`
 const Login: React.FC = () => {
   const {user, setUser} = React.useContext(UserContext);
 
-  const mySetUser = (e: React.FormEvent<HTMLAnchorElement>) => {
-    setUser(data?.loginUser);
-    console.log("Context setUser ---> ", user);
-  };
-  const myUser = (e: React.FormEvent<HTMLAnchorElement>) => {
-    console.log("Context user ---> ", user);
-  };
-
   const redirectTo = useNavigate();
 
   const [formValues, setFormValues] = useState<FormErrors>({
@@ -79,7 +71,7 @@ const Login: React.FC = () => {
     setAlert(false);
   }
 
-  const [loginUser, {data, loading, error}] = useMutation(LOGIN_USER, {
+  const [loginUser, {error}] = useMutation(LOGIN_USER, {
     onCompleted(data) {
       const myToken = data?.loginUser.token;
       window.localStorage.setItem("TOKEN", myToken);
@@ -143,7 +135,7 @@ const Login: React.FC = () => {
       setAlert(true);
       setAlertSeverity("error");
       setAlertMessage("Changes have been saved successfully.");
-      setTimeout(closeAlerts, 3000);
+      setTimeout(closeAlerts, 443000);
     }
     setFormValues(newFormValues);
   };
@@ -193,18 +185,6 @@ const Login: React.FC = () => {
             textAlign: "center",
           }}>
           Log in in to your Account
-        </Typography>
-        <Typography component="p" sx={{mt: "25px"}}>
-          Test----{">"}{" "}
-          <LinkRouter to="" style={{textDecoration: "none"}} onClick={mySetUser}>
-            setUser
-          </LinkRouter>
-        </Typography>
-        <Typography component="p" sx={{mt: "25px"}}>
-          Test----{">"}{" "}
-          <LinkRouter to="" style={{textDecoration: "none"}} onClick={myUser}>
-            user
-          </LinkRouter>
         </Typography>
       </Box>
       <Box
@@ -256,9 +236,7 @@ const Login: React.FC = () => {
 
           <Collapse in={alert} sx={{mt: "20px"}}>
             <Alert severity={alertSeverity} sx={{borderRadius: "100px", width: "248px"}}>
-              {error?.graphQLErrors.map(({message}, i) => (
-                <span key={i}>{message}</span>
-              ))}
+              {error && error?.graphQLErrors.map(({message}, i) => <span key={i}>{message}</span>)}
             </Alert>
           </Collapse>
         </form>
