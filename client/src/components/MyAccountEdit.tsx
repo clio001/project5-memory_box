@@ -1,12 +1,15 @@
 import React, {useState} from "react";
-import {Link as LinkRouter} from "react-router-dom";
-import {useQuery, gql, useMutation} from "@apollo/client";
+import {Link as LinkRouter, useNavigate} from "react-router-dom";
+import { gql, useMutation} from "@apollo/client";
+
 import {Grid, Box, Typography, TextField, Button, Collapse, Alert, FormControl, IconButton, Fade, Modal, Backdrop} from "@mui/material";
 import {PhotoCamera} from "@mui/icons-material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {styled} from "@mui/material/styles";
 
-import {GetUsers, FormErrors, ErrorSeverity, ErrorMessage} from "../types";
+import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
+
+import {UserContext} from "../context/UserContext";
 
 const Input = styled("input")({
   display: "none",
@@ -49,38 +52,51 @@ const style = {
   textAlign: "center",
 };
 
-const GET_USERS = gql`
-  query GetUsers {
-    users {
-      _id
+// const GET_USERS = gql`
+//   query GetUsers {
+//     users {
+//       _id
+//       firstName
+//       lastName
+//       email
+//       password
+//       avatar_url
+//       banner_url
+//     }
+//   }
+// `;
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($id: ID, $firstName: String, $lastName: String, $avatarUrl: String, $bannerUrl: String) {
+    updateUser(id: $id, firstName: $firstName, lastName: $lastName, avatar_url: $avatarUrl, banner_url: $bannerUrl) {
       firstName
       lastName
-      email
-      password
       avatar_url
       banner_url
     }
   }
 `;
 
-const UPDATE_USER = gql`
-  mutation UpdateUser($firstName: String, $lastName: String, $avatarUrl: String) {
-    updateUser(id: "62dd51f4c0c6c0d1781a1dac", firstName: $firstName, lastName: $lastName, avatar_url: $avatarUrl) {
-      firstName
-      lastName
-      avatar_url
-    }
+const DELETE_USER = gql`
+mutation DeleteUser($id: String, $token: String) {
+  deleteUser(id: $id, token: $token) {
+    _id
   }
+}
 `;
-
 const MyAccountEdit: React.FC = () => {
+	//   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
+	const [updateUser] = useMutation(UPDATE_USER);
+	const [deleteUser] = useMutation(DELETE_USER);
+
+	const redirectTo = useNavigate();
+	
+	const {user, setUser} = React.useContext(UserContext);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
-  console.log(data?.users);
-  //   console.log(data?.users[3].firstName);
 
   const [formValues, setFormValues] = useState<FormErrors>({
     firstName: {
@@ -113,7 +129,17 @@ const MyAccountEdit: React.FC = () => {
     setAlert(false);
   }
 
-  const [updateUser] = useMutation(UPDATE_USER);
+     const handleDeletion = (e: any) => {
+	console.log("ID: ", user?._id)
+	console.log("Token: ", user?.token)
+		deleteUser({
+        variables: {
+          id: user?._id,
+			 token: user?.token
+        },
+      });
+		redirectTo("/delete");
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // const {name, value}:{name: string; value: string}  = e.target;
@@ -128,11 +154,10 @@ const MyAccountEdit: React.FC = () => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("User ID: ", user?._id);
     e.preventDefault();
     const formFields = Object.keys(formValues);
     let newFormValues = {...formValues};
-
-    console.log("Before For", newFormValues);
 
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
@@ -145,7 +170,6 @@ const MyAccountEdit: React.FC = () => {
             error: true,
           },
         };
-        console.log("First IF ", newFormValues);
       } else {
         newFormValues = {
           ...newFormValues,
@@ -159,11 +183,23 @@ const MyAccountEdit: React.FC = () => {
     if (!newFormValues.firstName.error && !newFormValues.lastName.error && !newFormValues.avatar_url.error && !newFormValues.banner_url.error) {
       updateUser({
         variables: {
+          id: user?._id,
           firstName: formValues.firstName.value,
           lastName: formValues.lastName.value,
           avatarUrl: formValues.avatar_url.value,
           bannerUrl: formValues.banner_url.value,
         },
+      });
+      setUser({
+        __typename: "User",
+        _id: user?._id,
+        token: user?.token,
+        email: user?.email,
+        role: user?.role,
+        firstName: formValues.firstName.value,
+        lastName: formValues.lastName.value,
+        avatar_url: formValues.avatar_url.value,
+        banner_url: formValues.banner_url.value,
       });
       setAlert(true);
       setAlertSeverity("success");
@@ -172,6 +208,8 @@ const MyAccountEdit: React.FC = () => {
     }
     setFormValues(newFormValues);
   };
+
+
 
   return (
     <Grid
@@ -194,7 +232,7 @@ const MyAccountEdit: React.FC = () => {
           height: "200px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat;",
+          background: `#f6f6f6 url(${user?.banner_url ? user?.banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <LinkRouter to="/my-account">
           <Box sx={{position: "absolute", display: "flex", alignItems: "center", top: "20px", left: "15px", color: "#fff"}}>
@@ -227,12 +265,12 @@ const MyAccountEdit: React.FC = () => {
             position: "relative",
           }}>
           <img
-            src={data?.users[3].avatar_url === null || "" ? "profile.svg" : data?.users[3].avatar_url}
+            src={user?.avatar_url ? user?.avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "100px",
               width: "150px",
-              boxShadow: "rgb(181 181 181) 0px 0px 0px 5px",
+              boxShadow: "0 0 0px 5px #b5b5b5",
             }}
           />
           <Box sx={{position: "absolute", top: "100px", right: "-7px", background: "#fff", borderRadius: "100px", boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)"}}>
@@ -334,8 +372,11 @@ const MyAccountEdit: React.FC = () => {
                     Confirm account deletion
                   </Typography>
                   <Typography id="transition-modal-description" sx={{mt: 2}}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                    The deletion will be definitive and irreversible.
                   </Typography>
+                  <Button variant="contained" size="small" color="error" sx={{mt: "20px", my: "10px", padding: "0px"}} disableElevation onClick={handleDeletion}>
+                    DELETE
+                  </Button>
                 </Box>
               </Fade>
             </Modal>

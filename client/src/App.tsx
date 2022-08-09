@@ -6,6 +6,11 @@ import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
 import ViewMyAccountEdit from "./views/ViewMyAccountEdit";
 import NoMatch from "./components/NoMatch";
+import DeletedUser from "./components/DeletedUser";
+
+// import {ProfileContextProvider} from "./context/UserProfile"
+import {UserContextProvider} from "./context/UserContext"
+
 
 import {
   ApolloClient,
@@ -23,14 +28,17 @@ function App() {
   return (
     <div className="Home">
       <ApolloProvider client={client}>
+		<UserContextProvider>
         <Routes>
           <Route path="/" element={<ViewHome />} />
           <Route path="/login" element={<ViewLogin />} />
           <Route path="/register" element={<ViewRegister />} />
           <Route path="/my-account" element={<ViewMyAccount />} />
           <Route path="/edit-account" element={<ViewMyAccountEdit />} />
+          <Route path="/delete" element={<DeletedUser />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
+		</UserContextProvider>
       </ApolloProvider>
     </div>
   );

@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import {Link as LinkRouter} from "react-router-dom";
-import {Grid, Box, Typography, Button, TextField} from "@mui/material";
+import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import {gql, useMutation} from "@apollo/client";
+
+import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -27,7 +29,7 @@ const CssTextField = styled(TextField)({
   },
 });
 
-//Apollo operation to AddUser
+//Apollo mutation to AddUser
 const ADD_USER = gql`
   mutation AddUser($email: String, $password: String) {
     addUser(email: $email, password: $password) {
@@ -39,27 +41,110 @@ const ADD_USER = gql`
 
 const Register: React.FC = () => {
   //Default value for inputs
-  const defaultValues = {email: "", password: ""};
+  const defaultValues = {
+    email: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a E-Mail",
+    },
+    password: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a Password",
+    },
+  };
 
-  const [formValues, setFormValues] = useState(defaultValues);
+  const [formValues, setFormValues] = useState<FormErrors>({
+    email: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a E-Mail",
+    },
+    password: {
+      value: "",
+      error: false,
+      errorMessage: "You must enter a Password",
+    },
+  });
 
-  const [addUser] = useMutation(ADD_USER);
+  const [alert, setAlert] = useState<boolean>(false);
+  const [alertSeverity, setAlertSeverity] = useState<ErrorSeverity>();
+  const [alertMessage, setAlertMessage] = useState<ErrorMessage>();
+
+  function closeAlerts() {
+    setAlert(false);
+  }
+
+  const [addUser, {error}] = useMutation(ADD_USER);
+
+  const validateEmail = (e: string) => {
+    return e.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formFields = Object.keys(formValues);
+
+    let newFormValues = {...formValues};
+    for (let i = 0; i < formFields.length; i++) {
+      const currentField = formFields[i];
+      const currentValue = formValues[currentField].value;
+      if (currentValue === "" && !validateEmail(formValues.email.value)) {
+        newFormValues = {
+          ...newFormValues,
+          [currentField]: {
+            ...newFormValues[currentField],
+            error: true,
+          },
+        };
+      } else if (!validateEmail(formValues.email.value) && formValues.password.value !== "") {
+        newFormValues = {
+          email: {
+            value: formValues.email.value,
+            error: true,
+            errorMessage: "You must enter a valid E-Mail",
+          },
+          password: {
+            value: formValues.password.value,
+            error: false,
+            errorMessage: "You must enter a Password",
+          },
+        };
+      } else {
+        newFormValues = {
+          ...newFormValues,
+          [currentField]: {
+            ...newFormValues[currentField],
+            error: false,
+          },
+        };
+      }
+    }
+    if (!newFormValues.email.error && !newFormValues.password.error && validateEmail(formValues.email.value)) {
+      addUser({
+        variables: {
+          email: formValues.email.value,
+          password: formValues.password.value,
+        },
+      });
+    }
     handleClear();
-    addUser({
-      variables: {
-        email: formValues.email,
-        password: formValues.password,
-      },
-    });
+    setAlert(true);
+    setAlertSeverity("error");
+    setAlertMessage("Changes have been saved successfully.");
+    setTimeout(closeAlerts, 3000);
+    setFormValues(newFormValues);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const {name, value}:{name: string; value: string}  = e.target;
+    const {name, value} = e.target;
     setFormValues({
       ...formValues,
-      [e.target.name]: e.target.value,
+      [name]: {
+        ...formValues[name],
+        value,
+      },
     });
   };
 
@@ -122,8 +207,10 @@ const Register: React.FC = () => {
               mb: "20px",
             }}
             name="email"
-            value={formValues.email}
-            onChange={handleInputChange}
+            value={formValues.email.value}
+            onChange={handleChange}
+            error={formValues.email.error}
+            helperText={formValues.email.error && formValues.email.errorMessage}
           />
 
           <CssTextField
@@ -137,13 +224,21 @@ const Register: React.FC = () => {
               borderRadius: "100px",
             }}
             name="password"
-            value={formValues.password}
-            onChange={handleInputChange}
+            value={formValues.password.value}
+            onChange={handleChange}
+            error={formValues.password.error}
+            helperText={formValues.password.error && formValues.password.errorMessage}
           />
 
           <Button variant="contained" size="large" disableElevation className="buttons" type="submit">
             Create Account
           </Button>
+
+          <Collapse in={alert} sx={{mt: "20px"}}>
+            <Alert severity={alertSeverity} sx={{borderRadius: "100px", width: "248px"}}>
+              {error && error?.graphQLErrors.map(({message}, i) => <span key={i}>{message}</span>)}
+            </Alert>
+          </Collapse>
         </form>
         <Typography component="p" sx={{mt: "25px"}}>
           Already have an account?{" "}

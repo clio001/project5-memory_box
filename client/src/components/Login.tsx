@@ -4,6 +4,8 @@ import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/ma
 import {styled} from "@mui/material/styles";
 import {useMutation, gql} from "@apollo/client";
 
+import {UserContext} from "../context/UserContext";
+
 import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
 
 const CssTextField = styled(TextField)({
@@ -32,14 +34,20 @@ const CssTextField = styled(TextField)({
 const LOGIN_USER = gql`
   mutation LoginUser($email: String, $password: String) {
     loginUser(email: $email, password: $password) {
-      email
-      password
+      _id
       token
+      firstName
+      lastName
+      email
+      avatar_url
+      banner_url
     }
   }
 `;
 
 const Login: React.FC = () => {
+  const {user, setUser} = React.useContext(UserContext);
+
   const redirectTo = useNavigate();
 
   const [formValues, setFormValues] = useState<FormErrors>({
@@ -63,14 +71,16 @@ const Login: React.FC = () => {
     setAlert(false);
   }
 
-  const [loginUser, {data, loading, error}] = useMutation(LOGIN_USER, {
+  const [loginUser, {error}] = useMutation(LOGIN_USER, {
     onCompleted(data) {
       const myToken = data?.loginUser.token;
       window.localStorage.setItem("TOKEN", myToken);
+      // set userContxt
+      setUser(data?.loginUser);
       redirectTo("/my-account");
     },
   });
-  // const [loginUserToken] = useMutation(LOGIN_USER_TOKEN);
+
   const validateEmail = (e: string) => {
     return e.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   };
@@ -80,7 +90,6 @@ const Login: React.FC = () => {
     const formFields = Object.keys(formValues);
 
     let newFormValues = {...formValues};
-    console.log("newFormValues", newFormValues);
     for (let i = 0; i < formFields.length; i++) {
       const currentField = formFields[i];
       const currentValue = formValues[currentField].value;
@@ -105,9 +114,7 @@ const Login: React.FC = () => {
             errorMessage: "You must enter a Password",
           },
         };
-        console.log("CLG ELSE IF: ", formValues);
       } else {
-        console.log("ELSE ERROR FALSE");
         newFormValues = {
           ...newFormValues,
           [currentField]: {
@@ -128,7 +135,7 @@ const Login: React.FC = () => {
       setAlert(true);
       setAlertSeverity("error");
       setAlertMessage("Changes have been saved successfully.");
-      setTimeout(closeAlerts, 3000);
+      setTimeout(closeAlerts, 443000);
     }
     setFormValues(newFormValues);
   };
@@ -229,9 +236,7 @@ const Login: React.FC = () => {
 
           <Collapse in={alert} sx={{mt: "20px"}}>
             <Alert severity={alertSeverity} sx={{borderRadius: "100px", width: "248px"}}>
-              {error?.graphQLErrors.map(({message}, i) => (
-                <span key={i}>{message}</span>
-              ))}
+              {error && error?.graphQLErrors.map(({message}, i) => <span key={i}>{message}</span>)}
             </Alert>
           </Collapse>
         </form>

@@ -6,8 +6,8 @@ export interface RegisterUser {
 export interface GetUsers {
   [key: string]: UserAttributes;
 }
+
 export interface UserAttributes {
-  3: any;
   _id: string;
   firstName: string;
   lastName: string;
@@ -15,6 +15,8 @@ export interface UserAttributes {
   password: string;
   avatar_url: string;
   banner_url: string;
+  location: string;
+  role: string;
 }
 
 export interface GetUserToken {
@@ -33,37 +35,3 @@ export interface FormErrorsAttributes {
   error: boolean;
   errorMessage: string;
 }
-
-// export interface IForm{
-// 	firstName : firstName,
-// 	lastName : lastName,
-// 	avatar_url : avatar_url,
-// 	banner_url : banner_url,
-// }
-// export interface FormErrors {
-// 	firstName: firstName
-// 	lastName: lastName
-// 	avatar_url: avatar_url
-// 	banner_url: banner_url
-// }
-
-// export interface firstName {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
-// export interface lastName {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
-// export interface avatar_url {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
-// export interface banner_url {
-//     value: string;
-// 	 error: boolean;
-// 	 errorMessage: string;
-// }
