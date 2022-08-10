@@ -1,28 +1,19 @@
 import * as React from "react";
-import { Link as LinkRouter } from "react-router-dom";
+import {Link as LinkRouter} from "react-router-dom";
 
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
+import {AppBar, ListItemIcon, Box, Toolbar, IconButton, Typography, MenuItem, Menu, Badge, useScrollTrigger, Slide} from "@mui/material/";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
 import MoreIcon from "@mui/icons-material/MoreVert";
-
-import Slide from "@mui/material/Slide";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 interface Props {
   children: React.ReactElement;
 }
 
-function HideOnScroll({ children }: Props) {
+function HideOnScroll({children}: Props) {
   const trigger = useScrollTrigger({});
   return (
     <Slide appear={false} direction="down" in={!trigger}>
@@ -33,8 +24,7 @@ function HideOnScroll({ children }: Props) {
 
 const Appbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -71,10 +61,21 @@ const Appbar: React.FC = () => {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      onClose={handleMenuClose}>
+      <LinkRouter to="/my-account" style={{display: "flex", alignItems: "center", textDecoration: "none"}}>
+        <MenuItem onClick={handleMenuClose}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          My Account
+        </MenuItem>
+      </LinkRouter>
+      <MenuItem onClick={handleMenuClose}>
+        <ListItemIcon>
+          <Logout fontSize="small" />
+        </ListItemIcon>
+        Logout
+      </MenuItem>
     </Menu>
   );
 
@@ -93,9 +94,8 @@ const Appbar: React.FC = () => {
         horizontal: "right",
       }}
       open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
+      onClose={handleMobileMenuClose}>
+      {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
@@ -114,15 +114,9 @@ const Appbar: React.FC = () => {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton size="large" aria-label="account of current user" aria-controls="primary-search-account-menu" aria-haspopup="true" color="inherit">
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
@@ -131,7 +125,7 @@ const Appbar: React.FC = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{flexGrow: 1}}>
       <HideOnScroll>
         <AppBar
           sx={{
@@ -139,19 +133,13 @@ const Appbar: React.FC = () => {
             color: "#818181",
             height: "64px",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-            >
+            <IconButton size="large" edge="start" color="inherit" aria-label="open drawer">
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: { xs: "block", sm: "none" } }}>
-              <LinkRouter to="/" style={{ textDecoration: "none" }}>
+            <Box sx={{display: {xs: "block", sm: "none"}}}>
+              <LinkRouter to="/" style={{textDecoration: "none"}}>
                 <img
                   src="/logo-appbar.svg"
                   alt="MEMORYBOX by Alejandro and John"
@@ -164,14 +152,9 @@ const Appbar: React.FC = () => {
                 />
               </LinkRouter>
             </Box>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
+            <Typography variant="h6" noWrap component="div" sx={{display: {xs: "none", sm: "block"}}}>
               <Box>
-                <LinkRouter to="/" style={{ textDecoration: "none" }}>
+                <LinkRouter to="/" style={{textDecoration: "none"}}>
                   <img
                     src="/logo-appbar.svg"
                     alt="MEMORYBOX by Alejandro and John"
@@ -194,47 +177,24 @@ const Appbar: React.FC = () => {
                 inputProps={{ "aria-label": "search" }}
               />
             </Search> */}
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", sm: "flex" } }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
+            <Box sx={{flexGrow: 1}} />
+            <Box sx={{display: {xs: "none", sm: "flex"}}}>
+              {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="error">
                   <MailIcon />
                 </Badge>
               </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
+              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
                 <Badge badgeContent={17} color="error">
                   <NotificationsIcon />
                 </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
+              </IconButton> */}
+              <IconButton size="large" edge="end" aria-label="account of current user" aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen} color="inherit">
                 <AccountCircle />
               </IconButton>
             </Box>
-            <Box sx={{ display: { xs: "flex", sm: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
+            <Box sx={{display: {xs: "flex", sm: "none"}}}>
+              <IconButton size="large" aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
                 <MoreIcon />
               </IconButton>
             </Box>
