@@ -1,15 +1,33 @@
-import React, {useState} from "react";
+import React from "react";
 import {Link as LinkRouter} from "react-router-dom";
-import {Grid, Box, Typography, Button, TextField, Collapse, Alert} from "@mui/material";
-import {styled} from "@mui/material/styles";
-import {gql, useMutation} from "@apollo/client";
+import {useQuery, gql} from "@apollo/client";
+import {Grid, Box, Typography, Tooltip, Button} from "@mui/material";
+import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
+import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
 
-import {FormErrors, ErrorSeverity, ErrorMessage} from "../types";
+import {UserContext} from "../context/UserContext";
 
+import {GetUsers} from "../types";
 
+const GroupList: React.FC = () => {
+  const {user, setUser} = React.useContext(UserContext);
+  console.log(user);
 
+  //   const GET_USERS = gql`
+  //     query GetUsers {
+  //       users {
+  //         _id
+  //         firstName
+  //         lastName
+  //         email
+  //         password
+  //         avatar_url
+  //         banner_url
+  //       }
+  //     }
+  //   `;
 
-const Group: React.FC = () => {
+  //   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
 
   return (
     <Grid
@@ -32,8 +50,7 @@ const Group: React.FC = () => {
           mb: "70px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: "#f6f6f6 url(./profile-bg.jpg) center center/cover no-repeat",
-         //  background: `#f6f6f6 url(${user?.banner_url ? user?.banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
+          background: `#f6f6f6 url(${user?.banner_url ? user?.banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <Box
           sx={{
@@ -44,8 +61,7 @@ const Group: React.FC = () => {
             margin: "0 auto",
           }}>
           <img
-            src="./profile.svg"
-            // src={user?.avatar_url ? user?.avatar_url : "./profile.svg"}
+            src={user?.avatar_url ? user?.avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "100px",
@@ -53,6 +69,73 @@ const Group: React.FC = () => {
               boxShadow: "0 0 0px 5px #b5b5b5",
             }}
           />
+        </Box>
+      </Box>
+      {user?.role ? (
+        <Box sx={{mb: "30px"}}>
+          <Tooltip title="Admin" arrow placement="top">
+            <LocalPoliceOutlinedIcon sx={{color: "#BD5252"}} />
+          </Tooltip>
+          <Tooltip title="Top Contributor" arrow placement="top">
+            <WorkspacePremiumOutlinedIcon sx={{color: "#BD5252"}} />
+          </Tooltip>
+        </Box>
+      ) : (
+        ""
+      )}
+
+      <Box>
+        {user?.firstName ? (
+          <Typography
+            variant="h1"
+            color="initial"
+            sx={{
+              fontSize: "24px",
+              lineHeight: "0px",
+              pb: "20px",
+              letterSpacing: "0px",
+              textAlign: "center",
+            }}>
+            {user?.firstName} {user?.lastName ? user?.lastName : ""}
+          </Typography>
+        ) : (
+          ""
+        )}
+        {/* {user?.location ? (
+          <Typography
+            component="p"
+            color="initial"
+            sx={{
+              fontSize: "16px",
+              pb: "20px",
+              letterSpacing: "0px",
+              textAlign: "center",
+              color: "#C2C8D0",
+              fontWeight: "300",
+            }}>
+            {" "}
+            {user?.location}
+          </Typography>
+        ) : (
+          ""
+        )} */}
+
+        <Box sx={{display: "flex", justifyContent: "center", mb: "30px"}}>
+          <LinkRouter to="/edit-account">
+            <Button
+              variant="contained"
+              size="large"
+              disableElevation
+              className="buttons"
+              type="submit"
+              sx={{
+                width: "130px",
+                height: "26px",
+                fontSize: "12px!important",
+              }}>
+              Edit Profile
+            </Button>
+          </LinkRouter>
         </Box>
       </Box>
 
@@ -227,4 +310,15 @@ const Group: React.FC = () => {
     </Grid>
   );
 };
-export default Group;
+export default GroupList;
+
+// <Box>
+//   <div>
+//     {data &&
+//       data?.users.map((param: any) => (
+//         <div key={param.id}>
+//           <h2>{param.firstName}</h2>
+//         </div>
+//       ))}
+//   </div>
+// </Box>;
