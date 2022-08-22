@@ -8,7 +8,6 @@ function ViewMyAccount() {
     <Box className="ViewMyAccount">
       <Appbar />
       <MyAccount />
-		<BottomNav />
     </Box>
   );
 }
