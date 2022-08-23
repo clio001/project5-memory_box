@@ -23,7 +23,12 @@ export interface GetUserToken {
   token: string;
 }
 
-export type ErrorSeverity = "error" | "success" | "info" | "warning" | undefined;
+export type ErrorSeverity =
+  | "error"
+  | "success"
+  | "info"
+  | "warning"
+  | undefined;
 export type ErrorMessage = "Changes have been saved successfully.";
 
 export interface FormErrors {
@@ -35,3 +40,5 @@ export interface FormErrorsAttributes {
   error: boolean;
   errorMessage: string;
 }
+
+export type NewComment = string | undefined;
