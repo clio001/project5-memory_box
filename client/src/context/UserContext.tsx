@@ -11,6 +11,7 @@ type UserProfileType = {
   banner_url: string | null;
   //   location: string | null;
   role: string | null | undefined;
+  groups: string | null | undefined
 };
 
 interface Props {

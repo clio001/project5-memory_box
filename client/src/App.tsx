@@ -11,6 +11,7 @@ import DeletedUser from "./components/DeletedUser";
 
 // import {ProfileContextProvider} from "./context/UserProfile"
 import {UserContextProvider} from "./context/UserContext"
+import {GroupContextProvider} from "./context/GroupContext"
 
 
 import {
@@ -30,6 +31,7 @@ function App() {
     <div className="Home">
       <ApolloProvider client={client}>
 		<UserContextProvider>
+			<GroupContextProvider>
         <Routes>
           <Route path="/" element={<ViewHome />} />
           <Route path="/login" element={<ViewLogin />} />
@@ -40,6 +42,7 @@ function App() {
           <Route path="/delete" element={<DeletedUser />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
+		  </GroupContextProvider>
 		</UserContextProvider>
       </ApolloProvider>
     </div>

@@ -12,8 +12,13 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 const GroupList: React.FC = () => {
-  const {user, setUser} = React.useContext(UserContext);
-  console.log(user);
+    const {user, setUser} = React.useContext(UserContext);
+  
+	
+	 console.log(user?.groups);
+
+
+
 
 
   return (
@@ -37,7 +42,7 @@ const GroupList: React.FC = () => {
           mb: "70px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: `#f6f6f6 url(${user?.banner_url ? user?.banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
+          background: `#f6f6f6 url("./profile-bg.jpg") center center/cover no-repeat`,
         }}>
         <Box
           sx={{
@@ -48,7 +53,7 @@ const GroupList: React.FC = () => {
             margin: "0 auto",
           }}>
           <img
-            src={user?.avatar_url ? user?.avatar_url : "./profile.svg"}
+            src="./profile.svg"
             alt="profile img"
             style={{
               borderRadius: "10px",
@@ -61,7 +66,10 @@ const GroupList: React.FC = () => {
 
 		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px'}}>
 			<Box>
-				<Typography variant="h1" sx={{fontSize:'30px'}}>East Berlin Group</Typography>
+				<Typography variant="h1" sx={{fontSize:'30px'}}>
+Yoyo
+				
+				</Typography>
 			</Box>
 			<Box>
 				<IconButton aria-label="delete" size="medium" sx={{background: '#f1f1f1'}}>
@@ -70,22 +78,10 @@ const GroupList: React.FC = () => {
 			</Box>
 		</Box>
 
-		<Box
-        sx={{
-          width: "100%",
-          maxWidth: "395px",
-          minWidth: "320px",
-          mt: "15px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-			 mb: "10px"
-        }}>
-        <Box component="span"  sx={{width: "100%", border: "1px solid #C2C8D0"}}></Box>
 
-      </Box>
 
-		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px',height: "31px", background: "#F4F6FC ", borderRadius: "100px", p: "10px"}}>
+
+		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px',height: "31px", background: "#F4F6FC ", borderRadius: "100px", p: "10px", mt: "15px"}}>
 			<Box sx={{display: 'flex', alignItems: 'center'}}>
 				<Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" sx={{width: "33px",height: "33px",mr: "5px"}} />
 				<Avatar alt="Travis Howard" src="https://mui.com/static/images/avatar/2.jpg" sx={{width: "33px",height: "33px",mr: "5px"}} />
@@ -95,6 +91,14 @@ const GroupList: React.FC = () => {
 				<Button variant="contained" disableElevation size="small" sx={{borderRadius: '100px'}}>
 					Join
 				</Button>
+			</Box>
+		</Box>
+
+		<Box sx={{display: 'flex', alignItems: 'center', width: '100%', maxWidth: '395px', minWidth: '320px', mt: "10px"}}>
+			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" sx={{width: "20px",height: "20px",mr: "5px"}} />
+			<Box>
+				<Typography component="p" sx={{fontSize: '13px'}}>Admin · May 22</Typography>
+			</Box>
 			</Box>
 		</Box>
 
