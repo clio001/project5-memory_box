@@ -215,7 +215,7 @@ const Mutation = new GraphQLObjectType({
         body: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
-        if (!context.user) return null;
+        //if (!context.user) return null;
         return await Comment.findByIdAndUpdate(args.id, {
           body: args.body,
         });

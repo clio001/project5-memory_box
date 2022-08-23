@@ -100,3 +100,18 @@ a:hover {
   padding: 0.5rem;
   margin-top: 0.5rem;
 }
+.modalStyle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  box-shadow: 24;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}

@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { Box, Typography, Avatar } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Modal,
+  TextField,
+  Button,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 
 const DELETE_COMMENT = gql`
-  mutation deleteComment($id: String) {
-    deleteComment(id: $CommentId) {
+  mutation DeleteComment($deleteCommentId: String) {
+    deleteComment(id: $deleteCommentId) {
       id
+    }
+  }
+`;
+
+const UPDATE_COMMENT = gql`
+  mutation UpdateComment($updateCommentId: ID, $body: String) {
+    updateComment(id: $updateCommentId, body: $body) {
+      id
+      body
     }
   }
 `;
@@ -16,11 +32,20 @@ const DELETE_COMMENT = gql`
 function Comment(props: any) {
   const comment = props.data;
   const user = props.user;
+  const [openModal, setOpenModal] = useState(false);
+  const [updatedComment, setUpdatedComment] = useState("");
 
-  const [deleteComment, { error }] = useMutation(DELETE_COMMENT);
-  if (error) {
-    console.log("Mutation error: ", error);
-  }
+  const [deleteComment] = useMutation(DELETE_COMMENT);
+  const [updateComment] = useMutation(UPDATE_COMMENT);
+
+  const handleUpdateComment = () => {
+    updateComment({
+      variables: {
+        updateCommentId: comment.id,
+        body: updatedComment,
+      },
+    });
+  };
 
   return (
     <div>
@@ -60,13 +85,30 @@ function Comment(props: any) {
                 <EditIcon
                   sx={{ color: "gray", marginRight: "0.3rem" }}
                   fontSize="small"
+                  onClick={() => setOpenModal(true)}
                 />
+                <Modal open={openModal} onClose={() => setOpenModal(false)}>
+                  <Box className="modalStyle">
+                    <TextField
+                      multiline
+                      maxRows={8}
+                      defaultValue={comment.body}
+                      onChange={(e) => setUpdatedComment(e.target.value)}
+                    />
+                    <Button variant="outlined" onClick={handleUpdateComment}>
+                      Submit
+                    </Button>
+                  </Box>
+                </Modal>
+                {/* USE MODAL FOR EDIT */}
 
                 <ClearIcon
                   sx={{ color: "gray" }}
                   fontSize="small"
                   onClick={() => {
-                    deleteComment({ variables: { CommentId: comment.id } });
+                    deleteComment({
+                      variables: { deleteCommentId: comment?.id },
+                    });
                   }}
                 />
               </div>
