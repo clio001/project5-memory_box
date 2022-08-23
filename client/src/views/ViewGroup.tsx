@@ -8,7 +8,6 @@ function ViewGroup() {
     <Box className="ViewGroup">
       <Appbar />
       <Group />
-		<BottomNav />
     </Box>
   );
 }
