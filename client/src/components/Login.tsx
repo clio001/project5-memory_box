@@ -89,6 +89,7 @@ const Login: React.FC = () => {
       window.localStorage.setItem("TOKEN", myToken);
       // set userContxt
       setUser(data?.loginUser);
+		console.log(data?.loginUser)
       redirectTo("/my-account");
     },
   });

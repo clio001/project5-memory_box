@@ -17,6 +17,7 @@ export interface UserAttributes {
   banner_url: string;
   location: string;
   role: string;
+  groups: string
 }
 
 export interface GetUserToken {

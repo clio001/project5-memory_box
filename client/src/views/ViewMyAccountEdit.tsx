@@ -8,7 +8,6 @@ function ViewMyAccountEdit() {
     <Box className="ViewMyAccountEdit">
       <Appbar />
       <MyAccountEdit />
-		<BottomNav />
     </Box>
   );
 }

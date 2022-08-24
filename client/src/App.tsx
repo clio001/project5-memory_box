@@ -5,6 +5,7 @@ import ViewLogin from "./views/ViewLogin";
 import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
 import ViewMyAccountEdit from "./views/ViewMyAccountEdit";
+import ViewGroup from "./views/ViewGroup";
 import NoMatch from "./components/NoMatch";
 import DeletedUser from "./components/DeletedUser";
 import ViewItem from "./views/ViewItem";
