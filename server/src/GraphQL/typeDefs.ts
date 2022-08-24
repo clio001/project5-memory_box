@@ -103,6 +103,7 @@ const ItemType = new GraphQLObjectType({
     title: { type: GraphQLString },
     description: { type: GraphQLString },
     user_id: { type: GraphQLString },
+    groups: { type: GraphQLString },
     createdBy: {
       type: UserType,
       async resolve(parent, args) {
@@ -146,7 +147,12 @@ const GroupType = new GraphQLObjectType({
       },
     },
 
-    items: { type: GraphQLString },
+    items: {
+      type: new GraphQLList(ItemType),
+      async resolve(parent, args) {
+        return await Item.find({ groups: parent.id });
+      },
+    },
     public: { type: GraphQLBoolean },
   }),
 });

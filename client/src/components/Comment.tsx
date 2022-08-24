@@ -89,18 +89,31 @@ function Comment(props: any) {
                 />
                 <Modal open={openModal} onClose={() => setOpenModal(false)}>
                   <Box className="modalStyle">
+                    <Box>
+                      <EditIcon
+                        fontSize="large"
+                        sx={{ color: "#666500", mb: "1rem" }}
+                      />
+                    </Box>
+
                     <TextField
                       multiline
                       maxRows={8}
                       defaultValue={comment.body}
                       onChange={(e) => setUpdatedComment(e.target.value)}
+                      sx={{ backgroundColor: "#f4f6fc" }}
                     />
-                    <Button variant="outlined" onClick={handleUpdateComment}>
-                      Submit
-                    </Button>
+                    <Box mt={2}>
+                      <Button
+                        variant="outlined"
+                        onClick={handleUpdateComment}
+                        sx={{ color: "#666500", borderColor: "#666500" }}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
                   </Box>
                 </Modal>
-                {/* USE MODAL FOR EDIT */}
 
                 <ClearIcon
                   sx={{ color: "gray" }}
@@ -137,7 +150,7 @@ function Comment(props: any) {
               sx={{ color: "gray", mr: "0.5rem" }}
               fontSize="small"
             />
-            <Typography variant="caption">11:34</Typography>
+            <Typography variant="caption">2 / 11:34</Typography>
           </Box>
         </Box>
       </Box>

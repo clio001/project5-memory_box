@@ -31,6 +31,7 @@ declare namespace dbModel {
     bookmarks?: string;
     likes?: string;
     share: boolean;
+    groups?: string;
   }
 
   interface Comment {

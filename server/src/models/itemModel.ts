@@ -29,6 +29,9 @@ const itemSchema = new Schema<dbModel.Item>(
     file_url: {
       type: String,
     },
+    groups: {
+      type: String,
+    },
     comments: [
       {
         type: Schema.Types.ObjectId,

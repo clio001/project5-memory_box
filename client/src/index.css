@@ -107,11 +107,12 @@ a:hover {
   transform: translate(-50%, -50%);
   width: 280px;
   box-shadow: 24;
-  background-color: white;
+  background-color: #dee3ed;
   padding: 2rem;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  border: 0;
 }

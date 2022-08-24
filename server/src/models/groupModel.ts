@@ -21,13 +21,9 @@ const groupSchema = new Schema(
     members: {
       type: String,
     },
-
-    items: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Item",
-      },
-    ],
+    items: {
+      type: String,
+    },
     location: {
       type: String,
     },

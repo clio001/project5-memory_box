@@ -36,7 +36,6 @@ function Item() {
             }
           }
         }
-        email
       }
     }
   `;
@@ -65,6 +64,7 @@ function Item() {
           mt: "60px",
         }}
       >
+        <Box></Box>
         <img src={data && data.user.items[0].file_url} width="100%" />
         <Paper
           elevation={5}
@@ -75,6 +75,7 @@ function Item() {
             alignItems: "center",
             padding: "0.3rem",
             borderRadius: "25px",
+            marginTop: "-25px",
           }}
         >
           <Box
