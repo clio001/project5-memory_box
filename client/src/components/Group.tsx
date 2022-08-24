@@ -14,12 +14,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const GroupList: React.FC = () => {
     const {user, setUser} = React.useContext(UserContext);
   
-	
-	 console.log(user?.groups);
-
-
-
-
 
   return (
     <Grid
@@ -42,7 +36,7 @@ const GroupList: React.FC = () => {
           mb: "70px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: `#f6f6f6 url("./profile-bg.jpg") center center/cover no-repeat`,
+          background: `#f6f6f6 url(${user?.groups[0].banner_url ? user?.groups[0].banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <Box
           sx={{
@@ -53,11 +47,12 @@ const GroupList: React.FC = () => {
             margin: "0 auto",
           }}>
           <img
-            src="./profile.svg"
+            src={user?.groups[0].avatar_url ? user?.groups[0].avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "10px",
               width: "150px",
+				  height: "150px",
               boxShadow: "0 0 0px 5px #b5b5b5",
             }}
           />
@@ -67,7 +62,7 @@ const GroupList: React.FC = () => {
 		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px'}}>
 			<Box>
 				<Typography variant="h1" sx={{fontSize:'30px'}}>
-Yoyo
+				{user?.groups[0].name}
 				
 				</Typography>
 			</Box>
@@ -95,7 +90,7 @@ Yoyo
 		</Box>
 
 		<Box sx={{display: 'flex', alignItems: 'center', width: '100%', maxWidth: '395px', minWidth: '320px', mt: "10px"}}>
-			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" sx={{width: "20px",height: "20px",mr: "5px"}} />
+			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src={user?.avatar_url ? user?.avatar_url : "./profile.svg"} sx={{width: "20px",height: "20px",mr: "5px"}} />
 			<Box>
 				<Typography component="p" sx={{fontSize: '13px'}}>Admin · May 22</Typography>
 			</Box>
@@ -129,6 +124,31 @@ Yoyo
 
         <Box component="span" m={1} sx={{width: "100%", border: "1px solid #C2C8D0"}}></Box>
       </Box>
+
+		<Box
+        className="myCollections"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "column",
+          width: "100%",
+          maxWidth: "375px",
+          minWidth: "280px",
+          padding: "10px 10px",
+          mt: "10px",
+          mb: "8px",
+          background: "#fff",
+          boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)",
+          borderRadius: "10px",
+        }}>
+        <Box sx={{display: "flex", justifyContent: "space-between"}}>
+         <Box className="collection-images">
+          <img src="image-1.jpg" alt="" />
+        </Box>
+        </Box>
+      </Box>
+
+
 
 		<Box
         className="myCollections"
@@ -182,9 +202,6 @@ Yoyo
 
         <Box sx={{display: "flex", justifyContent: "space-around", mt: "10px"}} className="collection-images">
           <img src="image-1.jpg" alt="" />
-          <img src="image-2.jpg" alt="" />
-          <img src="image-3.jpg" alt="" />
-          <img src="image-4.jpg" alt="" />
         </Box>
       </Box>
       

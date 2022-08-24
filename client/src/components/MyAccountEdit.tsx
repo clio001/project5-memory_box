@@ -200,7 +200,7 @@ const MyAccountEdit: React.FC = () => {
         lastName: formValues.lastName.value,
         avatar_url: formValues.avatar_url.value,
         banner_url: formValues.banner_url.value,
-		  groups: user?.groups,
+
       });
       setAlert(true);
       setAlertSeverity("success");

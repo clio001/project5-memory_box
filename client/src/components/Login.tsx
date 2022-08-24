@@ -50,7 +50,6 @@ const LOGIN_USER = gql`
 			members {
 				avatar_url
 			}
-
 		}
     }
   }

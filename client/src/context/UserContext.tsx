@@ -1,17 +1,26 @@
 import React, {useEffect} from "react";
 
+
+// type groups = {
+// 	name: string;
+// 	avatar_url: string;
+// 	banner_url: string;
+// 	description: string;
+// 	location: string;
+// }
+
 type UserProfileType = {
-  _id: string | null | undefined;
-  token: string | null | undefined;
-  __typename: string | null | undefined;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null | undefined;
-  avatar_url: string | null;
+	_id: string | null | undefined;
+	token: string | null | undefined;
+	__typename: string | null | undefined;
+	firstName: string | null;
+	lastName: string | null;
+	email: string | null | undefined;
+	avatar_url: string | null;
   banner_url: string | null;
   //   location: string | null;
   role: string | null | undefined;
-  groups: string | null | undefined
+  groups?: any;
 };
 
 interface Props {
