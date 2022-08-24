@@ -37,6 +37,7 @@ function App() {
             <Route path="/edit-account" element={<ViewMyAccountEdit />} />
             <Route path="/delete" element={<DeletedUser />} />
             <Route path="/item" element={<ViewItem />} />
+            <Route path="/group" element={<ViewGroup />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
         </UserContextProvider>

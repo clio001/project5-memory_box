@@ -2,6 +2,7 @@ import { Typography, Grid, Box, Avatar, Divider, Paper } from "@mui/material";
 
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Comment from "./Comment";
+import Map from "./Map";
 import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useMutation, gql, useQuery } from "@apollo/client";
@@ -26,6 +27,16 @@ function Item() {
             id
             body
             user_id
+            likes {
+              id
+              comment_id
+              user_id
+              author {
+                _id
+                firstName
+                lastName
+              }
+            }
             author {
               firstName
               lastName
@@ -118,12 +129,13 @@ function Item() {
               {data && data.user.items[0].description}
             </Typography>
           </Box>
+
           <Divider>
             <Typography variant="body2" color="text.secondary">
               Location
             </Typography>
           </Divider>
-          <div>asdn</div>
+          <Map />
           <Divider>
             <Typography variant="body2" color="text.secondary">
               Comments {data && data.user.items[0].comments.length}

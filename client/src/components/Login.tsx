@@ -49,9 +49,15 @@ const LOGIN_USER = gql`
       email
       avatar_url
       banner_url
-      items {
-        id
-        title
+      groups {
+        name
+        description
+        avatar_url
+        banner_url
+        location
+        members {
+          avatar_url
+        }
       }
     }
   }
@@ -89,7 +95,7 @@ const Login: React.FC = () => {
       window.localStorage.setItem("TOKEN", myToken);
       // set userContxt
       setUser(data?.loginUser);
-		console.log(data?.loginUser)
+      console.log(data?.loginUser);
       redirectTo("/my-account");
     },
   });
