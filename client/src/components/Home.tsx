@@ -45,7 +45,7 @@ const Home: React.FC = () => {
             sx={{ mt: "calc(100vh - 793px)" }}
             className="buttons"
           >
-            Create Box
+            Start
           </Button>
         </LinkRouter>
         <Typography

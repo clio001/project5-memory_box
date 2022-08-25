@@ -182,7 +182,7 @@ const Mutation = new GraphQLObjectType({
         id: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
-        if (!context.user) return null;
+      //   if (!context.user) return null;
         return await Item.findByIdAndDelete(args.id);
       },
     },

@@ -6,6 +6,7 @@ import ViewRegister from "./views/ViewRegister";
 import ViewMyAccount from "./views/ViewMyAccount";
 import ViewMyAccountEdit from "./views/ViewMyAccountEdit";
 import ViewGroup from "./views/ViewGroup";
+import ViewGroupAddItem from "./views/ViewGroupAddItem";
 import NoMatch from "./components/NoMatch";
 import DeletedUser from "./components/DeletedUser";
 import ViewItem from "./views/ViewItem";
@@ -39,6 +40,7 @@ function App() {
             <Route path="/group" element={<ViewGroup />} />
             <Route path="/item" element={<ViewItem />} />
             <Route path="/group" element={<ViewGroup />} />
+            <Route path="/add-item" element={<ViewGroupAddItem />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
         </UserContextProvider>
