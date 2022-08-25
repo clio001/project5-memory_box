@@ -11,6 +11,9 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+
+// * Mutations
 
 const DELETE_COMMENT = gql`
   mutation DeleteComment($deleteCommentId: String) {
@@ -29,6 +32,22 @@ const UPDATE_COMMENT = gql`
   }
 `;
 
+const ADD_LIKE = gql`
+  mutation AddLike($userId: ID, $commentId: String) {
+    addLike(user_id: $userId, comment_id: $commentId) {
+      id
+    }
+  }
+`;
+
+const DELETE_LIKE = gql`
+  mutation DeleteLike($deleteLikeId: String) {
+    deleteLike(id: $deleteLikeId) {
+      id
+    }
+  }
+`;
+
 function Comment(props: any) {
   const comment = props.data;
   const user = props.user;
@@ -37,7 +56,10 @@ function Comment(props: any) {
 
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [updateComment] = useMutation(UPDATE_COMMENT);
+  const [addLike] = useMutation(ADD_LIKE);
+  const [deleteLike] = useMutation(DELETE_LIKE);
 
+  // * GraphQL handler functions
   const handleUpdateComment = () => {
     updateComment({
       variables: {
@@ -47,9 +69,17 @@ function Comment(props: any) {
     });
   };
 
+  const handleAddLike = () => {
+    addLike({
+      variables: {
+        userId: user._id,
+        commentId: comment.id,
+      },
+    });
+  };
+
   return (
     <div>
-      {/* {comment && console.log("comment", comment)} */}
       <Box className="comment-box">
         <Box
           sx={{
@@ -146,11 +176,43 @@ function Comment(props: any) {
               marginTop: "0.5rem",
             }}
           >
-            <ThumbUpOffAltIcon
-              sx={{ color: "gray", mr: "0.5rem" }}
-              fontSize="small"
-            />
-            <Typography variant="caption">2 / 11:34</Typography>
+            {comment && user && comment.likes.length > 0 ? (
+              comment.likes.map((like: any) => {
+                if (like.user_id === user._id) {
+                  return (
+                    <ThumbUpAltIcon
+                      sx={{ color: "gray", mr: "0.5rem" }}
+                      fontSize="small"
+                      onClick={() =>
+                        deleteLike({
+                          variables: {
+                            deleteLikeId: like.id,
+                          },
+                        })
+                      }
+                    />
+                  );
+                } else {
+                  return (
+                    <ThumbUpOffAltIcon
+                      sx={{ color: "gray", mr: "0.5rem" }}
+                      fontSize="small"
+                      onClick={handleAddLike}
+                    />
+                  );
+                }
+              })
+            ) : (
+              <ThumbUpOffAltIcon
+                sx={{ color: "gray", mr: "0.5rem" }}
+                fontSize="small"
+                onClick={handleAddLike}
+              />
+            )}
+
+            <Typography variant="caption">
+              {comment && comment.likes.length} / 11:34
+            </Typography>
           </Box>
         </Box>
       </Box>

@@ -38,6 +38,7 @@ function App() {
             <Route path="/delete" element={<DeletedUser />} />
             <Route path="/group" element={<ViewGroup />} />
             <Route path="/item" element={<ViewItem />} />
+            <Route path="/group" element={<ViewGroup />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
         </UserContextProvider>

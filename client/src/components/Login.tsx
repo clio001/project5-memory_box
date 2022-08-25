@@ -43,31 +43,31 @@ const LOGIN_USER = gql`
   mutation LoginUser($email: String, $password: String) {
     loginUser(email: $email, password: $password) {
       _id
-    token
-    avatar_url
-    banner_url
-    firstName
-    lastName
-    email
-    groups {
-      name
-      description
+      token
       avatar_url
       banner_url
-      location
-      items {
-			title
+      firstName
+      lastName
+      email
+      groups {
+        name
         description
-        id
-        groups
-        file_url
-      }
-      members {
         avatar_url
+        banner_url
+        location
+        items {
+          title
+          description
+          id
+          groups
+          file_url
+        }
+        members {
+          avatar_url
+        }
       }
     }
   }
-}
 `;
 
 const Login: React.FC = () => {
@@ -102,7 +102,7 @@ const Login: React.FC = () => {
       window.localStorage.setItem("TOKEN", myToken);
       // set userContxt
       setUser(data?.loginUser);
-		console.log(data?.loginUser)
+      console.log(data?.loginUser);
       redirectTo("/group");
     },
   });

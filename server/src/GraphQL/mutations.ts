@@ -271,11 +271,11 @@ const Mutation = new GraphQLObjectType({
     addLike: {
       type: LikeType,
       args: {
-        user_id: { type: GraphQLString },
+        user_id: { type: GraphQLID },
         comment_id: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
-        if (!context.user) return null;
+        // if (!context.user) return null;
         let newLike = new Like<dbModel.Like>({
           user_id: args.user_id,
           comment_id: args.comment_id,
@@ -292,7 +292,7 @@ const Mutation = new GraphQLObjectType({
         id: { type: GraphQLString },
       },
       async resolve(parent, args, context) {
-        if (!context.user) return null;
+        // if (!context.user) return null;
         return await Like.findByIdAndDelete(args.id);
       },
     },

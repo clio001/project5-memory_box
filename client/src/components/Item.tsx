@@ -2,6 +2,7 @@ import { Typography, Grid, Box, Avatar, Divider, Paper } from "@mui/material";
 
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Comment from "./Comment";
+import Map from "./Map";
 import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useMutation, gql, useQuery } from "@apollo/client";
@@ -9,15 +10,13 @@ import InputField from "./InputField";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Item() {
+  type x = {
+    [key: string]: any;
+  };
+  const singleItem: x = useLocation();
+  console.log(">>>>>>>>>>>", singleItem?.state.element2.id);
 
-	type x = {
-	[key: string]: any;
-}
-const singleItem: x = useLocation()
-console.log(">>>>>>>>>>>", singleItem?.state.element2.id)
-
-
-const itemId: x = singleItem.state.element2.id
+  const itemId: x = singleItem.state.element2.id;
 
   const SINGLE_ITEM = gql`
     query Item {
@@ -58,7 +57,7 @@ const itemId: x = singleItem.state.element2.id
   `;
   const { loading, error, data } = useQuery(SINGLE_ITEM);
 
-  console.log("DATADATA ",data)
+  console.log("DATADATA ", data);
 
   return (
     <Grid
@@ -130,36 +129,27 @@ const itemId: x = singleItem.state.element2.id
           >
             <Divider>
               <Typography variant="body2" color="text.secondary">
-                June, 10, 1920
+                June 10, 1920
               </Typography>
             </Divider>
-            <Typography mt={1}>
-              {data && data.item.description}
-            </Typography>
+            <Typography mt={1}>{data && data.item.description}</Typography>
           </Box>
+
           <Divider>
             <Typography variant="body2" color="text.secondary">
               Location
             </Typography>
           </Divider>
-          <div>asdn</div>
+          <Box mt={1} mb={3}>
+            <Map />
+          </Box>
+
           <Divider>
             <Typography variant="body2" color="text.secondary">
               Comments {data && data.item.comments.length}
             </Typography>
           </Divider>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              mt: 1,
-            }}
-          >
-            <Avatar src="" sx={{ width: 36, height: 36 }} />
-            <Avatar src="" sx={{ width: 36, height: 36, ml: "0.5rem" }} />
-            <Avatar src="" sx={{ width: 36, height: 36, ml: "0.5rem" }} />
-          </Box>
+
           <Box sx={{ mb: "5rem" }}>
             {" "}
             {data && data.item.comments.length === 0 ? (
@@ -170,8 +160,11 @@ const itemId: x = singleItem.state.element2.id
               </>
             ) : (
               data &&
-              data.item.comments.map((element: any, i: number) => {console.log(element)
-                return <Comment key={i} data={element} user={data.item.createdBy} />;
+              data.item.comments.map((element: any, i: number) => {
+                console.log(element);
+                return (
+                  <Comment key={i} data={element} user={data.item.createdBy} />
+                );
               })
             )}
           </Box>
