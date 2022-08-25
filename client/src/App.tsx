@@ -36,6 +36,7 @@ function App() {
             <Route path="/my-account" element={<ViewMyAccount />} />
             <Route path="/edit-account" element={<ViewMyAccountEdit />} />
             <Route path="/delete" element={<DeletedUser />} />
+            <Route path="/group" element={<ViewGroup />} />
             <Route path="/item" element={<ViewItem />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>

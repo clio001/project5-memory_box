@@ -43,18 +43,31 @@ const LOGIN_USER = gql`
   mutation LoginUser($email: String, $password: String) {
     loginUser(email: $email, password: $password) {
       _id
-      token
-      firstName
-      lastName
-      email
+    token
+    avatar_url
+    banner_url
+    firstName
+    lastName
+    email
+    groups {
+      name
+      description
       avatar_url
       banner_url
+      location
       items {
+			title
+        description
         id
-        title
+        groups
+        file_url
+      }
+      members {
+        avatar_url
       }
     }
   }
+}
 `;
 
 const Login: React.FC = () => {
@@ -90,7 +103,7 @@ const Login: React.FC = () => {
       // set userContxt
       setUser(data?.loginUser);
 		console.log(data?.loginUser)
-      redirectTo("/my-account");
+      redirectTo("/group");
     },
   });
 

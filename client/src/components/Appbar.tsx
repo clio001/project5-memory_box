@@ -70,7 +70,7 @@ const Appbar: React.FC = () => {
           My Account
         </MenuItem>
       </LinkRouter>
-      <LinkRouter to="/groups" style={{display: "flex", alignItems: "center", textDecoration: "none"}}>
+      <LinkRouter to="/group" style={{display: "flex", alignItems: "center", textDecoration: "none"}}>
         <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
             <Settings fontSize="small" />

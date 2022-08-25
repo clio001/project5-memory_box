@@ -6,11 +6,22 @@ import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import InputField from "./InputField";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Item() {
+
+	type x = {
+	[key: string]: any;
+}
+const singleItem: x = useLocation()
+console.log(">>>>>>>>>>>", singleItem?.state.element2.id)
+
+
+const itemId: x = singleItem.state.element2.id
+
   const USER_ITEM = gql`
-    query Users {
-      user(id: "62e938668989205442df9506") {
+    query Users($userId: ID) {
+      user(id: ${itemId}) {
         _id
         avatar_url
         items {

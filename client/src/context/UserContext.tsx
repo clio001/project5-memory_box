@@ -8,8 +8,11 @@ import React, {useEffect} from "react";
 // 	description: string;
 // 	location: string;
 // }
+type Groups = {
+	[key: string] : any
+}
 
-type UserProfileType = {
+interface UserProfileType {
 	_id: string | null | undefined;
 	token: string | null | undefined;
 	__typename: string | null | undefined;
@@ -21,6 +24,7 @@ type UserProfileType = {
   //   location: string | null;
   role: string | null | undefined;
   groups?: any;
+  items?: any;
 };
 
 interface Props {

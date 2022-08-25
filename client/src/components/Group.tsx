@@ -1,5 +1,5 @@
 import React from "react";
-import {Link as LinkRouter} from "react-router-dom";
+import {Link as LinkRouter, Navigate, useNavigate} from "react-router-dom";
 import {useQuery, gql} from "@apollo/client";
 import {Grid, Box, Typography, IconButton, Button, Avatar} from "@mui/material";
 import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
@@ -7,12 +7,24 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {UserContext} from "../context/UserContext";
 
+
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 
 const GroupList: React.FC = () => {
     const {user, setUser} = React.useContext(UserContext);
+const navigate = useNavigate()
+
+// const handleOpen = (e: any) => {
+// 	item({
+// 		variables: {
+// 			id: user?._id,
+// 		}
+// 	}
+// }
+
+	 
   
 
   return (
@@ -36,7 +48,7 @@ const GroupList: React.FC = () => {
           mb: "70px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: `#f6f6f6 url(${user?.groups[0].banner_url ? user?.groups[0].banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
+          background: `#f6f6f6 url(${user && user?.groups[0].banner_url ? user?.groups[0].banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <Box
           sx={{
@@ -47,7 +59,7 @@ const GroupList: React.FC = () => {
             margin: "0 auto",
           }}>
           <img
-            src={user?.groups[0].avatar_url ? user?.groups[0].avatar_url : "./profile.svg"}
+            src={user && user?.groups[0].avatar_url ? user?.groups[0].avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "10px",
@@ -62,7 +74,7 @@ const GroupList: React.FC = () => {
 		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px'}}>
 			<Box>
 				<Typography variant="h1" sx={{fontSize:'30px'}}>
-				{user?.groups[0].name}
+				{user && user?.groups[0].name}
 				
 				</Typography>
 			</Box>
@@ -90,7 +102,7 @@ const GroupList: React.FC = () => {
 		</Box>
 
 		<Box sx={{display: 'flex', alignItems: 'center', width: '100%', maxWidth: '395px', minWidth: '320px', mt: "10px"}}>
-			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src={user?.avatar_url ? user?.avatar_url : "./profile.svg"} sx={{width: "20px",height: "20px",mr: "5px"}} />
+			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src={user && user?.avatar_url ? user?.avatar_url : "./profile.svg"} sx={{width: "20px",height: "20px",mr: "5px"}} />
 			<Box>
 				<Typography component="p" sx={{fontSize: '13px'}}>Admin · May 22</Typography>
 			</Box>
@@ -125,98 +137,64 @@ const GroupList: React.FC = () => {
         <Box component="span" m={1} sx={{width: "100%", border: "1px solid #C2C8D0"}}></Box>
       </Box>
 
-		<Box
-        className="myCollections"
-        sx={{
+
+			<Box sx={{
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "column",
           width: "100%",
           maxWidth: "375px",
           minWidth: "280px",
-          padding: "10px 10px",
-          mt: "10px",
-          mb: "8px",
-          background: "#fff",
-          boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)",
-          borderRadius: "10px",
+
         }}>
-        <Box sx={{display: "flex", justifyContent: "space-between"}}>
-         <Box className="collection-images">
-          <img src="image-1.jpg" alt="" />
-        </Box>
-        </Box>
-      </Box>
-
-
-
-		<Box
-        className="myCollections"
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "column",
-          width: "100%",
-          maxWidth: "375px",
-          minWidth: "280px",
-          padding: "10px 10px",
-          mt: "10px",
-          mb: "8px",
-          background: "#fff",
-          boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)",
-          borderRadius: "10px",
-        }}>
-        <Box sx={{display: "flex", justifyContent: "space-between"}}>
-          <Box sx={{display: "flex", flexDirection: "column"}}>
-            <Typography component="span" sx={{color: "#707070", fontWeight: "700"}}>
-              My first car
-            </Typography>
-            <Typography component="span" sx={{fontSize: "11px", color: "#B6B6B6"}}>
-              14 pictures | 32 comments
-            </Typography>
-          </Box>
-          <Box sx={{display: "flex", alignItems: "center"}}>
-				<IconButton aria-label="delete" size="small" sx={{background: '#f1f1f1', mr: '5px'}}>
-					<FavoriteBorderIcon fontSize="inherit"  />
-				</IconButton>
-            <LinkRouter to="/" className="no-underline">
-              <Button
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "#BD5252",
-                  fontSize: "12px",
-                  fontWeight: "600",
-                  border: "1px solid #BD5252",
-                  borderRadius: "100px",
-                  height: "26px",
-                  textTransform: "none",
-                }}
-                className="btn-viewCollection">
-                Open
-              </Button>
-            </LinkRouter>
-				
-          </Box>
-        </Box>
-
-        <Box sx={{display: "flex", justifyContent: "space-around", mt: "10px"}} className="collection-images">
-          <img src="image-1.jpg" alt="" />
-        </Box>
-      </Box>
+				{user && user?.groups[0].items.map((element2: any, i: string) => 
+					{return <Box
+					className="myCollections" key={i}
+					sx={{
+						display: "flex",
+						justifyContent: "space-between",
+						flexDirection: "column",
+						padding: "10px 10px",
+						mt: "10px",
+						mb: "8px",
+						background: "#fff",
+						boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)",
+						borderRadius: "10px",
+					}}>
+					<Box sx={{display: "flex", justifyContent: "space-between"}}>
+						<Box className="collection-images">
+							<a href="./collections">
+								<img src={element2.file_url} alt={element2.title} width="150px" height="100px"  />
+							</a>
+						</Box>
+						<Box sx={{pl: "10px"}}>
+							<Typography component="p">{element2.title}</Typography>
+							<Typography component="p" sx={{fontSize: "12px"}}>{element2.description}</Typography>
+							<LinkRouter  to="/item" state={{ element2 }}>
+								<Button
+								variant="contained"
+								size="large"
+								disableElevation
+								className="buttons"
+								type="submit"
+								sx={{
+									width: "130px",
+									height: "26px",
+									fontSize: "12px!important",
+								}}
+								// onClick={() => navigate("/items", {state: element2})}
+								>
+								Open Item
+								</Button>
+							</LinkRouter>
+						</Box>
+					</Box>
+					</Box>
+				})}
+			</Box>
       
     </Grid>
   );
 };
 export default GroupList;
 
-// <Box>
-//   <div>
-//     {data &&
-//       data?.users.map((param: any) => (
-//         <div key={param.id}>
-//           <h2>{param.firstName}</h2>
-//         </div>
-//       ))}
-//   </div>
-// </Box>;
