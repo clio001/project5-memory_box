@@ -116,3 +116,7 @@ a:hover {
   text-align: center;
   border: 0;
 }
+
+.leaflet-container {
+  height: 15rem;
+}

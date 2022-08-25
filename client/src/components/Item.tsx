@@ -122,7 +122,7 @@ function Item() {
           >
             <Divider>
               <Typography variant="body2" color="text.secondary">
-                June, 10, 1920
+                June 10, 1920
               </Typography>
             </Divider>
             <Typography mt={1}>
@@ -135,24 +135,16 @@ function Item() {
               Location
             </Typography>
           </Divider>
-          <Map />
+          <Box mt={1} mb={3}>
+            <Map />
+          </Box>
+
           <Divider>
             <Typography variant="body2" color="text.secondary">
               Comments {data && data.user.items[0].comments.length}
             </Typography>
           </Divider>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              mt: 1,
-            }}
-          >
-            <Avatar src="" sx={{ width: 36, height: 36 }} />
-            <Avatar src="" sx={{ width: 36, height: 36, ml: "0.5rem" }} />
-            <Avatar src="" sx={{ width: 36, height: 36, ml: "0.5rem" }} />
-          </Box>
+
           <Box sx={{ mb: "5rem" }}>
             {" "}
             {data && data.user.items[0].comments.length === 0 ? (

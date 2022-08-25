@@ -80,8 +80,6 @@ function Comment(props: any) {
 
   return (
     <div>
-      {comment && console.log("Likes Array: ", comment.likes)}
-      {user && console.log("user", user)}
       <Box className="comment-box">
         <Box
           sx={{
