@@ -19,7 +19,8 @@ const ADD_COMMENT = gql`
 `;
 
 function InputField(props: any) {
-  const userData = props.data;
+  const itemData = props.data;
+  const user = props.user;
 
   const [newComment, setNewComment] = useState("");
 
@@ -29,8 +30,8 @@ function InputField(props: any) {
     addComment({
       variables: {
         body: newComment,
-        user_id: userData.user._id,
-        item_id: userData.user.items[0].id,
+        user_id: user._id,
+        item_id: itemData.item.id,
       },
     });
   };
@@ -67,21 +68,20 @@ function InputField(props: any) {
             maxRows={3}
             onChange={(e) => setNewComment(e.target.value)}
           />
-          {userData && (
-            <span>
-              <Button
-                variant="outlined"
-                style={{
-                  marginRight: "0.5rem",
-                  marginLeft: "0.5rem",
-                  borderColor: "#666500",
-                }}
-                onClick={handleAddComment}
-              >
-                <SendIcon sx={{ color: "#666500" }} />
-              </Button>
-            </span>
-          )}
+
+          <span>
+            <Button
+              variant="outlined"
+              style={{
+                marginRight: "0.5rem",
+                marginLeft: "0.5rem",
+                borderColor: "#666500",
+              }}
+              onClick={handleAddComment}
+            >
+              <SendIcon sx={{ color: "#666500" }} />
+            </Button>
+          </span>
         </Box>
       </Box>
     </div>

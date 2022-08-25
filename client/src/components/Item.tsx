@@ -10,6 +10,7 @@ import InputField from "./InputField";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Item() {
+  const { user } = useContext(UserContext);
   type x = {
     [key: string]: any;
   };
@@ -168,7 +169,7 @@ function Item() {
               })
             )}
           </Box>
-          {data && <InputField data={data} />}
+          {data && <InputField data={data} user={user} />}
         </Box>
       </Box>
     </Grid>

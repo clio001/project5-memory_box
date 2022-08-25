@@ -37,7 +37,8 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args) {
         const existingUser = await User.find({ email: args.email });
-        if (existingUser) {
+        console.log("Existing User: ", existingUser);
+        if (existingUser.length > 0) {
           throw Error(`${args.email} already exists.`);
         } else {
           const salt = await bcrypt.genSalt(10);
