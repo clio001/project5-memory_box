@@ -19,38 +19,46 @@ console.log(">>>>>>>>>>>", singleItem?.state.element2.id)
 
 const itemId: x = singleItem.state.element2.id
 
-  const USER_ITEM = gql`
-    query Users($userId: ID) {
-      user(id: ${itemId}) {
-        _id
-        avatar_url
-        items {
-          id
-          title
-          description
-          file_url
-          createdBy {
-            firstName
-            lastName
-          }
-          comments {
-            id
-            body
-            user_id
-            author {
-              firstName
-              lastName
-              avatar_url
-              comments {
-                id
-              }
-            }
-          }
-        }
+  const SINGLE_ITEM = gql`
+    query Item {
+      item(id: "${itemId}") {
+        id
+		  title
+		  description
+		  user_id
+		  file_url
+		  createdBy {
+			_id
+			firstName
+			lastName
+			avatar_url
+		  }
+		  comments {
+			id
+			body
+			item_id
+			user_id
+			author {
+				_id
+				firstName
+				comments {
+					id
+				}
+			lastName
+			avatar_url
+			}
+			likes {
+				id
+				comment_id
+				user_id
+			}
+		  }
       }
     }
   `;
-  const { loading, error, data } = useQuery(USER_ITEM);
+  const { loading, error, data } = useQuery(SINGLE_ITEM);
+
+  console.log("DATADATA ",data)
 
   return (
     <Grid
@@ -76,7 +84,7 @@ const itemId: x = singleItem.state.element2.id
         }}
       >
         <Box></Box>
-        <img src={data && data.user.items[0].file_url} width="100%" />
+        <img src={data && data.item.file_url} width="100%" />
         <Paper
           elevation={5}
           sx={{
@@ -98,18 +106,18 @@ const itemId: x = singleItem.state.element2.id
             }}
           >
             <Avatar
-              src={data && data.user.avatar_url}
+              src={data && data.item.createdBy.avatar_url}
               sx={{ width: "26", height: "26" }}
             />
             <Typography color="text.secondary" ml={1}>
-              {data && data.user.items[0].createdBy.firstName}{" "}
-              {data && data.user.items[0].createdBy.lastName}
+              {data && data.item.createdBy.firstName}{" "}
+              {data && data.item.createdBy.lastName}
             </Typography>
           </Box>
           <BookmarkBorderIcon sx={{ color: "#666500", mr: "0.3rem" }} />
         </Paper>
         <Typography variant="h5" sx={{ color: "#473800", mt: "1rem" }}>
-          {data && data.user.items[0].title}
+          {data && data.item.title}
         </Typography>
         <Box sx={{ ml: "0.5rem", mr: "0.5rem" }}>
           <Box
@@ -126,7 +134,7 @@ const itemId: x = singleItem.state.element2.id
               </Typography>
             </Divider>
             <Typography mt={1}>
-              {data && data.user.items[0].description}
+              {data && data.item.description}
             </Typography>
           </Box>
           <Divider>
@@ -137,7 +145,7 @@ const itemId: x = singleItem.state.element2.id
           <div>asdn</div>
           <Divider>
             <Typography variant="body2" color="text.secondary">
-              Comments {data && data.user.items[0].comments.length}
+              Comments {data && data.item.comments.length}
             </Typography>
           </Divider>
           <Box
@@ -154,7 +162,7 @@ const itemId: x = singleItem.state.element2.id
           </Box>
           <Box sx={{ mb: "5rem" }}>
             {" "}
-            {data && data.user.items[0].comments.length === 0 ? (
+            {data && data.item.comments.length === 0 ? (
               <>
                 <Typography variant="body2" color="text.secondary">
                   Be the first to comment ...
@@ -162,8 +170,8 @@ const itemId: x = singleItem.state.element2.id
               </>
             ) : (
               data &&
-              data.user.items[0].comments.map((element: any, i: number) => {
-                return <Comment key={i} data={element} user={data.user} />;
+              data.item.comments.map((element: any, i: number) => {console.log(element)
+                return <Comment key={i} data={element} user={data.item.createdBy} />;
               })
             )}
           </Box>
