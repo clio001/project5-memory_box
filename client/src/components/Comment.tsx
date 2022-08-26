@@ -51,6 +51,8 @@ const DELETE_LIKE = gql`
 function Comment(props: any) {
   const comment = props.data;
   const user = props.user;
+  const refetch = props.refetch;
+
   const [openModal, setOpenModal] = useState(false);
   const [updatedComment, setUpdatedComment] = useState("");
 
@@ -67,6 +69,8 @@ function Comment(props: any) {
         body: updatedComment,
       },
     });
+    setOpenModal(false);
+    refetch();
   };
 
   const handleAddLike = () => {
@@ -76,6 +80,7 @@ function Comment(props: any) {
         commentId: comment.id,
       },
     });
+    refetch();
   };
 
   return (
@@ -125,6 +130,28 @@ function Comment(props: any) {
                         sx={{ color: "#666500", mb: "1rem" }}
                       />
                     </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "16.5rem",
+                        backgroundColor: "white",
+                        padding: "0.5rem",
+                        borderRadius: "25px",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <Avatar
+                        src={comment && comment.author.avatar_url}
+                        sx={{ width: "26", height: "26" }}
+                      />
+                      <Typography color="text.secondary" ml={1}>
+                        {comment && comment.author.firstName}{" "}
+                        {comment && comment.author.lastName}
+                      </Typography>
+                    </Box>
 
                     <TextField
                       multiline
@@ -152,6 +179,7 @@ function Comment(props: any) {
                     deleteComment({
                       variables: { deleteCommentId: comment?.id },
                     });
+                    refetch();
                   }}
                 />
               </div>
@@ -183,13 +211,12 @@ function Comment(props: any) {
                     <ThumbUpAltIcon
                       sx={{ color: "gray", mr: "0.5rem" }}
                       fontSize="small"
-                      onClick={() =>
+                      onClick={() => {
                         deleteLike({
-                          variables: {
-                            deleteLikeId: like.id,
-                          },
-                        })
-                      }
+                          variables: { deleteLikeId: like.id },
+                        });
+                        refetch();
+                      }}
                     />
                   );
                 } else {

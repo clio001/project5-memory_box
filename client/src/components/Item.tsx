@@ -25,6 +25,11 @@ function Item() {
         id
 		  title
 		  description
+      type
+      location {
+        latitude
+        longitude
+      }
 		  user_id
 		  file_url
 		  createdBy {
@@ -56,7 +61,7 @@ function Item() {
       }
     }
   `;
-  const { loading, error, data } = useQuery(SINGLE_ITEM);
+  const { loading, error, data, refetch } = useQuery(SINGLE_ITEM);
 
   console.log("DATADATA ", data);
 
@@ -119,6 +124,9 @@ function Item() {
         <Typography variant="h5" sx={{ color: "#473800", mt: "1rem" }}>
           {data && data.item.title}
         </Typography>
+        <Typography variant="subtitle1" sx={{ color: "gray" }}>
+          {data && data.item.type}
+        </Typography>
         <Box sx={{ ml: "0.5rem", mr: "0.5rem" }}>
           <Box
             sx={{
@@ -136,15 +144,16 @@ function Item() {
             <Typography mt={1}>{data && data.item.description}</Typography>
           </Box>
 
-          <Divider>
-            <Typography variant="body2" color="text.secondary">
-              Location
-            </Typography>
-          </Divider>
-          <Box mt={1} mb={3}>
-            <Map />
-          </Box>
-
+          <div>
+            <Divider>
+              <Typography variant="body2" color="text.secondary">
+                Location
+              </Typography>
+            </Divider>
+            <Box mt={1} mb={3}>
+              {data && data.item.location.latitude && <Map data={data} />}
+            </Box>
+          </div>
           <Divider>
             <Typography variant="body2" color="text.secondary">
               Comments {data && data.item.comments.length}
@@ -155,21 +164,29 @@ function Item() {
             {" "}
             {data && data.item.comments.length === 0 ? (
               <>
-                <Typography variant="body2" color="text.secondary">
-                  Be the first to comment ...
-                </Typography>
+                <Box
+                  sx={{ display: "flex", justifyContent: "center", mt: "1rem" }}
+                >
+                  <Typography variant="body2" color="text.secondary">
+                    Be the first to comment ...
+                  </Typography>
+                </Box>
               </>
             ) : (
               data &&
               data.item.comments.map((element: any, i: number) => {
-                console.log(element);
                 return (
-                  <Comment key={i} data={element} user={data.item.createdBy} />
+                  <Comment
+                    key={i}
+                    data={element}
+                    user={user}
+                    refetch={refetch}
+                  />
                 );
               })
             )}
           </Box>
-          {data && <InputField data={data} user={user} />}
+          {data && <InputField data={data} user={user} refetch={refetch} />}
         </Box>
       </Box>
     </Grid>

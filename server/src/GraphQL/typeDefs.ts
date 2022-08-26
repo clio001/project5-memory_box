@@ -5,6 +5,7 @@ import graphql, {
   GraphQLBoolean,
   GraphQLList,
   GraphQLScalarType,
+  GraphQLFloat,
 } from "graphql";
 import _ from "lodash";
 import Bookmark from "../models/bookmarkModel.js";
@@ -94,6 +95,14 @@ const UserType = new GraphQLObjectType({
   }),
 });
 
+const LocationType = new GraphQLObjectType({
+  name: "location",
+  fields: () => ({
+    latitude: { type: GraphQLFloat },
+    longitude: { type: GraphQLFloat },
+  }),
+});
+
 // * ITEM
 
 const ItemType = new GraphQLObjectType({
@@ -110,7 +119,9 @@ const ItemType = new GraphQLObjectType({
         return await User.findById(parent.user_id);
       },
     },
-    location: { type: GraphQLString },
+    location: {
+      type: LocationType,
+    },
     type: { type: GraphQLString },
     file_url: { type: GraphQLString },
     comments: {

@@ -24,7 +24,10 @@ declare namespace dbModel {
     year?: string;
     user_id: string;
     createdBy: string;
-    location?: string;
+    location?: {
+      latitude: any;
+      longitude: any;
+    };
     type?: string;
     file_url: string;
     comments?: string;

@@ -21,6 +21,7 @@ const ADD_COMMENT = gql`
 function InputField(props: any) {
   const itemData = props.data;
   const user = props.user;
+  const refetch = props.refetch;
 
   const [newComment, setNewComment] = useState("");
 
@@ -34,6 +35,10 @@ function InputField(props: any) {
         item_id: itemData.item.id,
       },
     });
+    let field: any = document.getElementById("userComment");
+    field.value = "";
+    window.scrollTo(0, document.body.scrollHeight);
+    refetch();
   };
 
   return (

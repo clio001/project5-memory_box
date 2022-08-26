@@ -29,8 +29,8 @@ const Home: React.FC = () => {
               textAlign: "center",
             }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore.
+            A platform to share your favorite photos and memories with family
+            and friends
           </Typography>
         </Box>
       </Box>
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
             sx={{ mt: "calc(100vh - 793px)" }}
             className="buttons"
           >
-            Create Box
+            Start
           </Button>
         </LinkRouter>
         <Typography

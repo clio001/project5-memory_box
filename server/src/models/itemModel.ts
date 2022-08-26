@@ -18,11 +18,10 @@ const itemSchema = new Schema<dbModel.Item>(
     createdBy: {
       type: String,
     },
-    location: [
-      {
-        type: String,
-      },
-    ],
+    location: {
+      latitude: { type: Number },
+      longitude: { type: Number },
+    },
     type: {
       type: String,
     },
