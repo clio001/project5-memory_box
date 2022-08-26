@@ -13,19 +13,24 @@ type Groups = {
 }
 
 interface UserProfileType {
-	_id: string | null | undefined;
-	token: string | null | undefined;
 	__typename: string | null | undefined;
-	firstName: string | null;
-	lastName: string | null;
+	_id: string | null | undefined;
+	firstName: string | null | undefined;
+	lastName: string | null | undefined;
+	token: string | null | undefined;
 	email: string | null | undefined;
-	avatar_url: string | null;
-  banner_url: string | null;
+	role: string | null | undefined;
+	avatar_url: string | null | undefined;
+	banner_url: string | null | undefined;
+	title: string | null | undefined;
+	description: string | null | undefined;
+  file_url: string | null | undefined;
+  location?: any;
   //   location: string | null;
-  role: string | null | undefined;
   groups?: any;
   items?: any;
 };
+
 
 interface Props {
   children?: React.ReactNode;

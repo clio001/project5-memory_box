@@ -12,7 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 
-const GroupList: React.FC = () => {
+const Group: React.FC = () => {
     const {user, setUser} = React.useContext(UserContext);
 const navigate = useNavigate()
 
@@ -79,9 +79,11 @@ const navigate = useNavigate()
 				</Typography>
 			</Box>
 			<Box>
+				<LinkRouter  to="/add-item" style={{display: "flex", justifyContent: "right"}}>
 				<IconButton aria-label="delete" size="medium" sx={{background: '#f1f1f1'}}>
 					<AddIcon fontSize="inherit"  />
 				</IconButton>
+				</LinkRouter>
 			</Box>
 		</Box>
 
@@ -104,7 +106,7 @@ const navigate = useNavigate()
 		<Box sx={{display: 'flex', alignItems: 'center', width: '100%', maxWidth: '395px', minWidth: '320px', mt: "10px"}}>
 			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src={user && user?.avatar_url ? user?.avatar_url : "./profile.svg"} sx={{width: "20px",height: "20px",mr: "5px"}} />
 			<Box>
-				<Typography component="p" sx={{fontSize: '13px'}}>Admin · May 22</Typography>
+				<Typography component="p" sx={{fontSize: '13px', mt: "2px", color: "#8d8d8d"}}>{user && user?.firstName}is the owner of this group.</Typography>
 			</Box>
 			</Box>
 		</Box>
@@ -131,7 +133,7 @@ const navigate = useNavigate()
             fontSize: "13px",
             width: "500px",
           }}>
-          COLLECTIONS
+          GROUP ITEMS
         </Box>
 
         <Box component="span" m={1} sx={{width: "100%", border: "1px solid #C2C8D0"}}></Box>
@@ -162,15 +164,15 @@ const navigate = useNavigate()
 						borderRadius: "10px",
 					}}>
 					<Box sx={{display: "flex", justifyContent: "space-between"}}>
-						<Box className="collection-images">
-							<a href="./collections">
+						<Box className="collection-images-group">
+							<a href="./items">
 								<img src={element2.file_url} alt={element2.title} width="150px" height="100px"  />
 							</a>
 						</Box>
-						<Box sx={{pl: "10px"}}>
+						<Box sx={{pl: "10px", float: "right"}}>
 							<Typography component="p">{element2.title}</Typography>
 							<Typography component="p" sx={{fontSize: "12px"}}>{element2.description}</Typography>
-							<LinkRouter  to="/item" state={{ element2 }}>
+							<LinkRouter  to="/item" state={{ element2 }} style={{display: "flex", justifyContent: "right"}}>
 								<Button
 								variant="contained"
 								size="large"
@@ -178,14 +180,12 @@ const navigate = useNavigate()
 								className="buttons"
 								type="submit"
 								sx={{
-									width: "130px",
+									width: "65px",
 									height: "26px",
 									fontSize: "12px!important",
 								}}
 								// onClick={() => navigate("/items", {state: element2})}
-								>
-								Open Item
-								</Button>
+								>Open</Button>
 							</LinkRouter>
 						</Box>
 					</Box>
@@ -196,4 +196,4 @@ const navigate = useNavigate()
     </Grid>
   );
 };
-export default GroupList;
+export default Group;
