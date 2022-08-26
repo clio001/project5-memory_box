@@ -2,12 +2,13 @@ import { Typography, Grid, Box, Avatar, Divider, Paper } from "@mui/material";
 
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Comment from "./Comment";
-import Map from "./Map";
+// import Map from "./Map";
 import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import InputField from "./InputField";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link as LinkRouter, useLocation, useNavigate } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 function Item() {
   const { user } = useContext(UserContext);
@@ -81,8 +82,17 @@ function Item() {
           alignItems: "center",
           flexWrap: "nowrap",
           mt: "60px",
+			 position: "relative",
         }}
       >
+			        <LinkRouter to="/group">
+          <Box sx={{position: "absolute", display: "flex", alignItems: "center", top: "20px", left: "15px", color: "#fff"}}>
+            <Box sx={{display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", background: "#fff", borderRadius: "100px", mr: "8px", boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.13)"}}>
+              <ArrowBackIosNewIcon sx={{color: "#AEAEAE"}} />
+            </Box>
+            <Box sx={{fontSize: "12px", textShadow: "0px 0px 8px #484848"}}>Go back</Box>
+          </Box>
+        </LinkRouter>
         <Box></Box>
         <img src={data && data.item.file_url} width="100%" />
         <Paper
@@ -142,7 +152,7 @@ function Item() {
             </Typography>
           </Divider>
           <Box mt={1} mb={3}>
-            <Map />
+            {/* <Map /> */}
           </Box>
 
           <Divider>

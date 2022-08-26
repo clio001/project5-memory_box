@@ -66,13 +66,25 @@ const style = {
 //   }
 // `;
 
+// const ADD_ITEM = gql`
+// mutation AddItem($title: String, $description: String, $userId: String, $fileUrl: String) {
+//   addItem(title: $title, description: $description, user_id: $userId, file_url: $fileUrl) {
+//     title
+//     description
+//     user_id
+//     file_url
+//   }
+// }
+// `;
 const ADD_ITEM = gql`
-mutation AddItem($title: String, $description: String, $userId: String, $fileUrl: String) {
-  addItem(title: $title, description: $description, user_id: $userId, file_url: $fileUrl) {
+mutation AddItem($title: String, $description: String, $createdBy: String, $userId: String, $type: String, $fileUrl: String) {
+  addItem(title: $title, description: $description, createdBy: $createdBy, user_id: $userId, type: $type, file_url: $fileUrl) {
+    id
     title
     description
-    user_id
     file_url
+    groups
+    user_id
   }
 }
 `;
@@ -80,7 +92,7 @@ mutation AddItem($title: String, $description: String, $userId: String, $fileUrl
 
 const GroupAddItem: React.FC = () => {
 	//   const {loading, error, data} = useQuery<GetUsers>(GET_USERS);
-	const [updateUser] = useMutation(ADD_ITEM);
+	const [addGroupItem] = useMutation(ADD_ITEM);
 
 	const redirectTo = useNavigate();
 	
@@ -123,8 +135,6 @@ const GroupAddItem: React.FC = () => {
   }
 
 
-
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // const {name, value}:{name: string; value: string}  = e.target;
     const {name, value} = e.target;
@@ -137,15 +147,21 @@ const GroupAddItem: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("User ID: ", user?._id);
+const  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("User ID: ", user?.groups[0].id,);
     e.preventDefault();
-      updateUser({
+      addGroupItem({
         variables: {
           id: user?._id,
           title: formValues.title.value,
           description: formValues.description.value,
           fileUrl: formValues.file_url.value,
+			 groups: user?.groups[0].id,
+			 user_id: user?._id,
+			//  location: user?.groups[0].location,
+			//  firstName: user?.firstName,
+			//  lastName: user?.lastName,
+			//  avatar_url: user?.avatar_url,
          //  location: formValues.location.value,
         },
       });
@@ -154,7 +170,7 @@ const GroupAddItem: React.FC = () => {
         _id: user?._id,
 		  firstName: user?.firstName,
 		  lastName: user?.lastName,
-        token: user?.token,
+        token: user?.token, 
         email: user?.email,
         role: user?.role,
 		  avatar_url: user?.avatar_url,
@@ -197,7 +213,7 @@ const GroupAddItem: React.FC = () => {
           mb: "70px",
           backgroundColor: "#f6f6f6",
           borderRadius: "0 0 70px 70px",
-          background: `#f6f6f6 url(${user && user?.groups[0].location ? user?.groups[0].location : "./profile-bg.jpg"}) center center/cover no-repeat`,
+          background: `#f6f6f6 url(${user && user?.groups[0].banner_url ? user?.groups[0].banner_url : "./profile-bg.jpg"}) center center/cover no-repeat`,
         }}>
         <LinkRouter to="/group">
           <Box sx={{position: "absolute", display: "flex", alignItems: "center", top: "20px", left: "15px", color: "#fff"}}>
@@ -217,7 +233,7 @@ const GroupAddItem: React.FC = () => {
             margin: "0 auto",
           }}>
           <img
-            src={user && user?.groups[0].file_url ? user?.groups[0].file_url : "./profile.svg"}
+            src={user && user?.groups[0].avatar_url ? user?.groups[0].avatar_url : "./profile.svg"}
             alt="profile img"
             style={{
               borderRadius: "10px",
