@@ -71,7 +71,7 @@ const navigate = useNavigate()
         </Box>
       </Box>
 
-		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px'}}>
+		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '360px', minWidth: '320px'}}>
 			<Box>
 				<Typography variant="h1" sx={{fontSize:'30px'}}>
 				{user && user?.groups[0].name}
@@ -90,7 +90,7 @@ const navigate = useNavigate()
 
 
 
-		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '395px', minWidth: '320px',height: "31px", background: "#F4F6FC ", borderRadius: "100px", p: "10px", mt: "15px"}}>
+		<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '360px', minWidth: '320px',height: "31px", background: "#F4F6FC ", borderRadius: "100px", p: "10px", mt: "15px"}}>
 			<Box sx={{display: 'flex', alignItems: 'center'}}>
 				<Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" sx={{width: "33px",height: "33px",mr: "5px"}} />
 				<Avatar alt="Travis Howard" src="https://mui.com/static/images/avatar/2.jpg" sx={{width: "33px",height: "33px",mr: "5px"}} />
@@ -103,7 +103,7 @@ const navigate = useNavigate()
 			</Box>
 		</Box>
 
-		<Box sx={{display: 'flex', alignItems: 'center', width: '100%', maxWidth: '395px', minWidth: '320px', mt: "10px"}}>
+		<Box sx={{display: 'flex', alignItems: 'center', width: '100%', maxWidth: '360px', minWidth: '320px', mt: "10px"}}>
 			<Box sx={{display: 'flex'}}><Avatar alt="Remy Sharp" src={user && user?.avatar_url ? user?.avatar_url : "./profile.svg"} sx={{width: "20px",height: "20px",mr: "5px"}} />
 			<Box>
 				<Typography component="p" sx={{fontSize: '13px', mt: "2px", color: "#8d8d8d"}}>{user && user?.firstName}is the owner of this group.</Typography>
@@ -114,7 +114,7 @@ const navigate = useNavigate()
 		<Box
         sx={{
           width: "100%",
-          maxWidth: "395px",
+          maxWidth: "360px",
           minWidth: "320px",
           mt: "15px",
           display: "flex",

@@ -50,6 +50,7 @@ const LOGIN_USER = gql`
       lastName
       email
       groups {
+		  id
         name
         description
         avatar_url

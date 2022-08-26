@@ -93,13 +93,7 @@ const Appbar: React.FC = () => {
       </LinkRouter>
 
       <LinkRouter
-        to="/group"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          textDecoration: "none",
-        }}
-      >
+        to="/group">
         <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
@@ -107,12 +101,16 @@ const Appbar: React.FC = () => {
           Group
         </MenuItem>
       </LinkRouter>
+
+<LinkRouter
+        to="/">
       <MenuItem onClick={handleMenuClose}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
         Logout
       </MenuItem>
+		</LinkRouter>
     </Menu>
   );
 
