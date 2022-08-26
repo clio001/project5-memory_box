@@ -190,23 +190,23 @@ const MyAccountEdit: React.FC = () => {
           bannerUrl: formValues.banner_url.value,
         },
       });
-      setUser({
-        __typename: "User",
-        _id: user?._id,
-        firstName: formValues.firstName.value,
-        lastName: formValues.lastName.value,
-        token: user?.token,
-        email: user?.email,
-        role: user?.role,
-        avatar_url: formValues.avatar_url.value,
-        banner_url: formValues.banner_url.value,
-		  title: formValues.title.value,
-        description: formValues.description.value,
-        file_url: formValues.file_url.value,
-        location: formValues.location.value,
-		  groups: user?.groups,
-		  items: user?.items
-      });
+      // setUser({
+      //   __typename: "User",
+      //   _id: user?._id,
+      //   firstName: formValues.firstName.value,
+      //   lastName: formValues.lastName.value,
+      //   token: user?.token,
+      //   email: user?.email,
+      //   role: user?.role,
+      //   avatar_url: formValues.avatar_url.value,
+      //   banner_url: formValues.banner_url.value,
+		//   title: formValues.title.value,
+      //   description: formValues.description.value,
+      //   file_url: formValues.file_url.value,
+      //   location: formValues.location.value,
+		//   groups: user?.groups,
+		//   items: user?.items
+      // });
       setAlert(true);
       setAlertSeverity("success");
       setAlertMessage("Changes have been saved successfully.");
