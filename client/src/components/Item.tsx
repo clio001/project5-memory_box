@@ -16,7 +16,7 @@ function Item() {
     [key: string]: any;
   };
   const singleItem: x = useLocation();
-  console.log(">>>>>>>>>>>", singleItem?.state.element2.id);
+//   console.log(">>>>>>>>>>>", singleItem?.state.element2.id);
 
   const itemId: x = singleItem.state.element2.id;
 
@@ -64,7 +64,7 @@ function Item() {
   `;
   const { loading, error, data, refetch } = useQuery(SINGLE_ITEM);
 
-  console.log("DATADATA ", data);
+//   console.log("DATADATA ", data);
 
   return (
     <Grid
@@ -79,7 +79,7 @@ function Item() {
         flexWrap: "nowrap",
       }}
     >
-      {data && console.log("Query data: ", data)}
+      {/* {data && console.log("Query data: ", data)} */}
       <Box
         sx={{
           display: "flex",
